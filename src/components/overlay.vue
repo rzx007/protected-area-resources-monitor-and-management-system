@@ -17,12 +17,7 @@
             <span @click="fullScreen()">
               <i class="ol_icon el-icon-full-screen"></i>
             </span>
-            <span
-              @click="
-                switchs()
-                changeSatus()
-              "
-            >
+            <span @click="switchs(); changeSatus()">
               <i class="ol_icon el-icon-close"></i>
             </span>
 
@@ -167,17 +162,17 @@ export default {
     }
   }
 }
- .slide-fade-enter-active {
-    transition: all .2s ease-out;
-  }
+.slide-fade-enter-active {
+  transition: all 0.2s ease-out;
+}
 
-  .slide-fade-leave-active {
-    transition: all .2s ease;
-  }
+.slide-fade-leave-active {
+  transition: all 0.2s ease;
+}
 
-  .slide-fade-enter-from,
-  .slide-fade-leave-to {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
+}
 </style>

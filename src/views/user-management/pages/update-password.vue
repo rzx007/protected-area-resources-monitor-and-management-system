@@ -1,10 +1,10 @@
 <!--
- * @Author: rzx007
- * @Date: 2021-03-08 12:49:23
- * @LastEditors: rzx007
- * @LastEditTime: 2021-06-09 11:35:54
- * @FilePath: \vue-tgp-with-elementui\src\views\system-management\user-management\pages\update-password.vue
- * @Description: Do not edit
+ * @Author: 阮志雄
+ * @Date: 2021-10-08 17:30:04
+ * @LastEditTime: 2021-10-11 11:49:05
+ * @LastEditors: 阮志雄
+ * @Description: In User Settings Edit
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\user-management\pages\update-password.vue
 -->
 <template>
   <div class="user-info">

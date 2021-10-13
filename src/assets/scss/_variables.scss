@@ -1,7 +1,7 @@
 @charset "utf-8";
 // @import "@/styles.scss";
 
-$theme-color: #3385ff;
+$theme-color: #4762b0;
 
 // 主要字体献策
 $font-color-theme : #9F9BD4; //字体主题颜色默认
@@ -60,7 +60,7 @@ $border-color-theme4:#363535;
 // box-shadow
 // $box-shadow-theme1:rgba(128, 128, 128, 0.3) 0px 0px 40px inset;
 $box-shadow-theme2:4px 4px 16px rgba(75,102,171,0.2);
-$box-shadow-theme3:4px 4px 16px rgba(75,102,171,0.2);
+$box-shadow-theme3:8px 4px 16px rgba(75,102,171,0.2);
 
 @function box-shadow-theme1($lightness) {
     @return rgba(128, 128, 128, 0.3) 0px 0px $lightness inset;

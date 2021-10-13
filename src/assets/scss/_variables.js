@@ -26,7 +26,7 @@ var mapColorObj = {
     areaColors: '#2B91B7'
   },
   theme3: {
-    areaColor: '#06998e',
+    areaColor: '#121220',
     borderColor: '#87ebff',
     areaColors: '#096d66'
   },
@@ -52,7 +52,7 @@ var menuColorObj = {
   theme3: {
     textColor: '#fff',
     activeTextColor: '#fff',
-    backgroundColor: '#4762b0'
+    backgroundColor: '#121220'
   },
   theme4: {
     textColor: '#B0B0B0',

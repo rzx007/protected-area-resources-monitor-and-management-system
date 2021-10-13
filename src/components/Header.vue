@@ -1,9 +1,9 @@
 <template>
-  <div class="header" :class="[mode ? 'light-header' : '']">
+  <div class="header light-header">
     <!-- 折叠按钮 -->
-    <div class="collapse-btn" v-if="mode">
+    <!-- <div class="collapse-btn" v-if="mode">
       <i  @click="collapse=!collapse;handleCollapse()" :class="[collapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"></i>
-    </div>
+    </div> -->
     <div class="logo ellipsis" @click="$router.push('/')" title="首页">
       {{ slogan }}
     </div>
@@ -12,34 +12,26 @@
     </div>
     <div class="header-right">
       <div class="header-user-con">
-          <!-- 用户头像 -->
+        <!-- 用户头像 -->
         <div class="user-avator">
           <!-- <img src="@/assets/img/a.png" /> -->
         </div>
         <!-- 全屏显示 -->
         <div class="btn-fullscreen" @click="handleFullScreen">
-          <el-tooltip
-            effect="dark"
-            :content="fullscreen ? `取消全屏` : `全屏`"
-            placement="bottom">
+          <el-tooltip effect="dark" :content="fullscreen ? `取消全屏` : `全屏`" placement="bottom">
             <i class="el-icon-rank"></i>
           </el-tooltip>
         </div>
         <!-- 消息中心 -->
-        <!-- <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
+        <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
            <i class="el-icon-bell"></i>
         </el-tooltip>
-        <div class="btn-bell">
+        <!-- <div class="btn-bell">
           <span class="btn-bell-badge" v-if="message"></span>
-        </div>-->
-          <el-tooltip
-            effect="dark"
-            content="主题切换"
-            placement="bottom">
-             <i class="el-icon-orange"
-              @click="switchThemeBar = true"
-              v-if="showThemeBar"></i>
-          </el-tooltip>
+        </div> -->
+        <!-- <el-tooltip effect="dark" content="主题切换" placement="bottom">
+          <i class="el-icon-orange" @click="switchThemeBar = true" v-if="showThemeBar"></i>
+        </el-tooltip> -->
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -47,71 +39,31 @@
             <i f class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-mouse" command="updataPassword"
-              >密码修改</el-dropdown-item
-            >
-            <el-dropdown-item icon="el-icon-switch-button" command="loginout"
-              >注销</el-dropdown-item
-            >
+            <el-dropdown-item icon="el-icon-mouse" command="updataPassword">密码修改</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-switch-button" command="loginout">注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
-    <theme-bar :status="switchThemeBar"  @visibleChange="toggleThemeBar"></theme-bar>
+    <!-- <theme-bar :status="switchThemeBar" @visibleChange="toggleThemeBar"></theme-bar> -->
     <overlay :close.sync="close" owidth="400px" oheight="60vh" title="密码修改">
       <div v-if="close" class="addUser">
-        <el-form
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-          label-width="100px"
-          class="demo-ruleForm"
-        >
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="登录名称" prop="userName">
-            <el-input
-              v-model="ruleForm.userName"
-              :disabled="true"
-              size="mini"
-              style="width: 220px"
-            ></el-input>
+            <el-input v-model="ruleForm.userName" :disabled="true" size="mini" style="width: 220px"></el-input>
           </el-form-item>
           <el-form-item label="旧密码">
-            <el-input
-              type="password"
-              v-model="ruleForm.oldPwd"
-              size="mini"
-              auto-complete="off"
-              style="width: 220px"
-            ></el-input>
+            <el-input type="password" v-model="ruleForm.oldPwd" size="mini" auto-complete="off" style="width: 220px"></el-input>
           </el-form-item>
           <el-form-item label="新密码" prop="newPwd">
-            <el-input
-              type="password"
-              v-model="ruleForm.newPwd"
-              size="mini"
-              auto-complete="off"
-              style="width: 220px"
-            ></el-input>
+            <el-input type="password" v-model="ruleForm.newPwd" size="mini" auto-complete="off" style="width: 220px"></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="confirmNewPwd">
-            <el-input
-              type="password"
-              v-model="ruleForm.confirmNewPwd"
-              size="mini"
-              auto-complete="off"
-              style="width: 220px"
-            ></el-input>
+            <el-input type="password" v-model="ruleForm.confirmNewPwd" size="mini" auto-complete="off" style="width: 220px"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              size="mini"
-              @click="submitForm('ruleForm')"
-              >立即创建</el-button
-            >
-            <el-button @click="resetForm('ruleForm')" size="mini"
-              >重置</el-button
-            >
+            <el-button type="primary" size="mini" @click="submitForm('ruleForm')">立即创建</el-button>
+            <el-button @click="resetForm('ruleForm')" size="mini">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -125,7 +77,7 @@ import { updataPassword } from '@/api'
 import { title } from '@/settings'
 import bus from '@/utils/bus'
 export default {
-  data () {
+  data() {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
@@ -174,9 +126,7 @@ export default {
         ],
         oldPwd: [{ required: true, validator: validatePass, trigger: 'blur' }],
         newPwd: [{ required: true, validator: validatePass, trigger: 'blur' }],
-        confirmNewPwd: [
-          { required: true, validator: validatePass2, trigger: 'blur' }
-        ]
+        confirmNewPwd: [{ required: true, validator: validatePass2, trigger: 'blur' }]
       },
       switchThemeBar: false
     }
@@ -191,16 +141,16 @@ export default {
       default: true
     }
   },
-  components: { ThemeBar },
+  // components: { ThemeBar },
   computed: {
-    username () {
+    username() {
       const username = localStorage.getItem('ms_username')
       return username || this.name
     }
   },
   methods: {
     // 用户名下拉菜单选择事件
-    handleCommand (command) {
+    handleCommand(command) {
       if (command === 'loginout') {
         removeToken('token')
         this.$router.push('/login')
@@ -208,8 +158,8 @@ export default {
         this.close = true
       }
     },
-    updataPassword () {
-      updataPassword(this.ruleForm).then((res) => {
+    updataPassword() {
+      updataPassword(this.ruleForm).then(res => {
         if (res.resultCode === 0) {
           this.$message({
             message: '修改成功，重新登陆',
@@ -227,8 +177,8 @@ export default {
       })
     },
     // 提交用户信息按钮
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           delete this.ruleForm.confirmNewPwd
           delete this.ruleForm.userName
@@ -244,11 +194,11 @@ export default {
       })
     },
     // 清空表单信息按钮
-    resetForm (formName) {
+    resetForm(formName) {
       this.$refs[formName].resetFields()
     },
     // 全屏事件
-    handleFullScreen () {
+    handleFullScreen() {
       const element = document.documentElement
       if (this.fullscreen) {
         if (document.exitFullscreen) {
@@ -274,10 +224,10 @@ export default {
       }
       this.fullscreen = !this.fullscreen
     },
-    toggleThemeBar (bool) {
+    toggleThemeBar(bool) {
       this.switchThemeBar = bool
     },
-    handleCollapse () {
+    handleCollapse() {
       bus.$emit('handleCollapse', this.collapse)
     }
   }
@@ -292,13 +242,13 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  height: 50px;
+  height: 80px;
   font-size: 20px;
   @include font_color(#fff);
   .collapse-btn {
     margin-right: 12px;
     cursor: pointer;
-    &:hover{
+    &:hover {
       color: #d66a57;
     }
   }
@@ -372,17 +322,6 @@ export default {
   }
   .el-dropdown-menu__item {
     text-align: center;
-  }
-}
-
-.light-header {
-  @include content-background();
-  @include font_color(null);
-  border-bottom: 3px solid transparent;
-  @include border-color();
-  .el-dropdown-link {
-    @include font_color(null);
-    cursor: pointer;
   }
 }
 </style>

@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="horizontal-menu-main"
-    :class="[mode ? 'vertical-menu-main' : 'horizontal-menu', isCollapse ? 'isCollapse' : '']"
-  >
+  <div class="horizontal-menu-main" :class="[mode ? 'vertical-menu-main' : 'horizontal-menu', isCollapse ? 'isCollapse' : '']">
     <!-- <div class="slide-logo" v-if="mode">
       <img src="@/assets/img/logo.png" />
-    </div> -->
+    </div>-->
     <el-menu
       class="sidebar-el-menu"
       :default-active="onRoutes"
@@ -21,17 +18,19 @@
         <template v-if="item.children">
           <el-submenu :index="item.title" :key="item.index">
             <template slot="title">
-              <i class="icons" :class="item.icon" :style="{ color: menuConfig.textColor }"></i>
+              <!-- <i  class="icons iconfont" :class="item.icon" :style="{ color: menuConfig.textColor }"></i> -->
+              <svg-icon type="css" class="icons" :icon="item.icon" :style="{ color: menuConfig.textColor }"></svg-icon>
               <span slot="title">{{ item.title }}</span>
             </template>
-            <el-menu-item v-for="(subItem, i) in item.children" :key="i" :index="subItem.path">{{
-              subItem.title
-            }}</el-menu-item>
+            <el-menu-item v-for="(subItem, i) in item.children" :key="i" :index="subItem.path">
+              {{ subItem.title }}
+            </el-menu-item>
           </el-submenu>
         </template>
         <template v-else>
           <el-menu-item :index="item.path" :key="item.index">
-            <i class="icons" :class="item.icon" :style="{ color: menuConfig.textColor }"></i>
+            <!-- <i class="icons iconfont" :class="item.icon" :style="{ color: menuConfig.textColor }"></i> -->
+            <svg-icon type="css" class="icons" :icon="item.icon" :style="{ color: menuConfig.textColor }"></svg-icon>
             <span slot="title">{{ item.title }}</span>
           </el-menu-item>
         </template>
@@ -138,7 +137,7 @@ export default {
 }
 .vertical-menu-main {
   width: 200px;
-  transition: width .2s ease-in;
+  transition: width 0.2s ease-in;
 }
 .slide-logo {
   margin-left: 10px;

@@ -1,3 +1,11 @@
+<!--
+ * @Author: 阮志雄
+ * @Date: 2021-10-08 16:24:43
+ * @LastEditTime: 2021-10-13 10:59:37
+ * @LastEditors: 阮志雄
+ * @Description: In User Settings Edit
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\Bread_nav.vue
+-->
 <template>
   <div class="nav_bread">
     <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -36,7 +44,7 @@ export default {
   line-height: 40px;
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
   box-sizing: border-box;
   border-bottom: 2px solid transparent;
   @include border-color();

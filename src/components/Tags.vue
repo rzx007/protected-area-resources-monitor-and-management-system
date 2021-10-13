@@ -119,6 +119,7 @@ export default {
 
 <style lang="scss">
 .tags {
+  box-sizing: border-box;
   position: relative;
   height: 30px;
   overflow: hidden;

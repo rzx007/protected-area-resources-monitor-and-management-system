@@ -1,18 +1,33 @@
+<!--
+ * @Author: 阮志雄
+ * @Date: 2021-10-08 16:24:43
+ * @LastEditTime: 2021-10-11 11:36:58
+ * @LastEditors: 阮志雄
+ * @Description: In User Settings Edit
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\Svg-icon.vue
+-->
 <template>
-  <svg class="icon" aria-hidden="true">
-    <use :xlink:href="name" />
+  <svg v-if="type === 'svg'" class="icon" aria-hidden="true">
+    <use :xlink:href="'#'+iconName" />
   </svg>
+  <i v-else class="iconfont" :class="iconName"></i>
 </template>
 
 <script>
 export default {
   name: 'svg-icon',
-  data () {
+  data() {
     return {
-      name: '#icon-' + this.icon
+      iconName: 'icon-' + this.icon
     }
   },
-  props: ['icon']
+  props: {
+    icon: String,
+    type: {
+      type: String,
+      default: 'svg'
+    }
+  }
 }
 </script>
 <style lang="scss">

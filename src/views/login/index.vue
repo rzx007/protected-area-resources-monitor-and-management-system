@@ -22,16 +22,12 @@
       <div class="loginbox">
         <h2 style="text-align: center">
           <!-- <img src="../assets/logo.jpg" width="163" height="54" alt /> -->
-          {{slogan}}
+          {{ slogan }}
         </h2>
         <div class="formbox">
           <!--用户名-->
           <div class="bdbox">
-            <el-input
-              placeholder="用户名"
-              prefix-icon="el-icon-user"
-              v-model="lgusername"
-            ></el-input>
+            <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="lgusername"></el-input>
           </div>
 
           <!--密码-->
@@ -44,39 +40,37 @@
               prefix-icon="el-icon-c-scale-to-original"
             ></el-input>
           </div>
-          <el-button
-            type="primary"
-            v-debounce="loginajax"
-            :loading="isLoging"
-            class="login_btn"
-            >登录</el-button
-          >
+          <el-button type="primary" v-debounce="loginajax" :loading="isLoging" class="login_btn">登录</el-button>
+          <p class="login-tips" @click="close = true">没有账号? 立即注册</p>
         </div>
       </div>
     </div>
+    <overlay :close.sync="close" title="账号注册" owidth="380px">
+      <sign-up v-if="close"></sign-up>
+    </overlay>
   </div>
 </template>
 <script>
 import { setToken } from '@/utils/auth'
 import { login } from '@/api'
 import { title } from '@/settings'
+import signUp from './widgets/sign-up.vue'
 export default {
-  data: function () {
+  data: function() {
     return {
       slogan: title,
       lgusername: '',
       lguserpwd: '',
       lgButton: false,
       lgtoken: '',
-      isLoging: false
+      isLoging: false,
+      close: false
     }
   },
+  components: { signUp },
   watch: {
-    lgusername: function () {
-      var a = this.lgusername.slice(
-        this.lgusername.length - 1,
-        this.lgusername.length
-      )
+    lgusername: function() {
+      var a = this.lgusername.slice(this.lgusername.length - 1, this.lgusername.length)
       var re = /[A-Za-z]|[\u4e00-\u9fa5]|[0-9]/
       if (!re.test(a)) {
         this.lgusername = this.lgusername.slice(0, this.lgusername.length - 1)
@@ -87,7 +81,7 @@ export default {
         this.lgButton = false
       }
     },
-    lguserpwd: function () {
+    lguserpwd: function() {
       if (this.lgusername !== '' && this.lguserpwd !== '') {
         this.lgButton = true
       } else {
@@ -96,7 +90,7 @@ export default {
     }
   },
   methods: {
-    loginajax () {
+    loginajax() {
       // 登录验证返回token
       if (!this.lgusername || !this.lguserpwd) {
         this.$message({
@@ -115,7 +109,7 @@ export default {
         password: this.lguserpwd
       }
       login(params)
-        .then((res) => {
+        .then(res => {
           this.isLoging = false
           // 6小时失效
           setToken('token', res.data.token, { expires: 0.25 })
@@ -126,7 +120,7 @@ export default {
           this.isLoging = false
         })
     },
-    enterLoginajax (e) {
+    enterLoginajax(e) {
       // 检测密码是否为空之后进行enter事件的监控
       if (e.keyCode === 13) {
         if (this.lgusername !== '' && this.lguserpwd !== '') {
@@ -134,15 +128,15 @@ export default {
         }
       }
     },
-    debounce (fn, wait) {
+    debounce(fn, wait) {
       let timer
-      return function () {
+      return function() {
         const that = this
         const args = arguments
         if (timer) {
           clearTimeout(timer)
         }
-        timer = setTimeout(function () {
+        timer = setTimeout(function() {
           fn.apply(that, args)
         }, wait)
       }
@@ -150,14 +144,14 @@ export default {
   }
 }
 </script>
-<style lang='scss'>
+<style lang="scss">
 .login_main {
   width: 100%;
   height: 100vh;
   position: fixed;
   top: 0;
-  // @include base-background();
-  background: url(../assets/img/wlbg.png) no-repeat 0% 100%;
+  @include base-background();
+  // background: url(../assets/img/wlbg.png) no-repeat 0% 100%;
 }
 
 .login_content {
@@ -181,17 +175,24 @@ export default {
     @include box-shadow();
     // background: #0e9b92 linear-gradient(135deg, #0b827c, #11bab0);
     &:after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: url(../assets/img/wlbg.png) no-repeat 30% 90%;
+      // background: url(../assets/img/wlbg.png) no-repeat 30% 90%;
       z-index: -1;
       filter: blur(5px);
       filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=false);
     }
+  }
+  .login-tips {
+    text-align: end;
+    font-size: 12px;
+    line-height: 28px;
+    cursor: pointer;
+    color: #1989fa;
   }
 }
 

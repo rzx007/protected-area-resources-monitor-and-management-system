@@ -1,10 +1,10 @@
 <template>
   <div class="content">
-    <div class="view">
-      <div class="primary-border-color">
-        <CurdView :tableOptions="tableOptions" :fromOptions="fromOptions"  @params-change="getParams" ref="table" >
+     <div class="primary-border-color">
+        <curd-view :tableOptions="tableOptions" :fromOptions="fromOptions"  @params-change="getParams" ref="table" >
           <template v-slot:panel>
-            <el-button icon="el-icon-plus" size="mini" type="success" @click="addUser">新增用户</el-button>
+            <el-button icon="el-icon-plus" size="mini" type="success" @click="isShow=true">新增用户</el-button>
+            <el-button icon="el-icon-plus" size="mini" type="primary" @click="isNew=true">用户审批</el-button>
           </template>
           <template v-slot:operation="Props">
             <el-button type="primary" @click="editUser(Props.rowData.row)"
@@ -24,40 +24,24 @@
               <el-button type="danger" icon="el-icon-delete" slot="reference" title="删除" circle></el-button>
             </el-popconfirm>
           </template>
-
           <template v-slot:region="Props">
             <p>{{ Props.rowData.row.divisionCodeName ? Props.rowData.row.divisionCodeName : '所有地区' }}</p>
           </template>
-        </CurdView>
+        </curd-view>
       </div>
-    </div>
+    <overlay :close.sync='isShow' title="新增用户" owidth="380px">
+      <sign-up></sign-up>
+    </overlay>
+    <overlay :close.sync='isNew' title="用户审批" owidth="80vw">
+    </overlay>
   </div>
 </template>
 
 <script>
 const fromOptions = [{ name: 'name', label: '用户名称', type: 'text' }]
+import signUp from './pages/sign-up.vue'
 export default {
   data () {
-    const validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请入密码！'))
-      } else {
-        if (this.$refs.formRule.fromData.passwordag !== '') {
-          this.$refs.formRule.$refs.ruleForm.validateField('passwordag')
-        }
-        callback()
-      }
-    }
-    const validatePassCheck = (rule, value, callback) => {
-      console.log('rule', rule, this.$refs.formRule)
-      if (value === '') {
-        callback(new Error('请再次输入密码！'))
-      } else if (value !== this.$refs.formRule.fromData.password) {
-        callback(new Error('两次输入密码不一致！'))
-      } else {
-        callback()
-      }
-    }
     return {
       fromItem: [],
       tableOptions: {
@@ -69,10 +53,10 @@ export default {
         responseName: 'users',
         columns: [
           { type: 'index', label: '序号', align: 'center', width: 80 },
-          { label: '用户ID', align: 'center', prop: 'userId' },
-          { label: '用户名称', align: 'center', prop: 'userName' },
-          { label: '用户昵称', align: 'center', prop: 'userAlias' },
-          { label: '所属地区', align: 'center', slot: 'region' },
+          { label: '注册时间', align: 'center', prop: 'userId' },
+          { label: '账号', align: 'center', prop: 'userName' },
+          { label: '备注', align: 'center', prop: 'userAlias' },
+          { label: '角色权限', align: 'center', prop: 'userAlias' },
           {
             label: '状态',
             align: 'center',
@@ -87,15 +71,11 @@ export default {
       },
       fromOptions,
       isShow: false,
+      isNew: false,
       title: '',
-      isRole: false,
-      detailInfo: {},
-      isPassword: false,
-      selectedRow: {},
-      postParams: { password: '' },
-      postUrl: ''
     }
   },
+  components: { signUp },
   methods: {
     getParams (data) {
       this.tableOptions.params.consName = data.consName
@@ -103,7 +83,7 @@ export default {
     updateStatus (row) { },
 
     addUser () {
-      this.postUrl = '/systemManagementService/userService/addUser'
+      
     },
     editUser (row) {
       console.log(row);
