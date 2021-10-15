@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-13 23:48:45
+ * @LastEditTime: 2021-10-15 15:45:39
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\status.vue
@@ -43,7 +43,10 @@ export default {
         { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '' },
         { id: 'KJGRA679SHJO', status: 2, inUseTime: '', user: '张三' },
         { id: 'KJGRA679SHJO', status: 3, inUseTime: '2012-10-12', user: '李四' },
-        { id: 'KJGRA679SHJO', status: 4, inUseTime: '', user: '' }
+        { id: 'KJGRA679SHJO', status: 4, inUseTime: '', user: '' },
+        { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '' },
+        { id: 'KJGRA679SHJO', status: 2, inUseTime: '', user: '张三' },
+        { id: 'KJGRA679SHJO', status: 3, inUseTime: '2012-10-12', user: '李四' },
       ],
       statusEnum: [
         { status: 1, color: '#4762b0', title: '已部署' },

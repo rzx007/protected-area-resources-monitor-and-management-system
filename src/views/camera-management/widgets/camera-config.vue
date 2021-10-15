@@ -1,16 +1,14 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-14 00:35:38
+ * @LastEditTime: 2021-10-15 14:36:31
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-config.vue
 -->
 <template>
-  <div class="camera-detail-block">
-    <div class="back-block">
-      <i class="back-btn el-icon-back" @click="goBack" title="返回"></i>
-    </div>
+  <div class="camera-sub-block">
+    <back-bar @back="goBack"></back-bar>
     <div class="anas-block">
       <p class="sub-title">
         设备编号：<span>{{ info.id }}</span>
@@ -45,7 +43,9 @@
 </template>
 
 <script>
+import backBar from '../components/backBar.vue'
 export default {
+  components: { backBar },
   data() {
     return {
       activeIndex: 1
@@ -67,22 +67,13 @@ export default {
 }
 </script>
 <style lang="scss">
-.camera-detail-block {
+.camera-sub-block {
   @include font_color(null);
   padding: 30px;
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
-  .back-block {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-    .back-btn {
-      font-size: 26px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-  }
+
   .anas-block {
     color: #d5d5d8;
     padding: 12px 18px;
@@ -137,6 +128,10 @@ export default {
         @include tool-bar-color();
       }
     }
+  }
+  .config-btn {
+    margin-top: 28px;
+    text-align: center;
   }
 }
 </style>

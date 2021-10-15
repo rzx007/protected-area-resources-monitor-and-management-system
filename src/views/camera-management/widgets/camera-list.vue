@@ -1,19 +1,26 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-13 23:49:40
+ * @LastEditTime: 2021-10-15 15:49:17
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list.vue
 -->
 <template>
   <div class="camera-block">
+    <i class="el-icon-plus add-camera" @click="addCamera" title="添加相机"></i>
     <ul class="tabs">
       <li @click="activeIndex = 1" :class="{ active: activeIndex === 1 }">相机部署</li>
       <li @click="activeIndex = 2" :class="{ active: activeIndex === 2 }">任务下发</li>
     </ul>
-    <status v-show="activeIndex === 1" @click-camera="clickCamera" @click-recycle="clickRecycle" @click-deploy="clickDeploy"></status>
-    <task v-show="activeIndex === 2"></task>
+    <div class="camera-content">
+      <transition name="slide-fade">
+        <status v-show="activeIndex === 1" @click-camera="clickCamera" @click-recycle="clickRecycle" @click-deploy="clickDeploy"></status>
+      </transition>
+      <transition name="slide-fade">
+        <task v-show="activeIndex === 2" @click-camera="clickCamera" @click-task="clickTask"></task>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -39,21 +46,44 @@ export default {
     clickDeploy(item) {
       // 点击部署
       this.$emit('click-deploy', item)
+    },
+    clickTask(item) {
+      // 下发任务
+      this.$emit('click-task', item)
+    },
+    addCamera() {
+      this.$emit('click-add')
     }
   }
 }
 </script>
 <style lang="scss">
+$color: #4762b0;
 .camera-block {
   @include font_color(null);
   padding: 30px;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  .add-camera {
+    font-size: 28px;
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    cursor: pointer;
+    &:hover {
+      color: $color;
+    }
+  }
   .tabs {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 18px;
     .active {
       font-size: 26px;
-      @include font_color(#4762b0);
+      @include font_color($color);
       position: relative;
       &::after {
         content: '';
@@ -61,7 +91,7 @@ export default {
         bottom: -6px;
         left: 0;
         right: 0;
-        border-bottom: 4px solid #4762b0;
+        border-bottom: 4px solid $color;
       }
     }
     li {
@@ -76,6 +106,11 @@ export default {
         margin-left: 18px;
       }
     }
+  }
+  .camera-content {
+    flex: 1;
+    padding: 0 10px;
+    overflow: auto;
   }
 }
 </style>

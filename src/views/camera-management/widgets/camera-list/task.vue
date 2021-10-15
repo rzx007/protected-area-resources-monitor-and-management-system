@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-13 23:25:32
+ * @LastEditTime: 2021-10-15 11:43:22
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\task.vue
@@ -11,7 +11,7 @@
     <el-input v-model="code" placeholder="相机编号查询" clearable></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
-        <div class="info" title="查看信息">
+        <div class="info" title="查看信息" @click="clickCamera(item)">
           <span class="status" :style="{ backgroundColor: getStatus(item.status, 2) }">{{ getStatus(item.status) }}</span>
           <div class="sub-info">
             <p><span>编号：</span> {{ item.id }}</p>
@@ -22,7 +22,7 @@
           <div class="mask"></div>
         </div>
         <div class="setting">
-          <el-button type="primary">下发任务</el-button>
+          <el-button type="primary" @click="clickTask(item)">下发任务</el-button>
         </div>
       </li>
     </ul>
@@ -62,6 +62,14 @@ export default {
           }
         }
       }
+    },
+    clickCamera(item) {
+      // 点击相机
+      this.$emit('click-camera', item)
+    },
+    clickTask(item) {
+      // 下发任务
+       this.$emit('click-task', item)
     }
   }
 }
@@ -91,7 +99,7 @@ export default {
           width: 100%;
           z-index: -1;
           border-radius: 8px;
-          transition: all .3s ease-in-out;
+          transition: all 0.3s ease-in-out;
         }
         .sub-info {
           display: flex;

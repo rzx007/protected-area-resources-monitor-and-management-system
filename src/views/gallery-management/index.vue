@@ -1,3 +1,11 @@
+<!--
+ * @Author: 阮志雄
+ * @Date: 2021-10-11 11:31:45
+ * @LastEditTime: 2021-10-15 10:54:49
+ * @LastEditors: 阮志雄
+ * @Description: In User Settings Edit
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\gallery-management\index.vue
+-->
 <template>
   <div class="content">
     <div class="curd_view">
@@ -39,7 +47,7 @@ export default {
     },
     load() {
       this.count += 2
-      alert(this.count)
+      // alert(this.count)
     }
   }
 }

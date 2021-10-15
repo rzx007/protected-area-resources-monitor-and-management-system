@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import './plugins/day.js'
-import './plugins/particles.js'
 import '@/assets/scss/base.scss'
 import plugin from '@/utils/install' // 全局组件
 import '@/assets/fonts/iconfont.css'

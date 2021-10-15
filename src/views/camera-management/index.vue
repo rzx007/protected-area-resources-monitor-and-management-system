@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-11 11:39:09
- * @LastEditTime: 2021-10-14 00:01:53
+ * @LastEditTime: 2021-10-15 15:46:50
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\index.vue
@@ -14,13 +14,31 @@
         <div class="toggle-button" title="收起" @click="toggle = !toggle">
           <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
         </div>
-        <camera-list
-          v-show="level === 1"
-          @click-camera="clickCamera"
-          @click-recycle="clickRecycle"
-          @click-deploy="clickDeploy"
-        ></camera-list>
-        <camera-config v-if="level === 2" @click-back="level = 1" :info='cameraObj'></camera-config>
+        <transition name="slide-fade">
+          <camera-list
+            v-show="level === 1"
+            @click-camera="clickCamera"
+            @click-recycle="clickRecycle"
+            @click-deploy="clickDeploy"
+            @click-task="clickTask"
+            @click-add="addCamera"
+          ></camera-list>
+        </transition>
+        <transition name="slide-fade">
+          <camera-config v-if="level === 2" @click-back="level = 1" :info="cameraObj"></camera-config>
+        </transition>
+        <transition name="slide-fade">
+          <camera-deploy v-if="level === 3" @click-back="level = 1" :info="cameraObj"></camera-deploy>
+        </transition>
+        <transition name="slide-fade">
+          <camera-recycle v-if="level === 4" @click-back="level = 1" :info="cameraObj"></camera-recycle>
+        </transition>
+        <transition name="slide-fade">
+          <camera-setting v-if="level === 5" @click-back="level = 1" :info="cameraObj"></camera-setting>
+        </transition>
+        <transition name="slide-fade">
+         <camera-add v-if="level === 6" @click-back="level = 1"></camera-add>
+        </transition>
       </div>
     </div>
   </div>
@@ -30,33 +48,43 @@
 import AMapLoader from '@/utils/map'
 import cameraList from './widgets/camera-list.vue'
 import cameraConfig from './widgets/camera-config.vue'
+import cameraDeploy from './widgets/camera-deploy.vue'
+import cameraRecycle from './widgets/camera-recycle.vue'
+import CameraSetting from './widgets/camera-setting.vue'
+import CameraAdd from './widgets/camera-add.vue'
 export default {
   data() {
     return {
       toggle: true,
       map: {},
       AMap: {},
-      cameraObj:{}, // 点击得相机队形集合
-      level: 1 // 1 显示相机列表, 2显示相机详情
+      cameraObj: {}, // 点击得相机队形集合
+      level: 1 // 1 显示相机列表, 2显示相机详情 3显示相机部署 4显示相机回收 5相机任务下发 6添加相机
     }
   },
-  components: { cameraList, cameraConfig },
+  components: { cameraList, cameraConfig, cameraDeploy, cameraRecycle, CameraSetting, CameraAdd },
   mounted() {
     this.initMap()
   },
   methods: {
+    // 点击相机
     clickCamera(item) {
       this.level = 2
       this.cameraObj = item
-      console.log(item)
     },
+    // 点击回收
     clickRecycle(item) {
-      // 点击回收
-      this.$emit('click-recycle', item)
+      this.level = 4
     },
+    // 点击部署
     clickDeploy(item) {
-      // 点击部署
-      this.$emit('click-deploy', item)
+      this.level = 3
+    },
+    clickTask(item) {
+      this.level = 5
+    },
+    addCamera() {
+      this.level = 6
     },
     async initMap() {
       // 地图
@@ -107,7 +135,7 @@ export default {
     border-radius: 10px;
   }
   .carmera-list {
-    min-width: 420px;
+    min-width: 440px;
     height: 85vh;
     position: absolute;
     right: 30px;

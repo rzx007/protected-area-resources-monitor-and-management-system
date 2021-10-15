@@ -3,9 +3,7 @@
     <v-slidebar v-if="mode" :mode="mode"></v-slidebar>
     <div class="right_container">
       <el-header>
-        <v-header :mode="mode">
-          <v-slidebar v-if="!mode" :mode="mode"></v-slidebar>
-        </v-header>
+        <v-header :mode="mode"></v-header>
       </el-header>
       <div class="dashborad">
         <!-- <v-tags class="tag-nav-wrapper" v-if="tagsBar && $route.path != '/home'"></v-tags> -->

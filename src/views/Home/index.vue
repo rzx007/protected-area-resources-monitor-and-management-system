@@ -1,118 +1,97 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-10-13 10:12:10
+ * @LastEditTime: 2021-10-15 16:46:05
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\index.vue
 -->
 <template>
   <div class="content mapBox">
-    <div class="tooldragbar">
-      <mapToolbar @on-select='toolSelcet'></mapToolbar>
+    <home-map></home-map>
+    <div :class="[toggle ? '' : 'carmera-list-hidden', 'carmera-list']">
+      <div class="toggle-button" title="收起" @click="toggle = !toggle">
+        <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
+      </div>
+      <transition name="slide-fade">
+        <camera-list v-show="level === 1" @click-camera="clickCamera"></camera-list>
+      </transition>
+      <transition name="slide-fade">
+        <camera-config v-if="level === 2" @click-back="level = 1" :info="cameraObj"></camera-config>
+      </transition>
     </div>
-    <div id="container"></div>
   </div>
 </template>
 
 <script>
-import AMapLoader from '@/utils/map'
-import { apiGet } from '@/api'
-import mapToolbar from './widgets/mapToolBar.vue'
+import homeMap from './widgets/map.vue'
+import cameraList from './widgets/camera-list.vue'
+import cameraConfig from './widgets/camera-config.vue'
 export default {
-  data () {
+  components: { homeMap, cameraList, cameraConfig },
+  data() {
     return {
-      activeName: 'first',
-      AMap: {},
-      map: {}
+      toggle: true,
+      level: 1 // 1 显示相机列表, 2显示相机详情
     }
-  },
-  components: { mapToolbar },
-  mounted () {
-    this.initMap()
   },
   methods: {
-    async initMap () { // 地图
-      const { AMap } = await AMapLoader()
-      this.AMap = AMap
-      this.map = new this.AMap.Map('container', {
-        viewMode: '3D',
-        zoom: 10,
-        zooms: [7, 14],
-        showBuildingBlock: true,
-        center: [108.8196, 28.8666]
-      })
-      this.map.on('complete', () => {
-        console.log('complete')
-        const controlBar = new AMap.ControlBar({
-          position: {
-            bottom: '100px',
-            right: '0px'
-          }
-        })
-        this.getGeoJson(AMap)
-        this.map.addControl(new AMap.Scale()) // 比例尺
-        this.map.addControl(new AMap.ToolBar()) // 放大缩小按钮
-        this.map.addControl(controlBar)
-        this.addMarker(AMap) // 添加标记点
-      })
-    },
-    addMarker (AMap) {
-      this.map.add(new AMap.Marker({
-        position: this.map.getCenter(),
-        anchor: 'bottom-center'
-      }))
-    },
-    getGeoJson (AMap) { // 加载geojson地理数据， kml文件可通过插件方式转换为geojson
-      apiGet('https://a.amap.com/jsapi_demos/static/geojson/chongqing.json').then((result) => {
-        var geojson = new AMap.GeoJSON({
-          geoJSON: result,
-          // 还可以自定义getMarker和getPolyline
-          getPolygon: function (geojson, lnglats) {
-            // 计算面积
-            var area = AMap.GeometryUtil.ringArea(lnglats[0])
-            return new AMap.Polygon({
-              path: lnglats,
-              fillOpacity: 1 - Math.sqrt(area / 8000000000), // 面积越大透明度越高/
-              strokeColor: 'white',
-              fillColor: 'red'
-            })
-          }
-        })
-        this.map.add(geojson)
-      }).catch((err) => {
-        console.log(err)
-      })
-    },
-    addSatellite () { // 添加卫星图层
-      var satelliteLayer = new this.AMap.TileLayer.Satellite()
-      this.map.add([satelliteLayer])
-    },
-    toolSelcet (item) {
-      console.log(item.type)
-      if (item.type === 1) {
-        this.addSatellite() // 卫星图层
-      }
+    // 点击相机
+    clickCamera(item) {
+      this.level = 2
+      this.cameraObj = item
     }
-  },
-  destroyed () {
-    this.map.destroy()
   }
 }
 </script>
-<style lang='scss'>
-.mapBox{
+<style lang="scss">
+.mapBox {
   padding: 0;
-  #container{
-    width: 100%;
-    height: 100%;
-  }
-  .tooldragbar{
+  width: 100%;
+  height: 100%;
+  @include content-background();
+  border-radius: 10px;
+  position: relative;
+  @include box-shadow();
+  overflow: hidden;
+  .carmera-list {
+    min-width: 420px;
+    height: 85vh;
     position: absolute;
-    right: 80px;
-    top: 15px;
-    z-index: 100;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px);
+    z-index: 10;
+    border-radius: 14px;
+    @include box-shadow();
+    transition: all 0.6s ease-in-out;
+    .toggle-button {
+      position: absolute;
+      top: 50%;
+      left: -20px;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      width: 20px;
+      height: 50px;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      z-index: -1;
+      text-align: center;
+      line-height: 50px;
+      @include font_color(null);
+      cursor: pointer;
+      &:hover {
+        background-color: #3385ff;
+        color: #fff;
+      }
+    }
   }
+  .carmera-list-hidden {
+    transform: translate(100%, -50%);
+  }
+  
 }
-
 </style>

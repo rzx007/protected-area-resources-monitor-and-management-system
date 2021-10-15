@@ -1,33 +1,13 @@
 <template>
   <div class="login_main">
-    <vue-particles
-      color="#4762b0"
-      :particleOpacity="0.7"
-      :particlesNumber="60"
-      shapeType="circle"
-      :particleSize="4"
-      linesColor="#4762b0"
-      :linesWidth="1"
-      :lineLinked="true"
-      :lineOpacity="0.4"
-      :linesDistance="150"
-      :moveSpeed="2"
-      :hoverEffect="true"
-      hoverMode="grab"
-      :clickEffect="true"
-      clickMode="push"
-      class="lizi"
-    ></vue-particles>
     <div class="login_content">
       <div class="loginbox">
-        <h2 style="text-align: center">
-          <!-- <img src="../assets/logo.jpg" width="163" height="54" alt /> -->
-          {{ slogan }}
-        </h2>
+        <h2 style="text-align: center">{{ slogan }}</h2>
         <div class="formbox">
           <!--用户名-->
           <div class="bdbox">
-            <el-input placeholder="用户名" prefix-icon="el-icon-user" v-model="lgusername"></el-input>
+            <h4>手机号</h4>
+            <el-input placeholder="用户名" prefix-icon="el-icon-user" style="width:220px" v-model="lgusername"></el-input>
           </div>
 
           <!--密码-->
@@ -148,44 +128,57 @@ export default {
 .login_main {
   width: 100%;
   height: 100vh;
-  position: fixed;
-  top: 0;
+  min-width: 1200px;
   @include base-background();
-  // background: url(../assets/img/wlbg.png) no-repeat 0% 100%;
-}
-
-.login_content {
-  width: 450px;
-  height: 280px;
-  position: absolute;
-  top: 30%;
-  right: 50px;
-  .loginbox {
-    z-index: 1;
+  background: url(../../assets/img/bg.jpg) no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  @include font_color(null);
+  &::after {
+    content: '';
     position: absolute;
     top: 0;
+    bottom: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    background-color: rgba($color: #000, $alpha: 0.4);
+    backdrop-filter: blur(26px);
+    z-index: 0;
+  }
+}
+.login_content {
+  width: 50%;
+  height: 60%;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-start;
+  background: url(../../assets/img/bg.jpg) no-repeat;
+  background-size: cover;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    border-radius: 50%;
+    top: -45%;
+    left: -138%;
+    @include content-background();
+    z-index: -1;
+  }
+  .loginbox {
     box-sizing: border-box;
     padding: 10px;
-    border: 1px solid transparent;
-    @include border-color();
-    border-radius: 10px;
-    @include box-shadow();
-    // background: #0e9b92 linear-gradient(135deg, #0b827c, #11bab0);
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      // background: url(../assets/img/wlbg.png) no-repeat 30% 90%;
-      z-index: -1;
-      filter: blur(5px);
-      filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=false);
-    }
+    width: 40%;
+    @include content-background();
+    z-index: 10;
+    position: relative;
+    padding: 30px 20px;
   }
   .login-tips {
     text-align: end;
@@ -206,8 +199,6 @@ export default {
   @include font_color(null);
   font-weight: normal;
   letter-spacing: 2px;
-  border-bottom: 1px solid transparent;
-  @include border-color();
   img {
     float: left;
     padding-right: 20px;
