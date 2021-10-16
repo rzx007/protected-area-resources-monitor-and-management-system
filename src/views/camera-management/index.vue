@@ -135,7 +135,7 @@ export default {
     border-radius: 10px;
   }
   .carmera-list {
-    min-width: 440px;
+   width: auto;
     height: 85vh;
     position: absolute;
     right: 30px;

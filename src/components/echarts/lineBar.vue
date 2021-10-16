@@ -1,14 +1,13 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-08-26 13:41:03
- * @LastEditTime: 2021-09-02 10:34:18
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-10-16 16:55:19
+ * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
- * @FilePath: \linux-terminal-pc\src\components\echarts\lineBar.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\echarts\lineBar.vue
 -->
 <template>
   <div class="line-main">
-    <header class="title">{{ title }}</header>
     <div :id="randomId" :style="{ height }" class="bar-content"></div>
   </div>
 </template>
@@ -30,6 +29,7 @@ echarts.use([
   CanvasRenderer,
   ToolboxComponent
 ])
+
 export default {
   data() {
     return {
@@ -74,6 +74,12 @@ export default {
     height: {
       type: String,
       default: '210px'
+    },
+    itemStyle: {
+      type:Object,
+      default: function(){
+        return {}
+      }
     }
   },
   methods: {
@@ -82,13 +88,14 @@ export default {
       var chartDom = document.getElementById(this.randomId)
       this.barChart = echarts.init(chartDom)
       let series = []
-      const areaStyle = { areaStyle: {}, emphasis: { focus: 'series' } }
+      // const areaStyle = { areaStyle: {}, emphasis: { focus: 'series' } }
+      const areaStyle = {}
       for (let index = 0; index < _this.yAxis.length; index++) {
         const item = _this.yAxis[index]
         if (Array.isArray(item)) {
-          series.push({ name: _this.legend[index], type: _this.chartType, data: item, ...areaStyle })
+          series.push({ name: _this.legend[index], type: _this.chartType, data: item, itemStyle: _this.itemStyle, ...areaStyle, })
         } else {
-          series = [{ type: _this.chartType, data: _this.yAxis, ...areaStyle }]
+          series = [{ type: _this.chartType, data: _this.yAxis, itemStyle: _this.itemStyle, ...areaStyle }]
           break
         }
       }
@@ -97,7 +104,7 @@ export default {
         //   text: '世界人口总量',
         //   subtext: '数据来自网络'
         // },
-        color: ['#2ec7c9','#b6a2de', '#ffb980',  '#5ab1ef','#d87a80', '#8d98b3', '#e5cf0d', '#97b552', '#95706d'],
+        color: ['#5470c6','#91cc75', '#ffb980',  '#5ab1ef','#d87a80', '#8d98b3', '#e5cf0d', '#97b552', '#95706d'],
         toolbox: {
           feature: {
             saveAsImage: {}
@@ -143,11 +150,11 @@ export default {
 </script>
 <style lang="scss">
 .line-main {
-  border: 1px solid transparent;
+  // border: 1px solid transparent;
   @include content-background();
-  margin-bottom: 12px;
-  @include box-shadow();
-  @include border-color();
+  // margin-bottom: 12px;
+  // @include box-shadow();
+  // @include border-color();
   .bar-content {
     width: 100%;
   }

@@ -110,7 +110,7 @@ export default {
       slogan: title,
       collapse: false,
       fullscreen: false,
-      name: getToken('name') || '管理员',
+      username: getToken('userName') || '管理员',
       message: 2,
       close: false,
       ruleForm: {
@@ -142,12 +142,6 @@ export default {
     }
   },
   // components: { ThemeBar },
-  computed: {
-    username() {
-      const username = localStorage.getItem('ms_username')
-      return username || this.name
-    }
-  },
   methods: {
     // 用户名下拉菜单选择事件
     handleCommand(command) {

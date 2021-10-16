@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-15 16:29:10
+ * @LastEditTime: 2021-10-16 00:28:03
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\widgets\camera-list.vue
@@ -53,7 +53,7 @@ $color: #4762b0;
     justify-content: flex-start;
     margin-bottom: 18px;
     .active {
-      font-size: 26px;
+      font-size: 20px;
       @include font_color($color);
       position: relative;
       &::after {
@@ -67,7 +67,7 @@ $color: #4762b0;
     }
     li {
       line-height: 35px;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: #bfbfbf;
       letter-spacing: 2px;

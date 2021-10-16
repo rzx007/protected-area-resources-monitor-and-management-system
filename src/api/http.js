@@ -30,7 +30,7 @@ http.interceptors.response.use(
   response => {
     const status = response.status
     const res = response.data
-    if (status === 200) {
+    if (status === 200 && res.code === 0 ) {
       return Promise.resolve(res)
     } else {
       Message({

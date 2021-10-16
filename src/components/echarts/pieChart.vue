@@ -1,14 +1,14 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-08-26 13:41:18
- * @LastEditTime: 2021-09-10 10:00:43
+ * @LastEditTime: 2021-10-16 16:30:18
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
- * @FilePath: \linux-terminal-pc\src\components\echarts\pieChart.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\echarts\pieChart.vue
 -->
 <template>
   <div class="pie-main" :class="{bordershadow: header}">
-    <header class="title" v-if="header">{{ header }}</header>
+    <!-- <header class="title" v-if="header">{{ header }}</header> -->
     <div :id="randomId" :style="{ height }" class="pie-content"></div>
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
     chartType: {
       // 环形还是普通饼图
       type: String,
-      default: '',
+      default: 'circle',
       validator: function(value) {
         return ['', 'circle'].indexOf(value) !== -1
       }
@@ -62,7 +62,7 @@ export default {
       type: Object,
       default: function(){
         return {
-           position: 'inside',
+           position: 'outside',
            show: true
         }
       }
@@ -153,6 +153,6 @@ export default {
   }
 }
 .bordershadow{
-   @include box-shadow();
+  //  @include box-shadow();
 }
 </style>
