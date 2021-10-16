@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 16:08:30
- * @LastEditTime: 2021-10-16 16:58:11
+ * @LastEditTime: 2021-10-16 19:39:12
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis\widgets\map.vue
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       activeName: 'first',
-      AMap: {},
+      AMaps: {},
       map: {}
     }
   },
@@ -30,9 +30,9 @@ export default {
   methods: {
     async initMap() {
       // 地图
-      const { AMap } = await AMapLoader()
-      this.AMap = AMap
-      this.map = new this.AMap.Map('container', {
+      const { AMaps } = await AMapLoader()
+      this.AMaps = AMaps
+      this.map = new this.AMaps.Map('container', {
         viewMode: '3D',
         zoom: 10,
         zooms: [7, 14],
@@ -41,21 +41,21 @@ export default {
       })
       this.map.on('complete', () => {
         console.log('complete')
-        const controlBar = new AMap.ControlBar({
+        const controlBar = new AMaps.ControlBar({
           position: {
             bottom: '100px',
             right: '0px'
           }
         })
-        this.map.addControl(new AMap.Scale()) // 比例尺
-        this.map.addControl(new AMap.ToolBar()) // 放大缩小按钮
+        this.map.addControl(new AMaps.Scale()) // 比例尺
+        this.map.addControl(new AMaps.ToolBar()) // 放大缩小按钮
         this.map.addControl(controlBar)
-        this.addMarker(AMap) // 添加标记点
+        this.addMarker(AMaps) // 添加标记点
       })
     },
-    addMarker(AMap) {
+    addMarker(AMaps) {
       this.map.add(
-        new AMap.Marker({
+        new AMaps.Marker({
           position: this.map.getCenter(),
           anchor: 'bottom-center'
         })

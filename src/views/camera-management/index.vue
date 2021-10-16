@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-11 11:39:09
- * @LastEditTime: 2021-10-15 15:46:50
+ * @LastEditTime: 2021-10-16 19:39:00
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\index.vue
@@ -57,7 +57,7 @@ export default {
     return {
       toggle: true,
       map: {},
-      AMap: {},
+      AMaps: {},
       cameraObj: {}, // 点击得相机队形集合
       level: 1 // 1 显示相机列表, 2显示相机详情 3显示相机部署 4显示相机回收 5相机任务下发 6添加相机
     }
@@ -88,9 +88,9 @@ export default {
     },
     async initMap() {
       // 地图
-      const { AMap } = await AMapLoader()
-      this.AMap = AMap
-      this.map = new this.AMap.Map('carmera-map', {
+      const { AMaps } = await AMapLoader()
+      this.AMaps = AMaps
+      this.map = new this.AMaps.Map('carmera-map', {
         viewMode: '3D',
         zoom: 10,
         zooms: [7, 14],
@@ -99,19 +99,19 @@ export default {
       })
       this.map.on('complete', () => {
         console.log('complete')
-        const controlBar = new AMap.ControlBar({
+        const controlBar = new AMaps.ControlBar({
           position: {
             bottom: '100px',
             right: '0px'
           }
         })
         this.map.addControl(controlBar)
-        this.addMarker(AMap) // 添加标记点
+        this.addMarker(AMaps) // 添加标记点
       })
     },
-    addMarker(AMap) {
+    addMarker(AMaps) {
       this.map.add(
-        new AMap.Marker({
+        new AMaps.Marker({
           position: this.map.getCenter(),
           anchor: 'bottom-center'
         })

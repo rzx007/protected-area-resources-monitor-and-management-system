@@ -44,6 +44,7 @@ import { setToken } from '@/utils/auth'
 import { loginByMobile, loginByPwd, getCaptcha } from '@/api'
 import { title } from '@/settings'
 import signUp from './widgets/sign-up.vue'
+import md5 from 'md5-js'
 export default {
   data: function() {
     return {
@@ -64,7 +65,7 @@ export default {
     loginajax() {
       this.isLoging = true
       const params = { mobile: this.mobile }
-      this.loginByPwd ? (params.passwords = this.passwords) : (params.code = this.code)
+      this.loginByPwd ? (params.passwords = md5(this.passwords)) : (params.code = this.code)
       const login = this.loginByPwd ? loginByPwd(params) : loginByMobile(params)
       login
         .then(res => {

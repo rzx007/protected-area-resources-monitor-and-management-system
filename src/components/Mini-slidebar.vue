@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 12:24:04
- * @LastEditTime: 2021-10-13 16:34:28
+ * @LastEditTime: 2021-10-16 18:30:13
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\Mini-slidebar.vue
@@ -14,11 +14,8 @@
     <div class="menu-content">
       <ul class="menu-list">
         <li
-          @click="
-            activeIndex = index
-            pushRoute(item)
-          "
-          :class="[activeIndex === index ? 'activeClass' : '', 'menu-item']"
+          @click="pushRoute(item)"
+          :class="[$route.path === item.path ? 'activeClass' : '', 'menu-item']"
           v-for="(item, index) in menuData"
           :key="index"
         >
@@ -39,8 +36,7 @@ export default {
   components: { SvgIcon },
   data() {
     return {
-      menuData: [...routeArr],
-      activeIndex: 0
+      menuData: [...routeArr]
     }
   },
   methods: {

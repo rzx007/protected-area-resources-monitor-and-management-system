@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 16:08:30
- * @LastEditTime: 2021-10-15 16:25:58
+ * @LastEditTime: 2021-10-16 19:38:43
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\widgets\map.vue
@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       activeName: 'first',
-      AMap: {},
+      AMaps: {},
       map: {}
     }
   },
@@ -35,9 +35,10 @@ export default {
   methods: {
     async initMap() {
       // 地图
-      const { AMap } = await AMapLoader()
-      this.AMap = AMap
-      this.map = new this.AMap.Map('container', {
+      const { AMaps } = await AMapLoader()
+      this.AMaps = AMaps
+      this.map = new this.AMaps.Map('container', {
+        mapStyle: 'amap://styles/b0de2f829295042fd24e20c6233cef55',
         viewMode: '3D',
         zoom: 10,
         zooms: [7, 14],
@@ -46,38 +47,38 @@ export default {
       })
       this.map.on('complete', () => {
         console.log('complete')
-        const controlBar = new AMap.ControlBar({
+        const controlBar = new AMaps.ControlBar({
           position: {
             bottom: '100px',
             right: '0px'
           }
         })
-        this.getGeoJson(AMap)
-        this.map.addControl(new AMap.Scale()) // 比例尺
-        this.map.addControl(new AMap.ToolBar()) // 放大缩小按钮
+        this.getGeoJson(AMaps)
+        this.map.addControl(new AMaps.Scale()) // 比例尺
+        this.map.addControl(new AMaps.ToolBar()) // 放大缩小按钮
         this.map.addControl(controlBar)
-        this.addMarker(AMap) // 添加标记点
+        this.addMarker(AMaps) // 添加标记点
       })
     },
-    addMarker(AMap) {
+    addMarker(AMaps) {
       this.map.add(
-        new AMap.Marker({
+        new AMaps.Marker({
           position: this.map.getCenter(),
           anchor: 'bottom-center'
         })
       )
     },
-    getGeoJson(AMap) {
+    getGeoJson(AMaps) {
       // 加载geojson地理数据， kml文件可通过插件方式转换为geojson
       apiGet('https://a.amap.com/jsapi_demos/static/geojson/chongqing.json')
         .then(result => {
-          var geojson = new AMap.GeoJSON({
+          var geojson = new AMaps.GeoJSON({
             geoJSON: result,
             // 还可以自定义getMarker和getPolyline
             getPolygon: function(geojson, lnglats) {
               // 计算面积
-              var area = AMap.GeometryUtil.ringArea(lnglats[0])
-              return new AMap.Polygon({
+              var area = AMaps.GeometryUtil.ringArea(lnglats[0])
+              return new AMaps.Polygon({
                 path: lnglats,
                 fillOpacity: 1 - Math.sqrt(area / 8000000000), // 面积越大透明度越高/
                 strokeColor: 'white',
@@ -93,7 +94,7 @@ export default {
     },
     addSatellite() {
       // 添加卫星图层
-      var satelliteLayer = new this.AMap.TileLayer.Satellite()
+      var satelliteLayer = new this.AMaps.TileLayer.Satellite()
       this.map.add([satelliteLayer])
     },
     toolSelcet(item) {
