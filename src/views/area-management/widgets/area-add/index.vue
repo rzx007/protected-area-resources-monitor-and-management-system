@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-17 01:00:40
+ * @LastEditTime: 2021-10-17 16:44:21
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-add\index.vue
@@ -17,9 +17,9 @@
       </p>
       <p class="config-item">
         <span class="teil" title="在地图左键点击选取中心点">地理位置：<i class="el-icon-question"></i></span>
-        <el-input v-model="latlng" placeholder="经度" style="width:120px" clearable></el-input>
+        <el-input v-model="lng" placeholder="经度" style="width:120px" type="number" @change="handraulicSetCenter"></el-input>
         -
-        <el-input v-model="latlng" placeholder="纬度" style="width:120px" clearable></el-input>
+        <el-input v-model="lat" placeholder="纬度" style="width:120px" type="number" @change="handraulicSetCenter"></el-input>
       </p>
     </div>
     <div class="config-block">
@@ -33,8 +33,16 @@
         <el-switch v-model="fixedCnter" active-text="是" inactive-text="否" @change="swithCenter"> </el-switch>
       </p>
     </div>
+    <div class="config-block">
+      <h4 class="title">自定义导入</h4>
+      <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+      </el-upload>
+    </div>
     <div class="config-btn">
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="saveArea">保存</el-button>
       <el-button type="danger" @click="goBack">取消</el-button>
     </div>
   </div>
@@ -48,7 +56,8 @@ export default {
   data() {
     return {
       areaName: '',
-      latlng: '',
+      lng: null,
+      lat: null,
       edit: false,
       fixedCnter: false
     }
@@ -66,11 +75,26 @@ export default {
       this.$emit('click-back', false)
     },
     swithEdit(bool) {
-      hub.$emit('click-edit', bool)
+      hub.$emit('create-edit', bool)
     },
     swithCenter(bool) {
-      hub.$emit('click-center', bool)
+      hub.$emit('create-center', bool)
+    },
+    saveArea() {
+      this.$emit('cerate-area', { areaName: this.areaName, center: [this.lng, this.lat] })
+    },
+    handraulicSetCenter() {
+      // 手动填入经纬度坐标
+      if (this.lng && this.lat) {
+        hub.$emit('handraulic-center', [Number(this.lng), Number(this.lat)])
+      }
     }
+  },
+  mounted() {
+    hub.$on('on-setCenter', lnglat=> {
+      this.lng = Number(lnglat[0])
+      this.lat = Number(lnglat[1])
+    })
   }
 }
 </script>

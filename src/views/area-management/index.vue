@@ -1,26 +1,26 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-10-17 00:41:50
+ * @LastEditTime: 2021-10-17 16:59:14
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\index.vue
 -->
 <template>
   <div class="content areaMap">
-    <home-map :isEdit="editMap" :isCreate='isCreate' :mapId="mapId" ref="map"></home-map>
+    <home-map :isEdit="editMap" :isCreate="isCreate" :mapId="cameraObj.id" ref="map"></home-map>
     <div :class="[toggle ? '' : 'carmera-list-hidden', 'carmera-list']">
       <div class="toggle-button" title="收起" @click="toggle = !toggle">
         <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
       </div>
       <transition name="slide-fade">
-        <camera-list v-show="level === 1" @click-area="clickArea" @click-add='aaddArea'></camera-list>
+        <camera-list v-show="level === 1" @click-area="clickArea" @click-add="aaddArea"></camera-list>
       </transition>
       <transition name="slide-fade">
-        <camera-config v-if="level === 2" @click-back="goBack" :info="cameraObj" @click-edit="swithEdit"></camera-config>
+        <camera-config v-if="level === 2" @click-back="goBack" @update-edit="swithEdit" :info="cameraObj"></camera-config>
       </transition>
       <transition name="slide-fade">
-        <area-add v-if="level === 3" @click-back="cancelCreate"></area-add>
+        <area-add v-if="level === 3" @click-back="cancelCreate" @cerate-area="cerateArea"></area-add>
       </transition>
     </div>
   </div>
@@ -39,21 +39,18 @@ export default {
       level: 1, // 1 显示相机列表, 2显示相机详情, 3新增相机
       editMap: false,
       isCreate: false, // 新增
-      mapId: ''
+      cameraObj: {}
     }
   },
   methods: {
     // 点击相机
     clickArea(item) {
       this.level = 2
+      this.editMap = true
       this.cameraObj = item
     },
     swithEdit(bool) {
       this.editMap = bool
-    },
-    aaddArea() {
-      this.level = 3
-      this.isCreate = true
     },
     goBack() {
       // 详情返回自动关闭编辑功能
@@ -61,9 +58,18 @@ export default {
       this.editMap = false
       this.$refs.map.getPolygonPath()
     },
+    aaddArea() {
+      this.level = 3
+      this.isCreate = true
+    },
+
     cancelCreate() {
       this.level = 1
       this.isCreate = false
+    },
+    cerateArea(params) {
+      const path = this.$refs.map.getPolygonPath()
+      console.log(params, path)
     }
   }
 }

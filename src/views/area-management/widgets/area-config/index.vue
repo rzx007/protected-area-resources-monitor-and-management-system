@@ -1,10 +1,10 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-16 21:29:01
+ * @LastEditTime: 2021-10-17 16:58:06
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\camera-config.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-config\index.vue
 -->
 <template>
   <div class="camera-sub-block">
@@ -29,7 +29,7 @@
       <h4 class="title">保护区编辑</h4>
       <p class="config-item">
         <span class="teil">是否编辑：</span>
-        <el-switch v-model="edit" active-text="否" inactive-text="是" @change="swithEdit"> </el-switch>
+        <el-switch v-model="edit" active-text="是" inactive-text="否" @change="swithEdit"> </el-switch>
       </p>
     </div>
     <div class="config-btn">
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import hub from '@/utils/bus'
 import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
@@ -61,7 +62,7 @@ export default {
       this.$emit('click-back')
     },
     swithEdit(bool) {
-      this.$emit('click-edit', bool)
+     this.$emit('update-edit', bool)
     }
   }
 }

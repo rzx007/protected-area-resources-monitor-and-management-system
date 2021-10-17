@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 16:08:30
- * @LastEditTime: 2021-10-17 01:38:35
+ * @LastEditTime: 2021-10-17 17:19:31
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\map\index.vue
@@ -32,31 +32,38 @@ export default {
   },
   data() {
     return {
-      path: [
-        [116.403322, 39.920255],
-        [116.410703, 39.897555],
-        [116.402292, 39.892353],
-        [116.389846, 39.891365]
-      ],
-      center: [], // 中心点
-      mapEdit: false,
+      path: [],
+      center: [114.496577, 30.487779], // 中心点
+      mapCreate: false,
       mapFixed: false
     }
   },
   watch: {
-    isEdit: function(val) {
-      val ? polyEditor.open() : polyEditor.close()
+    mapId: function() {
+      this.getPathByAjax()
     },
-    isCreate: function(val) {
-      val && this.clickMapSetCneter()
+    isEdit: function(bool) {
+      const path = this.getPolygonPath()
+      if (path.length > 0) {
+        bool ? polyEditor.open() : polyEditor.close()
+      }
+    },
+    isCreate: function(bool) {
       this.clearPlogon()
+      if (bool) {
+        Map.on('click', this.getCenterLnglat)
+      } else {
+        Map.off('click', this.getCenterLnglat)
+        polyEditor.close()
+      }
     },
-    mapEdit: function(val) { // 新增时多边形是否可编辑
-      console.log(val)
+    mapCreate: function(val) {
+      // 新增时多边形是否可编辑
       val ? polyEditor.open() : polyEditor.close()
     },
-    mapFixed: function(val) {// 新增时多边形是否固定中心点
-      val ? Map.off('click', this.getCenterLnglat) : this.clickMapSetCneter()
+    mapFixed: function(val) {
+      // 新增时多边形是否固定中心点
+      val ? Map.off('click', this.getCenterLnglat) : Map.on('click', this.getCenterLnglat)
     }
   },
   async mounted() {
@@ -73,7 +80,7 @@ export default {
         zoom: 14,
         zooms: [7, 18],
         showBuildingBlock: true,
-        center: [116.419979, 39.905643]
+        center: this.center
       })
       Map.on('complete', () => {
         console.log('complete')
@@ -112,11 +119,10 @@ export default {
       })
     },
     clearPlogon() {
+      polygon.setPath([])
       polygon.destroy()
     },
     polyEditor() {
-      console.log(polygon.getBounds())
-      console.log(polygon.getPath())
       polyEditor = new AMap.PolygonEditor(Map, polygon)
       polyEditor.addAdsorbPolygons(polygon)
       // polyEditor.open()
@@ -128,7 +134,7 @@ export default {
         const subPath = [element.lng, element.lat]
         path.push(subPath)
       })
-      console.log(path)
+      return path
     },
     setDefaultPloygon() {
       const center = this.center
@@ -140,28 +146,54 @@ export default {
         [x[1], y[1]],
         [x[1], y[0]]
       ]
-      this.clearPlogon()
       this.setPloygon(defaultPath)
       polyEditor.setTarget(polygon)
-      this.mapEdit && polyEditor.open()
+      this.mapCreate && polyEditor.open()
+    },
+    setCenterZoom(center, zoom = 14) {
+      this.center = center
+      this.clearPlogon()
+      Map.setCenter(this.center)
+      Map.setZoom(zoom)
     },
     getCenterLnglat(e) {
-      this.center = [e.lnglat.getLng(), e.lnglat.getLat()]
-      Map.setCenter(this.center)
-      Map.setZoom(14)
+      //  新增保护区，根据中心点初始化一个正方形区域用于编辑
+      const center = [e.lnglat.getLng(), e.lnglat.getLat()]
+      hub.$emit('on-setCenter', center)
+      this.setCenterZoom(center)
       this.setDefaultPloygon()
     },
-    clickMapSetCneter() {
-      //  新增保护区，根据中心点初始化一个正方形区域用于编辑
-      Map.on('click', this.getCenterLnglat)
-    },
     hubEvent() {
-      hub.$on('click-edit', bool => {
-        this.mapEdit = bool
+      // 外部组件事件
+      hub.$on('create-edit', bool => {
+        this.mapCreate = bool
       })
-      hub.$on('click-center', bool => {
+      hub.$on('create-center', bool => {
         this.mapFixed = bool
       })
+      hub.$on('handraulic-center', lnglat => {
+        this.setCenterZoom(lnglat)
+        this.setDefaultPloygon()
+      })
+    },
+    getPathByAjax() {
+      // this.mapId 根据Id查询区域
+      setTimeout(() => {
+        this.path = [
+          [114.496577, 30.487779],
+          [114.500242, 30.485103],
+          [114.508865, 30.477446],
+          [114.503332, 30.468233],
+          [114.483569, 30.464996],
+          [114.467112, 30.470786],
+          [114.478323, 30.474708],
+          [114.476095, 30.484854],
+          [114.484575, 30.49307]
+        ]
+        this.setCenterZoom([114.496577, 30.487779])
+        this.setPloygon(this.path)
+        polyEditor.setTarget(polygon)
+      }, 1000)
     }
   },
   destroyed() {
