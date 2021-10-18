@@ -1,10 +1,10 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-16 00:26:55
+ * @LastEditTime: 2021-10-18 09:59:35
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\index.vue
 -->
 <template>
   <div class="camera-block">
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import task from './camera-list/task.vue'
-import status from './camera-list/status.vue'
+import task from './task.vue'
+import status from './status.vue'
 export default {
   data() {
     return {

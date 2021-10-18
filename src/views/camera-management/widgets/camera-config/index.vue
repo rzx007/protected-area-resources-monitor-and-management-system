@@ -1,10 +1,10 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-15 14:36:31
+ * @LastEditTime: 2021-10-18 09:59:28
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-config.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-config\index.vue
 -->
 <template>
   <div class="camera-sub-block">
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import backBar from '../components/backBar.vue'
+import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
   data() {

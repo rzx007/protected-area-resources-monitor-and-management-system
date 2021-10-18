@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-11 11:39:09
- * @LastEditTime: 2021-10-16 19:39:00
+ * @LastEditTime: 2021-10-18 10:05:19
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\index.vue
@@ -9,7 +9,7 @@
 <template>
   <div class="content">
     <div class="carmera-main">
-      <div id="carmera-map"></div>
+      <camera-map></camera-map>
       <div :class="[toggle ? '' : 'carmera-list-hidden', 'carmera-list']">
         <div class="toggle-button" title="收起" @click="toggle = !toggle">
           <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
@@ -37,7 +37,7 @@
           <camera-setting v-if="level === 5" @click-back="level = 1" :info="cameraObj"></camera-setting>
         </transition>
         <transition name="slide-fade">
-         <camera-add v-if="level === 6" @click-back="level = 1"></camera-add>
+          <camera-add v-if="level === 6" @click-back="level = 1"></camera-add>
         </transition>
       </div>
     </div>
@@ -45,27 +45,23 @@
 </template>
 
 <script>
-import AMapLoader from '@/utils/map'
-import cameraList from './widgets/camera-list.vue'
-import cameraConfig from './widgets/camera-config.vue'
-import cameraDeploy from './widgets/camera-deploy.vue'
-import cameraRecycle from './widgets/camera-recycle.vue'
-import CameraSetting from './widgets/camera-setting.vue'
-import CameraAdd from './widgets/camera-add.vue'
+import cameraMap from './widgets/map/index.vue'
+import cameraList from './widgets/camera-list/index.vue'
+import cameraConfig from './widgets/camera-config/index.vue'
+import cameraDeploy from './widgets/camera-deploy/index.vue'
+import cameraRecycle from './widgets/camera-recycle/index.vue'
+import CameraSetting from './widgets/camera-setting/index.vue'
+import CameraAdd from './widgets/camera-add/index.vue'
 export default {
   data() {
     return {
       toggle: true,
-      map: {},
-      AMaps: {},
       cameraObj: {}, // 点击得相机队形集合
       level: 1 // 1 显示相机列表, 2显示相机详情 3显示相机部署 4显示相机回收 5相机任务下发 6添加相机
     }
   },
-  components: { cameraList, cameraConfig, cameraDeploy, cameraRecycle, CameraSetting, CameraAdd },
-  mounted() {
-    this.initMap()
-  },
+  components: { cameraMap, cameraList, cameraConfig, cameraDeploy, cameraRecycle, CameraSetting, CameraAdd },
+
   methods: {
     // 点击相机
     clickCamera(item) {
@@ -85,37 +81,6 @@ export default {
     },
     addCamera() {
       this.level = 6
-    },
-    async initMap() {
-      // 地图
-      const { AMaps } = await AMapLoader()
-      this.AMaps = AMaps
-      this.map = new this.AMaps.Map('carmera-map', {
-        viewMode: '3D',
-        zoom: 10,
-        zooms: [7, 14],
-        showBuildingBlock: true,
-        center: [108.8196, 28.8666]
-      })
-      this.map.on('complete', () => {
-        console.log('complete')
-        const controlBar = new AMaps.ControlBar({
-          position: {
-            bottom: '100px',
-            right: '0px'
-          }
-        })
-        this.map.addControl(controlBar)
-        this.addMarker(AMaps) // 添加标记点
-      })
-    },
-    addMarker(AMaps) {
-      this.map.add(
-        new AMaps.Marker({
-          position: this.map.getCenter(),
-          anchor: 'bottom-center'
-        })
-      )
     }
   }
 }
@@ -135,7 +100,7 @@ export default {
     border-radius: 10px;
   }
   .carmera-list {
-   width: auto;
+    width: auto;
     height: 85vh;
     position: absolute;
     right: 30px;

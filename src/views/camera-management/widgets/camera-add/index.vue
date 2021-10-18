@@ -1,10 +1,10 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 15:27:07
- * @LastEditTime: 2021-10-15 15:39:20
+ * @LastEditTime: 2021-10-18 09:59:33
  * @LastEditors: 阮志雄
  * @Description: 新增相机
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-add.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-add\index.vue
 -->
 <template>
   <div class="camera-sub-block">
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import backBar from '../components/backBar.vue'
+import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
   data() {
