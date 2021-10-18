@@ -1,13 +1,13 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 16:08:30
- * @LastEditTime: 2021-10-16 19:39:12
+ * @LastEditTime: 2021-10-18 17:43:34
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis\widgets\map.vue
 -->
 <template>
-  <div class="map-container">
+  <div class="analysis-container">
     <div id="container"></div>
   </div>
 </template>
@@ -68,7 +68,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.map-container {
+.analysis-container {
   width: 100%;
   height: 50vh;
   min-height: 400px;

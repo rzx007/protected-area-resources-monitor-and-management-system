@@ -1,13 +1,13 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-16 13:09:24
- * @LastEditTime: 2021-10-16 16:57:23
+ * @LastEditTime: 2021-10-18 17:45:15
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis\widgets\lastest-gallery.vue
 -->
 <template>
-  <div class="gallery-main">
+  <div class="analysis-gallery-main">
     <div class="title">最新发现</div>
     <div class="analysis-content">
       <el-row :gutter="10">
@@ -53,7 +53,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.gallery-main {
+.analysis-gallery-main {
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
