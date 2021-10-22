@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 12:24:04
- * @LastEditTime: 2021-10-16 18:30:13
+ * @LastEditTime: 2021-10-22 14:44:32
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\Mini-slidebar.vue
@@ -52,7 +52,7 @@ $activeColor: #409eff;
   @include header-background();
   // padding-bottom: 30px;
   height: 100%;
-  width: 100px;
+  width: 96px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@ $activeColor: #409eff;
       top: 50%;
       transform: translateY(-50%);
       width: 100%;
-      height: 86%;
+      height: 90%;
       min-height: 500px;
       overflow-y: auto;
       display: flex;
@@ -81,7 +81,7 @@ $activeColor: #409eff;
           text-align: center;
           margin-bottom: 6px;
           .icon {
-            font-size: 34px;
+            font-size: 30px;
           }
         }
         .menu-title {

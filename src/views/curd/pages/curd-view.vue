@@ -28,7 +28,7 @@
 import CurdView from '@/components/CurdViews/index.vue'
 import StepsFromData from '@/components/StepsFromData/index.vue'
 const tableOptions = {
-  pageSize: 20,
+  limit: 20,
   showPanelTool: true,
   params: {}, // params的改变都会触发，表格的重新查询
   dataUrl: '/data-project-management-service/project/getProject',

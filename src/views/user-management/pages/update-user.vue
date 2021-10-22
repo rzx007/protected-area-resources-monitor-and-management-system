@@ -13,16 +13,25 @@
       <el-form-item label="确认密码" prop="checkPass">
         <el-input type="passwords" v-model="ruleForm.checkPass" autocomplete="off" placeholder="请再次输入密码"></el-input>
       </el-form-item>
-      <el-form-item style="margin-left:0"> </el-form-item>
+      <el-form-item label="角色">
+        <el-select v-model="ruleForm.roleId" filterable>
+          <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
-    <el-button type="primary" @click="submitForm('ruleForm')" class="signup_btn">创建用户</el-button>
+    <el-button type="primary" @click="submitForm('ruleForm')" class="signup_btn">更新</el-button>
   </div>
 </template>
 
 <script>
-import { addUser } from '@/api'
+import { updateUser } from '@/api'
 import md5 from 'md5-js'
 export default {
+  props: {
+    info: {
+      type: Object
+    }
+  },
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -61,7 +70,8 @@ export default {
         username: '',
         passwords: '',
         checkPass: '',
-        mobile: ''
+        mobile: '',
+        roleId: null
       },
       rules: {
         username: [
@@ -72,19 +82,24 @@ export default {
         passwords: [{ required: true, validator: validatePass, trigger: 'blur' }],
         checkPass: [{ required: true, validator: validatePass2, trigger: 'blur' }]
       },
-      isValidPhone: false // 手机号是否正确
+      isValidPhone: false, // 手机号是否正确
+      roleOptions: []
     }
+  },
+  created() {
+    this.ruleForm = Object.assign({}, this.ruleForm, JSON.parse(JSON.stringify(this.info)))
+    console.log(this.ruleForm)
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           delete this.ruleForm['checkPass']
-          const { username, mobile, passwords } = this.ruleForm
-          const params = { username, mobile, passwords: md5(passwords) }
-          addUser(params).then(res => {
+          const { username, mobile, passwords, roleId, userId } = this.ruleForm
+          const params = { username, mobile, roleId, userId, passwords: md5(passwords) }
+          updateUser(params).then(res => {
             this.$emit('success')
-            this.$message.success('新增用户成功!')
+            this.$message.success('更新用户成功!')
           })
         } else {
           console.log('error submit!!')

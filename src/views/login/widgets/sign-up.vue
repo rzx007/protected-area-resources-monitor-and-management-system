@@ -29,6 +29,7 @@
 
 <script>
 import { loginByMobile, getCaptcha, checkCaptcha } from '@/api'
+import md5 from 'md5-js'
 export default {
   data() {
     const validatePass = (rule, value, callback) => {
@@ -94,10 +95,13 @@ export default {
           this.checkCode().then(vaild => {
             if (vaild) {
               delete this.ruleForm['checkPass']
+              this.ruleForm.passwords = md5(this.ruleForm.passwords)
               loginByMobile(this.ruleForm).then(res => {
                 this.$message.success('注册成功, 等待管理员审核!')
               })
-            } else { this.$message.warning('验证码不匹配')}
+            } else {
+              this.$message.warning('验证码不匹配')
+            }
           })
         } else {
           console.log('error submit!!')
@@ -116,7 +120,7 @@ export default {
     checkCode() {
       return checkCaptcha({ mobile: this.ruleForm.mobile, code: this.ruleForm.code })
         .then(res => true)
-        .catch(err =>false)
+        .catch(err => false)
     },
     subtracCount() {
       // 获取验证码倒计时
@@ -141,7 +145,7 @@ export default {
     width: 100%;
     border-radius: 4px;
     transition: all 500ms;
-    @include font_color(null);
+    // @include font_color(null);
     cursor: pointer;
     font-size: 16px;
   }

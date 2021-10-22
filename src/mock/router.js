@@ -1,3 +1,11 @@
+/*
+ * @Author: 阮志雄
+ * @Date: 2021-10-08 16:24:43
+ * @LastEditTime: 2021-10-22 14:47:31
+ * @LastEditors: 阮志雄
+ * @Description: In User Settings Edit
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\mock\router.js
+ */
 const routeArr = [
   {
     title: '保护区信息',
@@ -50,41 +58,25 @@ const routeArr = [
     path: '/user-management'
   },
   {
+    title: '角色管理',
+    componentName: 'roleManagement',
+    componentPath: 'role-management/index',
+    icon: 'quanxian',
+    parentId: 0,
+    id: '05150',
+    type: 3,
+    path: '/role-management'
+  },
+  {
     title: '保护区管理',
     componentName: 'areaManagement',
     componentPath: 'area-management/index',
     icon: 'xitongguanli',
     parentId: 0,
-    id: '05150',
+    id: '05151',
     type: 3,
     path: '/area-management'
   },
-  // {
-  //   title: '例子',
-  //   icon: 'ceshi',
-  //   parentId: 0,
-  //   id: '0514',
-  //   type: 1,
-  //   children: [{
-  //     title: 'CURD布局',
-  //     componentName: 'curd',
-  //     componentPath: 'curd/index',
-  //     icon: 'el-icon-coffee-cup',
-  //     parentId: 0,
-  //     id: '05141',
-  //     type: 3,
-  //     path: '/curd'
-  //   }]
-  // },
-  {
-    title: '组件错误',
-    componentName: 'sdd',
-    componentPath: 'curd/pages/sdd',
-    icon: 'cuowu',
-    parentId: 0,
-    id: '05143',
-    type: 3,
-    path: '/sdd'
-  }
+
 ]
 export default routeArr

@@ -60,7 +60,7 @@
           :columns="tableOptions.columns"
           :lazy="tableOptions.lazy"
           :dataUrl="tableOptions.dataUrl"
-          :pageSize="tableOptions.pageSize"
+          :limit="tableOptions.limit"
           :isPrivate="tableOptions.isPrivate"
           :params="tableOptions.params"
           :local="tableOptions.local"
@@ -276,9 +276,9 @@ export default {
   flex: 1;
   padding-top: 0;
   /* padding-right: 0; */
-  .boxShadow {
-    @include box-shadow();
-  }
+  // .boxShadow {
+  //   @include box-shadow();
+  // }
   .mb {
     margin-bottom: 12px;
   }

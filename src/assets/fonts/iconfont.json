@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "8084570",
+      "name": "权限",
+      "font_class": "quanxian",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "120193",
+      "name": "相机",
+      "font_class": "xiangji",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
+      "icon_id": "741065",
+      "name": "预览",
+      "font_class": "yulan",
+      "unicode": "e852",
+      "unicode_decimal": 59474
+    },
+    {
       "icon_id": "125896",
       "name": "错误",
       "font_class": "cuowu",

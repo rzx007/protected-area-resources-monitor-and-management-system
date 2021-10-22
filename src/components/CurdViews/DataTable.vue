@@ -47,12 +47,12 @@ export default {
       type: Array
     },
     tableSize: {
-      default: 'mini'
+      default: 'normal'
     },
-    pageSize: {
+    limit: {
       default: 20
     },
-    pageIndex: {
+    start: {
       default: 1
     },
     showSettingToolbar: {
@@ -137,7 +137,7 @@ export default {
                 let index = null
                 let indexEle = ''
                 // eslint-disable-next-line no-unused-expressions
-                that.showPage ? (index = (that.pageIndex - 1) * that.pageSize + scope.$index + 1) : index = scope.$index + 1
+                that.showPage ? (index = (that.start - 1) * that.limit + scope.$index + 1) : index = scope.$index + 1
                 if (item.slot) {
                   // type为index 且有slot，提供插槽功能
                   indexEle = that.$scopedSlots[item.slot]({

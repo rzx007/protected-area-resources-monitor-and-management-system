@@ -38,7 +38,7 @@
 
 <script>
 const tableOptions = {
-  pageSize: 20,
+  limit: 20,
   showPanelTool: true,
   params: {},
   dataUrl: '/data-project-management-service/project/getProject',

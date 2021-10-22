@@ -1,24 +1,20 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-11 11:31:45
- * @LastEditTime: 2021-10-15 10:54:49
+ * @LastEditTime: 2021-10-19 16:43:45
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\gallery-management\index.vue
 -->
 <template>
-  <div class="content">
-    <div class="curd_view">
-      <div class="curd_table_view gallery-main">
-        <from-dynamic class="mb" :searchDynamic="fromOptions"></from-dynamic>
-        <div class="curd_table gallery-content" v-infinite-scroll="load">
-          <gallery @click="getImg"></gallery>
-        </div>
-      </div>
-      <overlay :close.sync="close" owidth="70vw" title="照片信息">
-        <sub-gallery></sub-gallery>
-      </overlay>
+  <div class="content" style="overflow:auto;overflow-x:hidden">
+    <div class="gallery-main" v-infinite-scroll="load" :infinite-scroll-immediate="false" infinite-scroll-delay=200>
+      <from-dynamic class="mb" :searchDynamic="fromOptions"></from-dynamic>
+      <gallery @click="getImg" :start="count"></gallery>
     </div>
+    <overlay :close.sync="close" owidth="70vw" title="照片信息">
+      <sub-gallery></sub-gallery>
+    </overlay>
   </div>
 </template>
 
@@ -46,7 +42,8 @@ export default {
       this.close = true
     },
     load() {
-      this.count += 2
+      this.count += 1
+      console.log(this.count)
       // alert(this.count)
     }
   }
@@ -54,16 +51,7 @@ export default {
 </script>
 <style lang="scss">
 .gallery-main {
-  display: flex;
-  flex-direction: column;
-}
-.gallery-content {
-  // min-height: 64vh;
-  flex: 1;
-  overflow: auto;
-  // display: grid;
-  // justify-content: flex-start;
-  // flex-wrap: wrap;
-  // align-items: flex-start;
+  // display: flex;
+  // flex-direction: column;
 }
 </style>

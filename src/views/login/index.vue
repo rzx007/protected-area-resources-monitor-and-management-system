@@ -206,7 +206,7 @@ export default {
     border-radius: 4px;
     margin-top: 15px;
     transition: all 500ms;
-    @include font_color(null);
+    // @include font_color(null);
     cursor: pointer;
     font-size: 16px;
   }
