@@ -73,7 +73,7 @@ export default {
           this.isLoging = false
           setToken('token', res.data.token, { expires: 0.25 })
           setToken('userName', res.data.username)
-          this.$router.push('/')
+          this.$router.replace('/')
         })
         .catch(() => {
           this.isLoging = false
@@ -120,6 +120,7 @@ export default {
   width: 100%;
   height: 100vh;
   min-width: 1200px;
+  min-height: 700px;
   @include base-background();
   background: url(../../assets/img/bg.jpg) no-repeat;
   background-size: cover;

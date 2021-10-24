@@ -1,30 +1,30 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-15 15:45:39
+ * @LastEditTime: 2021-10-24 15:27:42
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\status.vue
 -->
 <template>
-  <div class="status-list">
+  <div class="state-list" v-loading="loading">
     <el-input v-model="code" placeholder="相机编号查询" clearable></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
-          <span class="status" :style="{ backgroundColor: getStatus(item.status, 2) }">{{ getStatus(item.status) }}</span>
+          <span class="state" :style="{ backgroundColor: getStatus(item.state, 0) }">{{ getStatus(item.state) }}</span>
           <div class="sub-info">
             <p><span>编号：</span> {{ item.id }}</p>
-            <p style="margin-top:6px" v-show="[1, 3].includes(item.status)">
-              <span>布控时间：</span><span>{{ item.inUseTime }}</span>
+            <p style="margin-top:6px" v-show="[1, 2].includes(item.state)">
+              <span>布控时间：</span><span>{{ item.setTime }}</span>
             </p>
           </div>
           <div class="mask"></div>
         </div>
         <div class="setting">
-          <el-button type="warning" v-if="item.status == 1" @click="clickRecycle(item)">回收</el-button>
-          <el-button type="primary" v-if="item.status == 4" @click="clickDeploy(item)">部署</el-button>
-          <span v-if="[2, 3].includes(item.status)">{{ item.user }}</span>
+          <el-button type="warning" v-if="item.state == 1" @click="clickRecycle(item)">回收</el-button>
+          <el-button type="primary" v-if="item.state == 3" @click="clickDeploy(item)">部署</el-button>
+          <span v-if="[0, 2].includes(item.state)">{{ item.user }}</span>
         </div>
       </li>
     </ul>
@@ -32,35 +32,51 @@
 </template>
 
 <script>
+import { findCarmeraList } from '@/api'
 export default {
   name: 'task',
   emits: ['click-camera', 'click-recycle', 'click-deploy'],
   data() {
     return {
+      loading: false,
       code: '',
-      cameraList: [
-        // 1已部署， 2 待部署， 3 待回收 4 未部署
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '' },
-        { id: 'KJGRA679SHJO', status: 2, inUseTime: '', user: '张三' },
-        { id: 'KJGRA679SHJO', status: 3, inUseTime: '2012-10-12', user: '李四' },
-        { id: 'KJGRA679SHJO', status: 4, inUseTime: '', user: '' },
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '' },
-        { id: 'KJGRA679SHJO', status: 2, inUseTime: '', user: '张三' },
-        { id: 'KJGRA679SHJO', status: 3, inUseTime: '2012-10-12', user: '李四' },
-      ],
+      cameraList: [],
       statusEnum: [
-        { status: 1, color: '#4762b0', title: '已部署' },
-        { status: 2, color: '#1890FF', title: '待部署' },
-        { status: 3, color: '#E6A23C', title: '待回收' },
-        { status: 4, color: '#67C23A', title: '未部署' }
+        { state: 1, color: '#4762b0', title: '已部署' },
+        { state: 0, color: '#1890FF', title: '待部署' },
+        { state: 2, color: '#E6A23C', title: '待回收' },
+        { state: 3, color: '#67C23A', title: '未部署' }
       ]
     }
   },
+  created() {
+    this.getCarmeraList()
+  },
   methods: {
-    getStatus(status, type = 1) {
+    getCarmeraList() {
+      this.loading = true
+      // findCarmeraList({reserveId: 1}).then((res) => {
+      //   this.cameraList = res.code === 0 ? res.data : []
+      //   this.loading = false
+      // });
+      setTimeout(() => {
+        this.loading = false
+        this.cameraList = [
+          // 1已部署， 0 待部署， 2 待回收 3 未部署
+          { id: '23', state: 1, setTime: '2012-10-12', user: '' },
+          { id: '2', state: 0, setTime: '', user: '张三' },
+          { id: '3', state: 2, setTime: '2012-10-12', user: '李四' },
+          { id: '4', state: 3, setTime: '', user: '' },
+          { id: '5', state: 1, setTime: '2012-10-12', user: '' },
+          { id: '6', state: 0, setTime: '', user: '张三' },
+          { id: '7', state: 2, setTime: '2012-10-12', user: '李四' }
+        ]
+      }, 500)
+    },
+    getStatus(state, type = 1) {
       for (let index = 0; index < this.statusEnum.length; index++) {
         const element = this.statusEnum[index]
-        if (element.status === status) {
+        if (element.state === state) {
           if (type == 1) {
             return element.title
           } else {
@@ -85,7 +101,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.status-list {
+.state-list {
   width: 100%;
   .ul-list {
     width: 100%;
@@ -130,7 +146,7 @@ export default {
           }
         }
       }
-      .status {
+      .state {
         color: #fff;
         background-color: #4762b0;
         display: inline-block;

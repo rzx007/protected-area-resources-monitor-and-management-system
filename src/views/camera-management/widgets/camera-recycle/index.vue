@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 11:35:39
- * @LastEditTime: 2021-10-18 09:59:26
+ * @LastEditTime: 2021-10-24 14:47:44
  * @LastEditors: 阮志雄
  * @Description:相机回收
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-recycle\index.vue
@@ -11,17 +11,18 @@
     <back-bar @back="goBack" title="相机回收"></back-bar>
     <div class="anas-block">
       <p class="sub-title">
-        设备编号：<span>{{ info.id }}</span>
+        设备编号：<span>{{ camera.id }}</span>
       </p>
       <p class="sub-title">
-        布设时间：<span>{{ info.inUseTime }}</span>
+        布设时间：<span>{{ camera.inUseTime }}</span>
       </p>
     </div>
     <div class="config-block">
       <h4 class="title">相机信息</h4>
       <p class="config-item">
-        <span class="teil">相机编号：</span><span class="sub-teil">{{ info.id }}</span>
+        <span class="teil">相机编号：</span><span class="sub-teil">{{ camera.id }}</span>
       </p>
+      <p class="config-item"><span class="teil">地理位置：:</span><span class="sub-teil"></span></p>
       <p class="config-item"><span class="teil">相机型号：</span><span class="sub-teil">HW101</span></p>
       <p class="config-item"><span class="teil">存储卡编号:</span><span class="sub-teil">HW101</span></p>
       <p class="config-item"><span class="teil">布控时间：</span><span class="sub-teil">2021-10-08</span></p>
@@ -34,24 +35,24 @@
       </p>
     </div>
     <div class="config-btn">
-      <el-button type="primary" :disabled='!name'>确定</el-button>
+      <el-button type="primary" :disabled="!name" @click="psotRecycle()">确定</el-button>
       <el-button type="danger" @click="goBack">取消</el-button>
     </div>
-    
   </div>
 </template>
 <script>
+import { FixDown } from '@/api'
 import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
   data() {
     return {
       name: '',
-      options: [{ label: 'ben', value: '112231' }]
+      options: [{ label: 'ben', value: '1' }]
     }
   },
   props: {
-    info: {
+    camera: {
       type: Object,
       default: function() {
         return { id: '' }
@@ -60,7 +61,13 @@ export default {
   },
   methods: {
     goBack() {
-      this.$emit('click-back')
+      this.$emit('click-back', { status: false, camera: this.camera })
+    },
+    psotRecycle() {
+      FixDown({ cameraId: this.camera.id, userId: this.name }).then(res => {
+        res.code === 0 ? this.$message.success('回收任务已下发') : this.$message.warning('回收任务异常')
+        this.$emit('click-back', { status: true, camera: this.camera })
+      })
     }
   }
 }

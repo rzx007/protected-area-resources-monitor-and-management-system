@@ -13,9 +13,7 @@
     <div class="header-right">
       <div class="header-user-con">
         <!-- 用户头像 -->
-        <div class="user-avator">
-          <!-- <img src="@/assets/img/a.png" /> -->
-        </div>
+
         <!-- 全屏显示 -->
         <div class="btn-fullscreen" @click="handleFullScreen">
           <el-tooltip effect="dark" :content="fullscreen ? `取消全屏` : `全屏`" placement="bottom">
@@ -23,21 +21,22 @@
           </el-tooltip>
         </div>
         <!-- 消息中心 -->
-        <el-tooltip effect="dark" :content="message?`有${message}条未读消息`:`消息中心`" placement="bottom">
-           <i class="el-icon-bell"></i>
+        <el-tooltip effect="dark" :content="message ? `有${message}条未读消息` : `消息中心`" placement="bottom">
+          <i class="el-icon-bell"></i>
         </el-tooltip>
-        <!-- <div class="btn-bell">
-          <span class="btn-bell-badge" v-if="message"></span>
-        </div> -->
         <!-- <el-tooltip effect="dark" content="主题切换" placement="bottom">
           <i class="el-icon-orange" @click="switchThemeBar = true" v-if="showThemeBar"></i>
         </el-tooltip> -->
+
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-          <span class="el-dropdown-link">
-            {{ username }}
-            <i f class="el-icon-caret-bottom"></i>
-          </span>
+          <div class="user-block">
+            <img src="@/assets/img/avator.png" width="36px" />
+            <span class="el-dropdown-link">
+              {{ username }}
+              <i f class="el-icon-caret-bottom"></i>
+            </span>
+          </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-mouse" command="updataPassword">密码修改</el-dropdown-item>
             <el-dropdown-item icon="el-icon-switch-button" command="loginout">注销</el-dropdown-item>
@@ -272,48 +271,23 @@ export default {
   }
   .btn-fullscreen {
     transform: rotate(45deg);
-    margin-right: 5px;
-    font-size: 24px;
+    margin-right: 12px;
   }
-  .btn-bell,
-  .btn-fullscreen {
-    position: relative;
-    width: 30px;
-    /* height: 30px; */
-    text-align: center;
-    border-radius: 15px;
-    cursor: pointer;
-    line-height: 50px;
-    .el-icon-bell {
-      // @include font_color(#fff);
+  .user-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 18px;
+    .el-dropdown-link {
+      margin-left: 12px;
+      @include font_color(#fff);
+      cursor: pointer;
+      i {
+        font-size: 14px;
+      }
     }
   }
-  .btn-bell-badge {
-    position: absolute;
-    right: 0;
-    top: -2px;
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    background: #f56c6c;
-    // @include font_color(#fff);
-  }
-  .user-name {
-    margin-left: 10px;
-  }
-  .user-avator {
-    margin-left: 8px;
-  }
-  .user-avator img {
-    display: block;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  .el-dropdown-link {
-    @include font_color(#fff);
-    cursor: pointer;
-  }
+
   .el-dropdown-menu__item {
     text-align: center;
   }

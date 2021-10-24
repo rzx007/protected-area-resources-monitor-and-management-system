@@ -41,11 +41,11 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     if (!getToken('token')) {
-      Message({
-        message: '权限已失效，请重新登录！',
-        type: 'error',
-        duration: 1500
-      })
+      // Message({
+      //   message: '权限已失效，请重新登录！',
+      //   type: 'error',
+      //   duration: 1500
+      // })
       next({
         path: '/login'
       })

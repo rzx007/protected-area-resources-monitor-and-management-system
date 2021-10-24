@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-11 11:39:09
- * @LastEditTime: 2021-10-18 10:05:19
+ * @LastEditTime: 2021-10-24 15:16:21
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\index.vue
@@ -9,13 +9,14 @@
 <template>
   <div class="content">
     <div class="carmera-main">
-      <camera-map></camera-map>
+      <camera-map @click-map-carmera="getMapCarmera" ref="map"></camera-map>
       <div :class="[toggle ? '' : 'carmera-list-hidden', 'carmera-list']">
         <div class="toggle-button" title="收起" @click="toggle = !toggle">
           <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
         </div>
         <transition name="slide-fade">
           <camera-list
+            ref="cameralist"
             v-show="level === 1"
             @click-camera="clickCamera"
             @click-recycle="clickRecycle"
@@ -25,16 +26,16 @@
           ></camera-list>
         </transition>
         <transition name="slide-fade">
-          <camera-config v-if="level === 2" @click-back="level = 1" :info="cameraObj"></camera-config>
+          <camera-config v-if="level === 2" @click-back="level = 1" :camera="cameraObj"></camera-config>
         </transition>
         <transition name="slide-fade">
-          <camera-deploy v-if="level === 3" @click-back="level = 1" :info="cameraObj"></camera-deploy>
+          <camera-deploy v-if="level === 3" @click-back="cancelDeploy" :camera="cameraObj"></camera-deploy>
         </transition>
         <transition name="slide-fade">
-          <camera-recycle v-if="level === 4" @click-back="level = 1" :info="cameraObj"></camera-recycle>
+          <camera-recycle v-if="level === 4" @click-back="cancelRecycle" :camera="cameraObj"></camera-recycle>
         </transition>
         <transition name="slide-fade">
-          <camera-setting v-if="level === 5" @click-back="level = 1" :info="cameraObj"></camera-setting>
+          <camera-setting v-if="level === 5" @click-back="level = 1" :camera="cameraObj"></camera-setting>
         </transition>
         <transition name="slide-fade">
           <camera-add v-if="level === 6" @click-back="level = 1"></camera-add>
@@ -52,6 +53,7 @@ import cameraDeploy from './widgets/camera-deploy/index.vue'
 import cameraRecycle from './widgets/camera-recycle/index.vue'
 import CameraSetting from './widgets/camera-setting/index.vue'
 import CameraAdd from './widgets/camera-add/index.vue'
+import hub from '@/utils/bus'
 export default {
   data() {
     return {
@@ -61,7 +63,6 @@ export default {
     }
   },
   components: { cameraMap, cameraList, cameraConfig, cameraDeploy, cameraRecycle, CameraSetting, CameraAdd },
-
   methods: {
     // 点击相机
     clickCamera(item) {
@@ -71,16 +72,43 @@ export default {
     // 点击回收
     clickRecycle(item) {
       this.level = 4
+      this.cameraObj = item
+    },
+    cancelRecycle({ status }) {
+      console.log(status);
+      this.level = 1
+      if (status) {
+        // 刷新相机列表，刷新地图
+        this.$refs.cameralist.getCarmeraList()
+        this.$refs.map.ajaxRefreshMarkers()
+      }
     },
     // 点击部署
     clickDeploy(item) {
       this.level = 3
+      this.cameraObj = item
+      this.$refs.map.addDeployCamera(item)
+    },
+    cancelDeploy({ status }) {
+      this.level = 1
+      if (status) {
+        // 刷新相机列表，刷新地图
+        this.$refs.cameraList.getCarmeraList()
+        this.$refs.map.ajaxRefreshMarkers()
+      } else {
+        this.$refs.map.cancelDeployCamera(this.cameraObj)
+      }
     },
     clickTask(item) {
+      this.cameraObj = item
       this.level = 5
     },
     addCamera() {
       this.level = 6
+    },
+    getMapCarmera(item) {
+      this.level = 2
+      this.cameraObj = item
     }
   }
 }

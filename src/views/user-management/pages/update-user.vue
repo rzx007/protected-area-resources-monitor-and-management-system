@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item label="角色">
         <el-select v-model="ruleForm.roleId" filterable>
-          <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId"> </el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { updateUser } from '@/api'
+import { updateUser, listRole } from '@/api'
 import md5 from 'md5-js'
 export default {
   props: {
@@ -87,10 +87,16 @@ export default {
     }
   },
   created() {
+    this.getRoleData()
     this.ruleForm = Object.assign({}, this.ruleForm, JSON.parse(JSON.stringify(this.info)))
     console.log(this.ruleForm)
   },
   methods: {
+    getRoleData() {
+      listRole({ start: 0, limit: 100 }).then(res => {
+        this.roleOptions = res.data.list
+      })
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

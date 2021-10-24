@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-18 09:59:35
+ * @LastEditTime: 2021-10-24 15:19:47
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\index.vue
@@ -15,10 +15,16 @@
     </ul>
     <div class="camera-content">
       <transition name="slide-fade">
-        <status v-show="activeIndex === 1" @click-camera="clickCamera" @click-recycle="clickRecycle" @click-deploy="clickDeploy"></status>
+        <status
+          v-show="activeIndex === 1"
+          @click-camera="clickCamera"
+          @click-recycle="clickRecycle"
+          @click-deploy="clickDeploy"
+          ref="status"
+        ></status>
       </transition>
       <transition name="slide-fade">
-        <task v-show="activeIndex === 2" @click-camera="clickCamera" @click-task="clickTask"></task>
+        <task v-show="activeIndex === 2" @click-camera="clickCamera" @click-task="clickTask" ref="task"></task>
       </transition>
     </div>
   </div>
@@ -53,6 +59,12 @@ export default {
     },
     addCamera() {
       this.$emit('click-add')
+    },
+    getCarmeraList() {
+      this.$refs.status.getCarmeraList()
+    },
+    getTaskList() {
+      this.$refs.task.getCarmeraList()
     }
   }
 }
@@ -111,6 +123,7 @@ $color: #4762b0;
     flex: 1;
     padding: 0 10px;
     overflow: auto;
+    min-width: 350px;
   }
 }
 </style>

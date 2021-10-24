@@ -1,8 +1,8 @@
 // 测试环境
 const dev = {
-  host: '10.172.246.234', // 服务器ip地址或域名
-  password: 'root.2011', // 密码
-  catalog: '/usr/local/etc/apache-tomcat-8.5.53/webapps/sjzc', // 前端文件压缩目录
+  host: '114.55.176.189', // 服务器ip地址或域名
+  password: 'pa$$w0rd', // 密码
+  catalog: '/usr/local/nginx/html', // 前端文件压缩目录
   port: 22, // 服务器ssh连接端口号
   username: 'root' // ssh登录用户
   // ssh连接跳转至目标机配置，适用于跳板机-内网登录，如无需跳转请注释掉该配置
@@ -363,11 +363,6 @@ async function replaceIP(env, fileConfig) {
 
 // 执行前端部署
 ;(async () => {
-  const argv = process.argv.slice(2)
-  console.log(eval(argv[0]))
-  Config.publishEnv = argv ? eval(argv[0]) : ''
-  // 替换接口IP地址
-  await replaceIP(argv[0], fileConfig)
   // 压缩包的名字
   const date = new Date()
   const year = date.getFullYear()

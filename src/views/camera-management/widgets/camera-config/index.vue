@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-18 09:59:28
+ * @LastEditTime: 2021-10-24 15:25:49
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-config\index.vue
@@ -11,10 +11,10 @@
     <back-bar @back="goBack"></back-bar>
     <div class="anas-block">
       <p class="sub-title">
-        设备编号：<span>{{ info.id }}</span>
+        设备编号：<span>{{ camera.id }}</span>
       </p>
       <p class="sub-title">
-        布设时间：<span>{{ info.inUseTime }}</span>
+        布设时间：<span>{{ camera.inUseTime }}</span>
       </p>
     </div>
     <div class="config-block">
@@ -52,14 +52,23 @@ export default {
     }
   },
   props: {
-    info: {
+    camera: {
       type: Object,
       default: function() {
         return { id: '' }
       }
     }
   },
+  watch: {
+    props: {
+      handler: function() {},
+      deep: true
+    }
+  },
   methods: {
+    getData() {
+      findCarmeraById({ reserveId: 1 })
+    },
     goBack() {
       this.$emit('click-back')
     }

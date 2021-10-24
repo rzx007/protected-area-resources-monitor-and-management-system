@@ -1,7 +1,7 @@
 /*
  * @Author: 阮志雄
  * @Date: 2021-07-08 14:29:08
- * @LastEditTime: 2021-10-22 18:52:11
+ * @LastEditTime: 2021-10-22 19:09:04
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\api\api.js
@@ -31,6 +31,11 @@ export async function updateUser (params) {
 // 启用禁用用户
 export async function updateUserStatus (params) {
   const res = await http.post('/reserve/appUser/handleUser', params)
+  return res
+}
+// 角色列表
+export async function listRole (params) {
+  const res = await http.post('/reserve/appRole/list', params)
   return res
 }
 // 新增角色

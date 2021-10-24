@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-10-24 17:21:47
+ * @LastEditTime: 2021-10-24 16:45:36
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
@@ -125,7 +125,7 @@ export default {
       })
       return marker
     },
-    createIcon(iconPath = 'camera2') {
+    createIcon(iconPath = 'camera1') {
       const startIcon = new AMap.Icon({
         // 图标尺寸
         size: new AMap.Size(25, 20),
@@ -153,10 +153,6 @@ export default {
         case 0:
           iconPath = 'camera3'
           stutusName = '待部署'
-          break
-        case 3:
-          iconPath = 'camera3'
-          stutusName = '未部署'
           break
         default:
           break

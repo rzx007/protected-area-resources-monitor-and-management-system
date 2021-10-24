@@ -1,14 +1,14 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-10-15 16:46:05
+ * @LastEditTime: 2021-10-24 16:49:20
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\index.vue
 -->
 <template>
   <div class="content mapBox">
-    <home-map></home-map>
+    <home-map @click-map-carmera="getMapCarmera" ref="map"></home-map>
     <div :class="[toggle ? '' : 'carmera-list-hidden', 'carmera-list']">
       <div class="toggle-button" title="收起" @click="toggle = !toggle">
         <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import homeMap from './widgets/map.vue'
-import cameraList from './widgets/camera-list.vue'
+import homeMap from './widgets/map/index.vue'
+import cameraList from './widgets/camera-list/index.vue'
 import cameraConfig from './widgets/camera-config.vue'
 export default {
   components: { homeMap, cameraList, cameraConfig },
@@ -38,6 +38,10 @@ export default {
   methods: {
     // 点击相机
     clickCamera(item) {
+      this.level = 2
+      this.cameraObj = item
+    },
+    getMapCarmera(item) {
       this.level = 2
       this.cameraObj = item
     }
