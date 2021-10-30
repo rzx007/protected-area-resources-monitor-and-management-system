@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-24 15:21:46
+ * @LastEditTime: 2021-10-30 17:01:18
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\task.vue
@@ -14,8 +14,8 @@
         <div class="info" title="查看信息" @click="clickCamera(item)">
           <span class="state" :style="{ backgroundColor: getStatus(item.state, 2) }">{{ getStatus(item.state) }}</span>
           <div class="sub-info">
-            <p><span>编号：</span> {{ item.id }}</p>
-            <p style="margin-top:6px" v-show="[1, 3].includes(item.state)">
+            <p><span>编号：</span> {{ item.imeival }}</p>
+            <p style="margin-top:6px" v-show="[3, 4].includes(item.state)">
               <span>布控时间：</span><span>{{ item.inUseTime }}</span>
             </p>
           </div>
@@ -30,18 +30,20 @@
 </template>
 
 <script>
+import { findCarmeraList, findAllCarmeraList } from '@/api'
 export default {
   name: 'task',
   data() {
     return {
       loading: false,
       code: '',
-      cameraList: [], // 1已部署， 2 待部署， 3 待回收 4 未部署
+      cameraList: [], 
       statusEnum: [
-        { state: 1, color: '#4762b0', title: '已部署' },
-        { state: 0, color: '#1890FF', title: '待部署' },
-        { state: 2, color: '#E6A23C', title: '待回收' },
-        { state: 3, color: '#67C23A', title: '未部署' }
+        // 1 未部署， 2 部署中 3已部署 4 回收中
+        { state: 3, color: '#4762b0', title: '已部署' },
+        { state: 2, color: '#1890FF', title: '部署中' },
+        { state: 4, color: '#E6A23C', title: '回收中' },
+        { state: 1, color: '#67C23A', title: '未部署' }
       ]
     }
   },
@@ -51,19 +53,10 @@ export default {
   methods: {
     getCarmeraList() {
       this.loading = true
-      setTimeout(() => {
+      findAllCarmeraList().then(res => {
+        this.cameraList = res.code === 0 ? res.data.list : []
         this.loading = false
-        this.cameraList = [
-          // 1已部署， 0 待部署， 2 待回收 3 未部署
-          { id: '23', state: 1, inUseTime: '2012-10-12', user: '' },
-          { id: '2', state: 0, inUseTime: '', user: '张三' },
-          { id: '3', state: 2, inUseTime: '2012-10-12', user: '李四' },
-          { id: '4', state: 3, inUseTime: '', user: '' },
-          { id: '5', state: 1, inUseTime: '2012-10-12', user: '' },
-          { id: '6', state: 0, inUseTime: '', user: '张三' },
-          { id: '7', state: 2, inUseTime: '2012-10-12', user: '李四' }
-        ]
-      }, 500)
+      })
     },
     getStatus(state, type = 1) {
       for (let index = 0; index < this.statusEnum.length; index++) {

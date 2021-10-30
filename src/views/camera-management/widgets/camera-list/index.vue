@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-24 15:19:47
+ * @LastEditTime: 2021-10-30 17:40:00
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\index.vue
@@ -79,6 +79,7 @@ $color: #4762b0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+   min-width: 390px;
   .add-camera {
     font-size: 28px;
     position: absolute;
@@ -123,7 +124,7 @@ $color: #4762b0;
     flex: 1;
     padding: 0 10px;
     overflow: auto;
-    min-width: 350px;
+   min-width: 350px;
   }
 }
 </style>

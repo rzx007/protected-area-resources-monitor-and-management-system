@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-11 11:39:09
- * @LastEditTime: 2021-10-24 15:16:21
+ * @LastEditTime: 2021-10-30 17:09:32
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\index.vue
@@ -16,7 +16,7 @@
         </div>
         <transition name="slide-fade">
           <camera-list
-            ref="cameralist"
+            ref="cameralists"
             v-show="level === 1"
             @click-camera="clickCamera"
             @click-recycle="clickRecycle"
@@ -38,7 +38,7 @@
           <camera-setting v-if="level === 5" @click-back="level = 1" :camera="cameraObj"></camera-setting>
         </transition>
         <transition name="slide-fade">
-          <camera-add v-if="level === 6" @click-back="level = 1"></camera-add>
+          <camera-add v-if="level === 6" @click-back="cancelAdd"></camera-add>
         </transition>
       </div>
     </div>
@@ -75,13 +75,14 @@ export default {
       this.cameraObj = item
     },
     cancelRecycle({ status }) {
-      console.log(status);
       this.level = 1
-      if (status) {
-        // 刷新相机列表，刷新地图
-        this.$refs.cameralist.getCarmeraList()
-        this.$refs.map.ajaxRefreshMarkers()
-      }
+      this.$nextTick(() => {
+        if (status) {
+          // 刷新相机列表，刷新地图
+          this.$refs.cameralists.getCarmeraList()
+          this.$refs.map.ajaxRefreshMarkers()
+        }
+      })
     },
     // 点击部署
     clickDeploy(item) {
@@ -91,13 +92,22 @@ export default {
     },
     cancelDeploy({ status }) {
       this.level = 1
-      if (status) {
-        // 刷新相机列表，刷新地图
-        this.$refs.cameraList.getCarmeraList()
-        this.$refs.map.ajaxRefreshMarkers()
-      } else {
-        this.$refs.map.cancelDeployCamera(this.cameraObj)
-      }
+      this.$nextTick(() => {
+        if (status) {
+          // 刷新相机列表，刷新地图
+          this.$refs.cameralists.getCarmeraList()
+          this.$refs.map.ajaxRefreshMarkers()
+        } else {
+          this.$refs.map.cancelDeployCamera(this.cameraObj)
+        }
+      })
+    },
+    // 新增相机
+    cancelAdd({ status }) {
+      this.level = 1
+      this.$nextTick(() => {
+        status && this.$refs.cameralists.getCarmeraList()
+      })
     },
     clickTask(item) {
       this.cameraObj = item

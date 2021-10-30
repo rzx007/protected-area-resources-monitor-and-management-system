@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-10-24 17:21:47
+ * @LastEditTime: 2021-10-30 16:54:25
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { findAllCarmeraList } from '@/api'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
 let AMap, Map, polygon
@@ -19,7 +20,7 @@ export default {
     return {
       path: [],
       center: [114.489377, 30.47579],
-      cameraList: [], // 1已部署， 0 待部署， 2 待回收 3 未部署
+      cameraList: [], // 1 未部署， 2 部署中 3已部署 4 回收中
       carmera: {}
     }
   },
@@ -47,19 +48,23 @@ export default {
       })
     },
     getMarkersData() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve([
-            { id: 'KJGRA679SHJ6', state: 1, inUseTime: '2012-10-12', user: '', lnglat: [] },
-            { id: 'KJGRA679SHJ1', state: 0, inUseTime: '', user: '张三', lnglat: [] },
-            { id: 'KJGRA679SHJ2', state: 2, inUseTime: '2012-10-12', user: '李四', lnglat: [] },
-            { id: 'KJGRA679SHJ7', state: 3, inUseTime: '', user: '', lnglat: [] },
-            { id: 'KJGRA679SHJ3', state: 1, inUseTime: '2012-10-12', user: '', lnglat: [] },
-            { id: 'KJGRA679SHJ4', state: 0, inUseTime: '', user: '张三', lnglat: [] },
-            { id: 'KJGRA679SHJ5', state: 2, inUseTime: '2012-10-12', user: '李四', lnglat: [] }
-          ])
-        }, 1000)
+      return findAllCarmeraList().then(res => {
+        const cameraList = res.code === 0 ? res.data.list : []
+        return cameraList.filter(item => item.state !==1)
       })
+      // return new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve([
+      //       { id: 'KJGRA679SHJ6', state: 3, inUseTime: '2012-10-12', user: '', lnglat: [] },
+      //       { id: 'KJGRA679SHJ1', state: 4, inUseTime: '', user: '张三', lnglat: [] },
+      //       { id: 'KJGRA679SHJ2', state: 2, inUseTime: '2012-10-12', user: '李四', lnglat: [] },
+      //       { id: 'KJGRA679SHJ7', state: 3, inUseTime: '', user: '', lnglat: [] },
+      //       { id: 'KJGRA679SHJ3', state: 1, inUseTime: '2012-10-12', user: '', lnglat: [] },
+      //       { id: 'KJGRA679SHJ4', state: 1, inUseTime: '', user: '张三', lnglat: [] },
+      //       { id: 'KJGRA679SHJ5', state: 2, inUseTime: '2012-10-12', user: '李四', lnglat: [] }
+      //     ])
+      //   }, 1000)
+      // })
     },
     async initMap() {
       // 地图
@@ -109,8 +114,11 @@ export default {
       var markers = Map.getAllOverlays('marker')
       Map.remove(markers)
       for (let index = 0; index < this.cameraList.length; index++) {
-        const item = this.cameraList[index]
-        const lnglat = this.path[index]
+        const element = this.cameraList[index]
+        const item = element
+        // const lnglat = this.path[index]
+        const lnglat = [Number(element['longitudeVal']), Number(element['latitudeVal'])]
+
         const marker = this.createMarker(lnglat, item)
         Map.add(marker)
       }
@@ -125,7 +133,7 @@ export default {
       })
       return marker
     },
-    createIcon(iconPath = 'camera2') {
+    createIcon(iconPath = 'camera3') {
       const startIcon = new AMap.Icon({
         // 图标尺寸
         size: new AMap.Size(25, 20),
@@ -139,24 +147,20 @@ export default {
       return startIcon
     },
     setIconImg(state) {
-      let iconPath = 'camera1'
-      let stutusName = '已部署'
+      let iconPath = 'camera3'
+      let stutusName = '部署中'
       switch (state) {
-        case 1:
-          iconPath = 'camera1'
-          stutusName = '已部署'
-          break
         case 2:
-          iconPath = 'camera2'
-          stutusName = '待回收'
-          break
-        case 0:
           iconPath = 'camera3'
-          stutusName = '待部署'
+          stutusName = '部署中'
+          break
+        case 4:
+          iconPath = 'camera2'
+          stutusName = '回收中'
           break
         case 3:
-          iconPath = 'camera3'
-          stutusName = '未部署'
+          iconPath = 'camera4'
+          stutusName = '已部署'
           break
         default:
           break
@@ -168,7 +172,7 @@ export default {
       const infoWindow = new AMap.InfoWindow({
         anchor: 'top-left',
         content: `
-            相机编号：${extData.id ? extData.id : ''}<br/>
+            相机编号：${extData.imeival ? extData.imeival : ''}<br/>
             状态：${stutusName}
         `
       })
