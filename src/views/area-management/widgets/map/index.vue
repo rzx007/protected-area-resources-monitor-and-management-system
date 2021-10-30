@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 16:08:30
- * @LastEditTime: 2021-10-30 20:52:41
+ * @LastEditTime: 2021-10-30 21:30:57
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\map\index.vue
@@ -119,8 +119,10 @@ export default {
       })
     },
     clearPlogon() {
+      polygon.hide()
       polygon.setPath([])
       polygon.destroy()
+      // Map.clearMap()
     },
     polyEditor() {
       polyEditor = new AMap.PolygonEditor(Map, polygon)

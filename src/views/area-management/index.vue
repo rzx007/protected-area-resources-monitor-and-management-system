@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-10-30 20:50:58
+ * @LastEditTime: 2021-10-30 21:16:18
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\index.vue
@@ -57,7 +57,8 @@ export default {
       // 详情返回自动关闭编辑功能
       this.level = 1
       this.editMap = false
-      this.$refs.map.getPolygonPath()
+      const path = this.$refs.map.getPolygonPath()
+      console.log( path)
     },
     aaddArea() {
       this.level = 3
