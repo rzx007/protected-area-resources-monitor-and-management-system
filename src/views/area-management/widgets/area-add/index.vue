@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-30 20:45:26
+ * @LastEditTime: 2021-10-31 00:01:45
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-add\index.vue
@@ -13,7 +13,7 @@
       <h4 class="title">保护区信息</h4>
       <p class="config-item">
         <span class="teil">保护区名称：</span>
-        <el-input v-model="areaName" placeholder="" clearable style="width:250px"></el-input>
+        <el-input v-model="areaName" placeholder="" clearable style="width:250px" @blur="initRemark"></el-input>
       </p>
       <p class="config-item">
         <span class="teil" title="在地图左键点击选取中心点">地理位置：<i class="el-icon-question"></i></span>
@@ -34,12 +34,8 @@
       </p>
     </div>
     <div class="config-block">
-      <h4 class="title">自定义导入</h4>
-      <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
-      </el-upload>
+      <h4 class="title">保护区介绍</h4>
+      <el-input type="textarea" :autosize="{ minRows: 7, maxRows: 20 }" placeholder="请输入内容" v-model="remark"> </el-input>
     </div>
     <div class="config-btn">
       <el-button type="primary" @click="saveArea">保存</el-button>
@@ -56,6 +52,7 @@ export default {
   data() {
     return {
       areaName: '',
+      remark:'',
       lng: null,
       lat: null,
       edit: false,
@@ -71,6 +68,9 @@ export default {
     }
   },
   methods: {
+    initRemark() {
+       if (!this.remark) this.remark = this.areaName
+    },
     goBack() {
       this.$emit('click-back', false)
     },
@@ -81,8 +81,7 @@ export default {
       hub.$emit('create-center', bool)
     },
     saveArea() {
-      
-      this.$emit('cerate-area', { title: this.areaName, center: [this.lng, this.lat], remark:'' })
+      this.$emit('cerate-area', { title: this.areaName, center: [this.lng, this.lat], remark: this.remark })
     },
     handraulicSetCenter() {
       // 手动填入经纬度坐标
@@ -92,7 +91,7 @@ export default {
     }
   },
   mounted() {
-    hub.$on('on-setCenter', lnglat=> {
+    hub.$on('on-setCenter', lnglat => {
       this.lng = Number(lnglat[0])
       this.lat = Number(lnglat[1])
     })

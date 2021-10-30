@@ -1,13 +1,13 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-17 16:58:06
+ * @LastEditTime: 2021-10-31 00:27:27
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-config\index.vue
 -->
 <template>
-  <div class="camera-sub-block">
+  <div class="area-sub-update-block">
     <back-bar @back="goBack"></back-bar>
     <div class="anas-block">
       <p class="sub-title">
@@ -19,11 +19,15 @@
     </div>
     <div class="config-block">
       <h4 class="title">保护区信息</h4>
-      <p class="config-item"><span class="teil">相机型号：</span><span class="sub-teil">HW101</span></p>
-      <p class="config-item"><span class="teil">计划回收时间：</span><span class="sub-teil">2021/09/12</span></p>
+      <p class="config-item">
+        <span class="teil">保护区名称：</span>
+        <el-input v-model="form.areaName" placeholder="" clearable style="width:250px"></el-input>
+      </p>
       <p class="config-item"><span class="teil">地理位置：</span><span class="sub-teil">114.22343°E,31.33113°N</span></p>
-      <p class="config-item"><span class="teil">温度：</span><span class="sub-teil">35°C</span></p>
-      <p class="config-item"><span class="teil">电量：</span><span class="sub-teil">45%</span></p>
+    </div>
+    <div class="config-block">
+      <h4 class="title">保护区介绍</h4>
+      <el-input type="textarea" :autosize="{ minRows: 7, maxRows: 20 }" placeholder="请输入内容" v-model="form.remark"> </el-input>
     </div>
     <div class="config-block">
       <h4 class="title">保护区编辑</h4>
@@ -33,7 +37,7 @@
       </p>
     </div>
     <div class="config-btn">
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="updataArea()">保存</el-button>
       <el-button type="danger" @click="goBack">取消</el-button>
     </div>
   </div>
@@ -46,7 +50,8 @@ export default {
   components: { backBar },
   data() {
     return {
-      edit: false
+      edit: false,
+      form: this.info
     }
   },
   props: {
@@ -59,16 +64,19 @@ export default {
   },
   methods: {
     goBack() {
-      this.$emit('click-back')
+      this.$emit('click-back', { status: false, area: this.form })
+    },
+    updataArea() {
+      this.$emit('click-back', { status: true, area: this.form })
     },
     swithEdit(bool) {
-     this.$emit('update-edit', bool)
+      this.$emit('update-edit', bool)
     }
   }
 }
 </script>
 <style lang="scss">
-.camera-sub-block {
+.area-sub-update-block {
   @include font_color(null);
   padding: 30px;
   box-sizing: border-box;
@@ -98,7 +106,7 @@ export default {
   .config-block {
     margin-top: 24px;
     .config-item {
-      line-height: 30px;
+      line-height: 42px;
       font-size: 13px;
       span {
         display: inline-block;

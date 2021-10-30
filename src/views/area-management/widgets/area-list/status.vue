@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-30 20:31:16
+ * @LastEditTime: 2021-10-31 00:34:39
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-list\status.vue
@@ -9,7 +9,7 @@
 <template>
   <div class="area-cameral-list">
     <ul class="ul-list">
-      <li v-for="(item, index) in cameraList" :key="index">
+      <li v-for="(item, index) in areaList" :key="index">
         <div class="info" title="查看信息" @click="clickArea(item)">
           <!-- <span class="status" :style="{ backgroundColor: getStatus(item.status, 2) }">{{ getStatus(item.status) }}</span> -->
           <div class="sub-info-block">
@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       code: '',
-      cameraList: [
+      areaList: [
         // 1已部署， 2 待部署， 3 待回收 4 未部署
         { id: '神农架保护区', status: 1, inUseTime: '2012-10-12', user: '' },
         { id: '张家界保护区', status: 1, inUseTime: '2012-10-12', user: '张三' },
@@ -59,8 +59,8 @@ export default {
   },
   methods: {
     getAreaList() {
-      areaList({start: 0, limit: 1000, title:''}).then((res) => {
-        
+      areaList({ start: 0, limit: 1000, title: '' }).then(res => {
+        this.areaList = res.data.list
       })
     },
     getStatus(status, type = 1) {

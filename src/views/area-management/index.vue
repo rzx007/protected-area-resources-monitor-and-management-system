@@ -1,14 +1,14 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-10-30 21:16:18
+ * @LastEditTime: 2021-10-31 00:32:54
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\index.vue
 -->
 <template>
   <div class="content areaMap">
-    <home-map :isEdit="editMap" :isCreate="isCreate" :mapId="cameraObj.id" ref="map"></home-map>
+    <home-map :isEdit="editMap" :isCreate="isCreate" :mapId="areaObj.id" ref="map"></home-map>
     <div :class="[toggle ? '' : 'carmera-list-hidden', 'carmera-list']">
       <div class="toggle-button" title="收起" @click="toggle = !toggle">
         <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
@@ -17,7 +17,7 @@
         <area-list v-show="level === 1" @click-area="clickArea" @click-add="aaddArea"></area-list>
       </transition>
       <transition name="slide-fade">
-        <area-config v-if="level === 2" @click-back="goBack" @update-edit="swithEdit" :info="cameraObj"></area-config>
+        <area-config v-if="level === 2" @click-back="clickUpdate" @update-edit="swithEdit" :info="areaObj"></area-config>
       </transition>
       <transition name="slide-fade">
         <area-add v-if="level === 3" @click-back="cancelCreate" @cerate-area="cerateArea"></area-add>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { addArea } from '@/api'
+import { addArea, updateArea, deleteArea } from '@/api'
 import homeMap from './widgets/map/index.vue'
 import areaList from './widgets/area-list/index.vue'
 import areaConfig from './widgets/area-config/index.vue'
@@ -40,7 +40,7 @@ export default {
       level: 1, // 1 显示相机列表, 2显示相机详情, 3新增相机
       editMap: false,
       isCreate: false, // 新增
-      cameraObj: {}
+      areaObj: {}
     }
   },
   methods: {
@@ -48,23 +48,25 @@ export default {
     clickArea(item) {
       this.level = 2
       this.editMap = true
-      this.cameraObj = item
+      this.areaObj = item
     },
     swithEdit(bool) {
       this.editMap = bool
     },
-    goBack() {
+    clickUpdate({ status, area }) {
       // 详情返回自动关闭编辑功能
       this.level = 1
       this.editMap = false
-      const path = this.$refs.map.getPolygonPath()
-      console.log( path)
+      if (status) {
+        const path = this.$refs.map.getPolygonPath()
+        console.log(path)
+        this.updateArea({ lngLat: JSON.stringify(path), ...area })
+      }
     },
     aaddArea() {
       this.level = 3
       this.isCreate = true
     },
-
     cancelCreate() {
       this.level = 1
       this.isCreate = false
@@ -75,7 +77,14 @@ export default {
       this.addArea({ lngLat: JSON.stringify(path), ...params })
     },
     addArea(params) {
-      addArea(params).then(res => {})
+      addArea(params).then(res => {
+        res.code === 0 ? this.$message.success('保护区新增成功') : this.$message.warning('保护区新增异常')
+      })
+    },
+    updateArea(params) {
+      updateArea(params).then(res => {
+        res.code === 0 ? this.$message.success('保护区更新成功') : this.$message.warning('保护区更新异常')
+      })
     }
   }
 }
