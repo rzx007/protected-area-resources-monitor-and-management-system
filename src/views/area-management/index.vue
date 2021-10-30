@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-10-17 16:59:14
+ * @LastEditTime: 2021-10-30 20:50:58
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\index.vue
@@ -14,10 +14,10 @@
         <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
       </div>
       <transition name="slide-fade">
-        <camera-list v-show="level === 1" @click-area="clickArea" @click-add="aaddArea"></camera-list>
+        <area-list v-show="level === 1" @click-area="clickArea" @click-add="aaddArea"></area-list>
       </transition>
       <transition name="slide-fade">
-        <camera-config v-if="level === 2" @click-back="goBack" @update-edit="swithEdit" :info="cameraObj"></camera-config>
+        <area-config v-if="level === 2" @click-back="goBack" @update-edit="swithEdit" :info="cameraObj"></area-config>
       </transition>
       <transition name="slide-fade">
         <area-add v-if="level === 3" @click-back="cancelCreate" @cerate-area="cerateArea"></area-add>
@@ -27,12 +27,13 @@
 </template>
 
 <script>
+import { addArea } from '@/api'
 import homeMap from './widgets/map/index.vue'
-import cameraList from './widgets/area-list/index.vue'
-import cameraConfig from './widgets/area-config/index.vue'
+import areaList from './widgets/area-list/index.vue'
+import areaConfig from './widgets/area-config/index.vue'
 import areaAdd from './widgets/area-add/index.vue'
 export default {
-  components: { homeMap, cameraList, cameraConfig, areaAdd },
+  components: { homeMap, areaList, areaConfig, areaAdd },
   data() {
     return {
       toggle: true,
@@ -70,6 +71,10 @@ export default {
     cerateArea(params) {
       const path = this.$refs.map.getPolygonPath()
       console.log(params, path)
+      this.addArea({ lngLat: JSON.stringify(path), ...params })
+    },
+    addArea(params) {
+      addArea(params).then(res => {})
     }
   }
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 11:36:17
- * @LastEditTime: 2021-10-24 14:25:27
+ * @LastEditTime: 2021-10-30 19:41:06
  * @LastEditors: 阮志雄
  * @Description: 相机任务下发(相机设置)
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-setting\index.vue
@@ -11,7 +11,7 @@
     <back-bar @back="goBack" title="配置下发"></back-bar>
     <div class="anas-block">
       <p class="sub-title">
-        设备编号：<span>{{ camera.id }}</span>
+        设备编号：<span>{{ camera.imeival }}</span>
       </p>
       <p class="sub-title">
         布设时间：<span>{{ camera.inUseTime }}</span>
@@ -127,6 +127,7 @@
 </template>
 
 <script>
+import { uploadStatus } from '@/api'
 import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
@@ -156,7 +157,27 @@ export default {
     goBack() {
       this.$emit('click-back')
     },
+    uploadStatus() {
+      uploadStatus({
+        ImeiVal: this.camera.imeival,
+        SDTotalSpaceVal: '128GB',
+        FWVersion: '1.0.1',
+        PirInterval: '100000',
+        PSize: '10M',
+        VSize: '720P',
+        VLength: 1000 * 60 * 60,
+        SignalVal:'',
+        BatteryVal:'',
+        TemperatureVal:'',
+        SDUsedpaceVal:'',
+        LongitudeVal:'',
+        LatitudeVal:'',
+      }).then(res => {
+        this.$emit('click-back')
+      })
+    },
     onSubmit() {
+      this.uploadStatus()
       console.log('submit!')
     }
   }

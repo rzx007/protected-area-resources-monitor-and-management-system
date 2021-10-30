@@ -1,10 +1,10 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-16 20:19:17
+ * @LastEditTime: 2021-10-30 20:31:16
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\camera-list\status.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-list\status.vue
 -->
 <template>
   <div class="area-cameral-list">
@@ -13,7 +13,7 @@
         <div class="info" title="查看信息" @click="clickArea(item)">
           <!-- <span class="status" :style="{ backgroundColor: getStatus(item.status, 2) }">{{ getStatus(item.status) }}</span> -->
           <div class="sub-info-block">
-            <svg-icon type='css' icon='ditu1' class="marks"></svg-icon>
+            <svg-icon type="css" icon="ditu1" class="marks"></svg-icon>
             <div class="sub-info">
               <p><span>名称:</span> {{ item.id }}</p>
               <p style="margin-top:6px" v-show="[1, 3].includes(item.status)">
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { areaList } from '@/api'
 export default {
   name: 'task',
   emits: ['click-area', 'click-recycle', 'click-deploy'],
@@ -53,7 +54,15 @@ export default {
       ]
     }
   },
+  created() {
+    this.getAreaList()
+  },
   methods: {
+    getAreaList() {
+      areaList({start: 0, limit: 1000, title:''}).then((res) => {
+        
+      })
+    },
     getStatus(status, type = 1) {
       for (let index = 0; index < this.statusEnum.length; index++) {
         const element = this.statusEnum[index]
@@ -69,7 +78,7 @@ export default {
     clickArea(item) {
       // 点击相机
       this.$emit('click-area', item)
-    },
+    }
   }
 }
 </script>

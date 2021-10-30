@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-17 16:44:21
+ * @LastEditTime: 2021-10-30 20:45:26
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-add\index.vue
@@ -81,7 +81,8 @@ export default {
       hub.$emit('create-center', bool)
     },
     saveArea() {
-      this.$emit('cerate-area', { areaName: this.areaName, center: [this.lng, this.lat] })
+      
+      this.$emit('cerate-area', { title: this.areaName, center: [this.lng, this.lat], remark:'' })
     },
     handraulicSetCenter() {
       // 手动填入经纬度坐标
