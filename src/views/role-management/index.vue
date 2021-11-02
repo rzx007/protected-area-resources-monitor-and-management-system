@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-08 17:30:04
- * @LastEditTime: 2021-10-22 19:02:25
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\role-management\index.vue
--->
 <template>
   <div class="content">
     <div class="primary-border-color sys-management">
@@ -25,7 +17,7 @@
           >
             <el-button type="danger" slot="reference" title="删除" plain>删除</el-button>
           </el-popconfirm>
-          <el-button type="success" plain title="分配权限">分配权限</el-button>
+          <el-button type="success" plain title="分配权限" @click="isPermission=true">分配权限</el-button>
         </template>
         <template v-slot:region="Props">
           <p>{{ Props.rowData.row.divisionCodeName ? Props.rowData.row.divisionCodeName : '所有地区' }}</p>
@@ -51,6 +43,9 @@
         "
       ></update-user>
     </overlay>
+    <overlay :close.sync="isPermission" title="权限分配" owidth="380px">
+      <permission v-if="isPermission"></permission>
+    </overlay>
   </div>
 </template>
 
@@ -59,6 +54,7 @@ const fromOptions = [{ name: 'mobile', label: '账号', type: 'text' }]
 import { deleteRole } from '@/api'
 import signUp from './pages/add-role.vue'
 import UpdateUser from './pages/update-role.vue'
+import permission from './pages/permission.vue'
 export default {
   data() {
     return {
@@ -67,7 +63,6 @@ export default {
         limit: 20,
         showPanelTool: true,
         defaultPanel: [],
-        height: '70vh',
         params: {},
         dataUrl: '/reserve/appRole/list',
         responseName: 'list',
@@ -81,10 +76,11 @@ export default {
       fromOptions,
       isAdd: false,
       isUpdate: false,
+      isPermission: false,
       userInfo: {}
     }
   },
-  components: { signUp, UpdateUser },
+  components: { signUp, UpdateUser, permission },
   methods: {
     getParams(data) {
       this.tableOptions.params.consName = data.consName

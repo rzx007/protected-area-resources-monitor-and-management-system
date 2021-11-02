@@ -4,7 +4,8 @@ import svgIcon from '@/components/Svg-icon.vue'
 import overlay from '@/components/overlay'
 import CurdView from '@/components/CurdViews/index'
 import BreadNav from '@/components/Bread_nav'
-const components = { svgIcon, overlay, CurdView, BreadNav }
+import FromData from '@/components/FromData/index'
+const components = { svgIcon, overlay, CurdView, BreadNav, FromData }
 
 function plugin (Vue) {
   if (plugin.installed) {

@@ -1,7 +1,7 @@
 /*
  * @Author: 阮志雄
  * @Date: 2021-10-08 16:24:43
- * @LastEditTime: 2021-10-22 14:47:31
+ * @LastEditTime: 2021-11-01 23:22:01
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\mock\router.js
@@ -58,14 +58,14 @@ const routeArr = [
     path: '/user-management'
   },
   {
-    title: '角色管理',
-    componentName: 'roleManagement',
-    componentPath: 'role-management/index',
+    title: '权限管理',
+    componentName: 'permission',
+    componentPath: 'permission/index',
     icon: 'quanxian',
     parentId: 0,
     id: '05150',
     type: 3,
-    path: '/role-management'
+    path: '/permission'
   },
   {
     title: '保护区管理',

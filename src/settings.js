@@ -1,13 +1,5 @@
-/*
- * @Author: 阮志雄
- * @Date: 2021-10-08 16:24:43
- * @LastEditTime: 2021-10-24 16:39:34
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\settings.js
- */
 module.exports = {
-  title: '保护区相机后台管理系统', // 保护区相机后台管理系统
+  title: '甘肃电网有序用电实时监测', // 保护区相机后台管理系统
   fixedHeader: true, // 是否国定头部 固定true 不固定false
   menuModeisVertical: true, // true 菜单垂直显示，false菜单水平显示
   tagsBar: true, // 是否显示多标签页 true为显示,false不显示

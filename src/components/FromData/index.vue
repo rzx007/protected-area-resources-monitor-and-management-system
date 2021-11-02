@@ -409,7 +409,7 @@ export default {
           if (valid) {
             apiPost(this.postUrl, fromData)
               .then((res) => {
-                if (res.code === 1) {
+                if (res.code === 0) {
                   this.$emit('submit', fromData, res.data)
                   this.$notify({
                     title: '提示',

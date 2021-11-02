@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-31 00:34:39
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-list\status.vue
--->
 <template>
   <div class="area-cameral-list">
     <ul class="ul-list">
