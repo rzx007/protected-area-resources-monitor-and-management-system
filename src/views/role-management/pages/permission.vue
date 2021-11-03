@@ -1,9 +1,9 @@
 <template>
-  <div class="assign-menu">
+  <div class="permission-menu">
     <el-tree
       :data="treeData"
       show-checkbox
-      node-key="id"
+      node-key="menuId"
       :default-checked-keys="checkedKeys"
       :props="defaultProps"
       defaultExpandAll
@@ -12,73 +12,72 @@
     >
     </el-tree>
     <div class="form_btn">
-      <el-button
-        type="primary"
-        @click="saveConfirm"
-        round
-        size="small"
-        v-throttle
-        >保存</el-button
-      >
+      <el-button type="primary" @click="saveConfirm" round size="small" v-throttle>保存</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { getRoleOwnMenu, roleGrantMenu } from '@/api'
+import { getRoleOwnMenu, getMenuTree, roleGrantMenu } from '@/api'
 export default {
-  props: ['info', 'treeData'],
-  data () {
+  props: ['info'],
+  data() {
     return {
       defaultProps: {
         children: 'children',
-        label: 'name'
+        label: 'menuName'
       },
       ownTreeList: [],
       allMenuList: [],
-      checkedKeys: []
+      checkedKeys: [],
+      treeData: []
     }
   },
-  created () {
-    this.getRoleOwnMenu()
+  async created() {
+    await this.getMenuTree()
+    await this.getRoleOwnMenu()
   },
   methods: {
-    saveConfirm () {
+    saveConfirm() {
       const menuArr = this.$refs.tree.getCheckedNodes(false, true)
       const menuIds = []
       if (menuArr.length > 0) {
         menuArr.forEach(item => {
-          menuIds.push(item.id)
+          menuIds.push(item.menuId)
         })
       }
       roleGrantMenu({
-        systemFunctionIds: menuIds,
+        menuIds: menuIds.join(','),
         roleId: this.info.roleId
       }).then(res => {
-        if (res.code === 1) {
+        if (res.code === 0) {
           this.$message.success(res.msg)
           this.$emit('close', true)
         }
       })
     },
-    getRoleOwnMenu () {
+    async getMenuTree() {
+      getMenuTree({ start: 0, limit: 100 }).then(res => {
+        this.treeData = res.data.list
+        return  res.data.list
+      })
+    },
+    async getRoleOwnMenu() {
       getRoleOwnMenu({ roleId: this.info.roleId }).then(res => {
-        if (res.code === 1) {
-          if ('children' in res.data.roleSystemFunctions) {
-            const menuIds = []
-            const data = res.data.roleSystemFunctions.children
-            const handleMenuIds = function (menu) {
-              menu.forEach(item => {
-                if (item.children && item.children.length) {
-                  handleMenuIds(item.children)
-                } else {
-                  menuIds.push(item.id)
-                }
-              })
-              return menuIds
-            }
-            this.checkedKeys = handleMenuIds(data)
+        if (res.code === 0) {
+          const menuIds = []
+          const data = res.data.list
+          const handleMenuIds = function(menu) {
+            menu.forEach(item => {
+              if (item.children && item.children.length) {
+                handleMenuIds(item.children)
+              } else {
+                menuIds.push(item.menuId)
+              }
+            })
+            return menuIds
           }
+          this.checkedKeys = handleMenuIds(data)
         }
       })
     }
@@ -87,12 +86,13 @@ export default {
 </script>
 
 <style lang="scss">
-.assign-menu {
+.permission-menu {
   width: 100%;
   padding: 20px 0;
   box-sizing: border-box;
   overflow: hidden;
   .menu-tree {
+    min-height: 30vh;
     max-height: 50vh;
     margin-bottom: 10px;
     overflow-y: auto;

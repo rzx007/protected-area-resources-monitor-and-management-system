@@ -1,10 +1,10 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-16 21:35:01
+ * @LastEditTime: 2021-11-03 12:36:22
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\camera-list\index.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-list\index.vue
 -->
 <template>
   <div class="camera-block">
@@ -15,7 +15,7 @@
     </ul>
     <div class="camera-content">
       <transition name="slide-fade">
-        <status v-show="activeIndex === 1" @click-area="clickArea"></status>
+        <status v-show="activeIndex === 1" @click-area="clickArea" ref="status"></status>
       </transition>
     </div>
   </div>
@@ -32,11 +32,13 @@ export default {
   components: { status },
   methods: {
     clickArea(item) {
-      console.log(item)
       this.$emit('click-area', item)
     },
     aaddArea() {
       this.$emit('click-add')
+    },
+    getAreaList() {
+      this.$refs.status.getAreaList()
     }
   }
 }

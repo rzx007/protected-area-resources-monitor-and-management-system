@@ -17,7 +17,16 @@
           >
             <el-button type="danger" slot="reference" title="删除" plain>删除</el-button>
           </el-popconfirm>
-          <el-button type="success" plain title="分配权限" @click="isPermission=true">分配权限</el-button>
+          <el-button
+            type="success"
+            plain
+            title="分配权限"
+            @click="
+              isPermission = true
+              detailInfo = Props.rowData.row
+            "
+            >分配权限</el-button
+          >
         </template>
         <template v-slot:region="Props">
           <p>{{ Props.rowData.row.divisionCodeName ? Props.rowData.row.divisionCodeName : '所有地区' }}</p>
@@ -43,8 +52,8 @@
         "
       ></update-user>
     </overlay>
-    <overlay :close.sync="isPermission" title="权限分配" owidth="380px">
-      <permission v-if="isPermission"></permission>
+    <overlay :close.sync="isPermission" title="权限分配" owidth="40vw">
+      <permission v-if="isPermission" @close="closeMenuDialog" :info="detailInfo"></permission>
     </overlay>
   </div>
 </template>
@@ -58,6 +67,7 @@ import permission from './pages/permission.vue'
 export default {
   data() {
     return {
+      detailInfo: {},
       fromItem: [],
       tableOptions: {
         limit: 20,
@@ -95,6 +105,13 @@ export default {
       deleteRole({ roleId: row.roleId }).then(res => {
         res.code === 0 && this.$refs.table.refresh()
       })
+    },
+    closeMenuDialog() {
+      this.isPermission = false
+      // this.$store.dispatch('GetUserMenu').then(routes => {
+      //   this.$message.success('菜单更新！')
+      // })
+      this.$refs.curdView.refresh()
     }
   }
 }

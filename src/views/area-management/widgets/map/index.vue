@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 16:08:30
- * @LastEditTime: 2021-10-30 21:30:57
+ * @LastEditTime: 2021-11-03 12:39:20
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\map\index.vue
@@ -28,7 +28,11 @@ export default {
       type: Boolean,
       default: false
     },
-    mapId: String
+    mapId: Number,
+    pathStr: {
+      type: String,
+      default: '[]'
+    }
   },
   data() {
     return {
@@ -39,10 +43,18 @@ export default {
     }
   },
   watch: {
-    mapId: function() {
-      this.getPathByAjax()
+    pathStr: {
+      handler: function(newPath) {
+        this.path = JSON.parse(newPath)
+        this.getPathByAjax()
+      },
+      deep: true
     },
+    // mapId: function() {
+    //   this.getPathByAjax()
+    // },
     isEdit: function(bool) {
+      console.log(bool);
       const path = this.getPolygonPath()
       if (path.length > 0) {
         bool ? polyEditor.open() : polyEditor.close()
@@ -179,23 +191,11 @@ export default {
       })
     },
     getPathByAjax() {
+      // console.log(this.path);
       // this.mapId 根据Id查询区域
-      setTimeout(() => {
-        this.path = [
-          [114.496577, 30.487779],
-          [114.500242, 30.485103],
-          [114.508865, 30.477446],
-          [114.503332, 30.468233],
-          [114.483569, 30.464996],
-          [114.467112, 30.470786],
-          [114.478323, 30.474708],
-          [114.476095, 30.484854],
-          [114.484575, 30.49307]
-        ]
-        this.setCenterZoom([114.496577, 30.487779])
-        this.setPloygon(this.path)
-        polyEditor.setTarget(polygon)
-      }, 1000)
+      this.setCenterZoom([114.496577, 30.487779])
+      this.setPloygon(this.path)
+      polyEditor.setTarget(polygon)
     }
   },
   destroyed() {

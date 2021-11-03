@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-31 00:27:27
+ * @LastEditTime: 2021-11-03 12:15:04
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-config\index.vue
@@ -21,7 +21,7 @@
       <h4 class="title">保护区信息</h4>
       <p class="config-item">
         <span class="teil">保护区名称：</span>
-        <el-input v-model="form.areaName" placeholder="" clearable style="width:250px"></el-input>
+        <el-input v-model="form.title" placeholder="" clearable style="width:250px"></el-input>
       </p>
       <p class="config-item"><span class="teil">地理位置：</span><span class="sub-teil">114.22343°E,31.33113°N</span></p>
     </div>

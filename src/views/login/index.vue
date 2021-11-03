@@ -69,11 +69,13 @@ export default {
       const login = this.loginByPwd ? loginByPwd(params) : loginByMobile(params)
       login
         .then(res => {
-          console.log(res)
-          this.isLoging = false
-          setToken('token', res.data.token, { expires: 0.25 })
-          setToken('userName', res.data.username)
-          this.$router.replace('/')
+          this.$store.dispatch('GetUserMenu', res.data.userId).then(routes => {
+            this.isLoging = false
+            setToken('token', res.data.token, { expires: 0.25 })
+            setToken('userName', res.data.username)
+            setToken('userId', res.data.userId)
+            this.$router.replace('/')
+          })
         })
         .catch(() => {
           this.isLoging = false

@@ -3,13 +3,12 @@
     <ul class="ul-list">
       <li v-for="(item, index) in areaList" :key="index">
         <div class="info" title="查看信息" @click="clickArea(item)">
-          <!-- <span class="status" :style="{ backgroundColor: getStatus(item.status, 2) }">{{ getStatus(item.status) }}</span> -->
           <div class="sub-info-block">
             <svg-icon type="css" icon="ditu1" class="marks"></svg-icon>
             <div class="sub-info">
-              <p><span>名称:</span> {{ item.id }}</p>
-              <p style="margin-top:6px" v-show="[1, 3].includes(item.status)">
-                <span>布控时间：</span><span>{{ item.inUseTime }}</span>
+              <p><span>名称:</span> {{ item.title }}</p>
+              <p style="margin-top:6px">
+                <span>相机数量：</span><span>{{ item.cameraNum }}</span>
               </p>
             </div>
           </div>
@@ -28,22 +27,11 @@
 import { areaList } from '@/api'
 export default {
   name: 'task',
-  emits: ['click-area', 'click-recycle', 'click-deploy'],
+  emits: ['click-area'],
   data() {
     return {
       code: '',
-      areaList: [
-        // 1已部署， 2 待部署， 3 待回收 4 未部署
-        { id: '神农架保护区', status: 1, inUseTime: '2012-10-12', user: '' },
-        { id: '张家界保护区', status: 1, inUseTime: '2012-10-12', user: '张三' },
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '李四' }
-      ],
-      statusEnum: [
-        { status: 1, color: '#4762b0', title: '已部署' },
-        { status: 2, color: '#1890FF', title: '待部署' },
-        { status: 3, color: '#E6A23C', title: '待回收' },
-        { status: 4, color: '#67C23A', title: '未部署' }
-      ]
+      areaList: []
     }
   },
   created() {
@@ -54,18 +42,6 @@ export default {
       areaList({ start: 0, limit: 1000, title: '' }).then(res => {
         this.areaList = res.data.list
       })
-    },
-    getStatus(status, type = 1) {
-      for (let index = 0; index < this.statusEnum.length; index++) {
-        const element = this.statusEnum[index]
-        if (element.status === status) {
-          if (type == 1) {
-            return element.title
-          } else {
-            return element.color
-          }
-        }
-      }
     },
     clickArea(item) {
       // 点击相机

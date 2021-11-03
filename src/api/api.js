@@ -1,7 +1,7 @@
 /*
  * @Author: 阮志雄
  * @Date: 2021-07-08 14:29:08
- * @LastEditTime: 2021-11-02 15:24:18
+ * @LastEditTime: 2021-11-02 17:17:57
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\api\api.js
@@ -59,13 +59,18 @@ export async function delSystemFunction(params) {
   return res
 }
 //获取菜单列表
-export async function roleGrantMenu(params) {
+export async function getMenuTree(params) {
   const res = await http.post('/reserve/appMenu/list', params)
   return res
 }
 //获取角色菜单列表
 export async function getRoleOwnMenu(params) {
   const res = await http.post('/reserve/appMenu/list', params)
+  return res
+}
+//设置角色的菜单
+export async function roleGrantMenu(params) {
+  const res = await http.post('/reserve/appRoleMenu/add', params)
   return res
 }
 // 不定参数请求

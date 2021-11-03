@@ -1,14 +1,15 @@
 /*
  * @Author: rzx007
  * @Date: 2021-05-24 10:25:48
- * @LastEditors: rzx007
- * @LastEditTime: 2021-06-17 10:48:28
- * @FilePath: \vue-template-with-elementui\src\store\modules\menuPermission.js
+ * @LastEditors: 阮志雄
+ * @LastEditTime: 2021-11-03 11:51:34
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\store\modules\menuPermission.js
  * @Description: Do not edit
  */
 import { getSystemFuncList } from '@/api'
 import router from '@/router'
 import getRoutes from '@/router/getRoutes'
+import { getToken } from '@/utils/auth'
 
 const permission = {
   state: {
@@ -21,18 +22,26 @@ const permission = {
     }
   },
   actions: {
-    GetUserMenu ({ commit }) {
+    GetUserMenu({ commit }, userId = getToken('userId')) {
       return new Promise((resolve, reject) => {
         let asyncRoutes = []
         router.options.routes[1].children = []
-        getSystemFuncList()
+        getSystemFuncList({ userId })
           .then(res => {
-            asyncRoutes = [].concat(
-              res.data.systemFunctionTreeNodes[0].children
-            )
+            if (res.data.length < 1) return
+            res.data.forEach(item => {
+              asyncRoutes.push({
+                title: item.menuName,
+                componentName: item.linkUrl,
+                componentPath: item.linkUrl,
+                icon: 'tongji',
+                id: item.menuId,
+                path: item.linkUrl
+              })
+            });
             const routes = getRoutes(asyncRoutes)
             console.log(router.options)
-            router.options.routes[1].children = [].concat(routes)
+            router.options.routes[0].children = routes
             router.options.routes.push(
               {
                 component: () => import('@/components/notFound.vue'),

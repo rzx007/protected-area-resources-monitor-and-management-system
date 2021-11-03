@@ -1,20 +1,20 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-10-31 00:32:54
+ * @LastEditTime: 2021-11-03 12:41:02
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\index.vue
 -->
 <template>
   <div class="content areaMap">
-    <home-map :isEdit="editMap" :isCreate="isCreate" :mapId="areaObj.id" ref="map"></home-map>
+    <home-map :isEdit="editMap" :isCreate="isCreate" :mapId="areaObj.reserveId" :pathStr="areaObj.lngLat" ref="map"></home-map>
     <div :class="[toggle ? '' : 'carmera-list-hidden', 'carmera-list']">
       <div class="toggle-button" title="收起" @click="toggle = !toggle">
         <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
       </div>
       <transition name="slide-fade">
-        <area-list v-show="level === 1" @click-area="clickArea" @click-add="aaddArea"></area-list>
+        <area-list v-show="level === 1" @click-area="clickArea" @click-add="aaddArea" ref="list"></area-list>
       </transition>
       <transition name="slide-fade">
         <area-config v-if="level === 2" @click-back="clickUpdate" @update-edit="swithEdit" :info="areaObj"></area-config>
@@ -47,8 +47,9 @@ export default {
     // 点击相机
     clickArea(item) {
       this.level = 2
-      this.editMap = true
+      // this.editMap = true
       this.areaObj = item
+      console.log(item)
     },
     swithEdit(bool) {
       this.editMap = bool
@@ -79,11 +80,13 @@ export default {
     addArea(params) {
       addArea(params).then(res => {
         res.code === 0 ? this.$message.success('保护区新增成功') : this.$message.warning('保护区新增异常')
+        this.$refs.list.getAreaList()
       })
     },
     updateArea(params) {
       updateArea(params).then(res => {
         res.code === 0 ? this.$message.success('保护区更新成功') : this.$message.warning('保护区更新异常')
+        this.$refs.list.getAreaList()
       })
     }
   }

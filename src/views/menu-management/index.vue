@@ -48,7 +48,7 @@ const tableOptions = {
   pageSize: 20,
   showPanelTool: true,
   defaultPanel: [],
-  params: { bvId: '', name: '', type: 3 }, // params的改变都会触发，表格的重新查询
+  params: { }, // params的改变都会触发，表格的重新查询
   dataUrl: '/reserve/appMenu/list',
   responseName: 'list',
   columns: [
@@ -64,7 +64,7 @@ export default {
     return {
       tips: '新增',
       tableOptions,
-      fromOptions: [{ name: 'name', label: '菜单名称', type: 'text' }],
+      fromOptions: [{ name: 'menuName', label: '菜单名称', type: 'text' }],
       close: false,
       selectedRow: {},
       aclnId: '',

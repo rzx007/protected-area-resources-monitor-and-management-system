@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 12:24:04
- * @LastEditTime: 2021-10-22 14:44:32
+ * @LastEditTime: 2021-11-03 11:53:40
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\Mini-slidebar.vue
@@ -30,14 +30,20 @@
 </template>
 
 <script>
-import routeArr from '@/mock/router.js'
+// import routeArr from '@/mock/router.js'
+import { mapGetters } from 'vuex'
 import SvgIcon from './Svg-icon.vue'
 export default {
   components: { SvgIcon },
   data() {
     return {
-      menuData: [...routeArr]
+      // menuData: [...routeArr]
     }
+  },
+  computed: {
+    ...mapGetters({
+      menuData: 'routes'
+    })
   },
   methods: {
     pushRoute(item) {

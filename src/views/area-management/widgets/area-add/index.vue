@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-31 00:01:45
+ * @LastEditTime: 2021-11-03 12:20:03
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-add\index.vue
@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       areaName: '',
-      remark:'',
+      remark: '',
       lng: null,
       lat: null,
       edit: false,
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     initRemark() {
-       if (!this.remark) this.remark = this.areaName
+      if (!this.remark) this.remark = this.areaName
     },
     goBack() {
       this.$emit('click-back', false)
@@ -81,7 +81,7 @@ export default {
       hub.$emit('create-center', bool)
     },
     saveArea() {
-      this.$emit('cerate-area', { title: this.areaName, center: [this.lng, this.lat], remark: this.remark })
+      this.$emit('cerate-area', { title: this.areaName, center: JSON.stringify([this.lng, this.lat]), remark: this.remark })
     },
     handraulicSetCenter() {
       // 手动填入经纬度坐标
