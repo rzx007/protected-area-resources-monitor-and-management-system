@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-11 11:31:45
- * @LastEditTime: 2021-11-04 16:40:20
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\gallery-management\index.vue
--->
 <template>
   <div
     class="content"
@@ -54,7 +46,7 @@ export default {
       this.close = true
     },
     load() {
-      if (this.count >= this.totalPage) return
+      if (this.count >= 12) return
       this.count += 1
       console.log(this.count)
       // alert(this.count)
