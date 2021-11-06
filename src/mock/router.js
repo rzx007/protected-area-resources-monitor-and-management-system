@@ -1,7 +1,7 @@
 /*
  * @Author: 阮志雄
  * @Date: 2021-10-08 16:24:43
- * @LastEditTime: 2021-11-01 23:22:01
+ * @LastEditTime: 2021-11-04 00:24:20
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\mock\router.js
@@ -10,7 +10,7 @@ const routeArr = [
   {
     title: '保护区信息',
     componentName: 'Home',
-    componentPath: 'Home/index',
+    componentPath: '/Home',
     icon: 'ditu1',
     parentId: 0,
     id: '0515',
@@ -20,7 +20,7 @@ const routeArr = [
   {
     title: '相机管理',
     componentName: 'cameraManagement',
-    componentPath: 'camera-management/index',
+    componentPath: '/camera-management',
     icon: 'zhaoxiangji',
     parentId: 0,
     id: '05146',
@@ -30,7 +30,7 @@ const routeArr = [
   {
     title: '数据统计',
     componentName: 'analysis',
-    componentPath: 'analysis/index',
+    componentPath: '/analysis',
     icon: 'tongji',
     parentId: 0,
     id: '05147',
@@ -40,7 +40,7 @@ const routeArr = [
   {
     title: '照片分析',
     componentName: 'gallery-management',
-    componentPath: 'gallery-management/index',
+    componentPath: '/gallery-management',
     icon: 'zhaopian',
     parentId: 0,
     id: '05148',
@@ -50,7 +50,7 @@ const routeArr = [
   {
     title: '用户管理',
     componentName: 'userManagement',
-    componentPath: 'user-management/index',
+    componentPath: '/user-management',
     icon: 'yonghu',
     parentId: 0,
     id: '05149',
@@ -60,7 +60,7 @@ const routeArr = [
   {
     title: '权限管理',
     componentName: 'permission',
-    componentPath: 'permission/index',
+    componentPath: '/permission',
     icon: 'quanxian',
     parentId: 0,
     id: '05150',
@@ -70,7 +70,7 @@ const routeArr = [
   {
     title: '保护区管理',
     componentName: 'areaManagement',
-    componentPath: 'area-management/index',
+    componentPath: '/area-management',
     icon: 'xitongguanli',
     parentId: 0,
     id: '05151',

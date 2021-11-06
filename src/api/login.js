@@ -29,3 +29,9 @@ export async function getSystemFuncList(params) {
   const res = await http.post('/reserve/appRoleMenu/list', params)
   return res
 }
+//  根据域名查保护区
+
+export async function findAreaByDoMain(params) {
+  const res = await http.post('/reserve/appReserve/findByDoMain', params)
+  return res
+}

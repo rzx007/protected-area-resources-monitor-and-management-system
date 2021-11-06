@@ -1,16 +1,8 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-08 16:24:43
- * @LastEditTime: 2021-10-11 11:36:58
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\Svg-icon.vue
--->
 <template>
-  <svg v-if="type === 'svg'" class="icon" aria-hidden="true">
+  <svg v-if="type === 'svg'" class="icon" aria-hidden="true" @click="clickEvent($event)">
     <use :xlink:href="'#'+iconName" />
   </svg>
-  <i v-else class="iconfont" :class="iconName"></i>
+  <i v-else class="iconfont" :class="iconName" @click="clickEvent($event)"></i>
 </template>
 
 <script>
@@ -26,6 +18,11 @@ export default {
     type: {
       type: String,
       default: 'svg'
+    }
+  },
+  methods: {
+    clickEvent($event){
+      this.$emit('click', $event)
     }
   }
 }

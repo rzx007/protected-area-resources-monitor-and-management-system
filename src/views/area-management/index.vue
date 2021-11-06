@@ -1,14 +1,13 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-11-03 12:41:02
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\index.vue
--->
 <template>
   <div class="content areaMap">
-    <home-map :isEdit="editMap" :isCreate="isCreate" :mapId="areaObj.reserveId" :pathStr="areaObj.lngLat" ref="map"></home-map>
+    <home-map
+      :isEdit="editMap"
+      :isCreate="isCreate"
+      :mapId="areaObj.reserveId"
+      :centerLnglat="centerLnglat"
+      :pathStr="areaObj.lngLat"
+      ref="map"
+    ></home-map>
     <div :class="[toggle ? '' : 'carmera-list-hidden', 'carmera-list']">
       <div class="toggle-button" title="收起" @click="toggle = !toggle">
         <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
@@ -40,7 +39,13 @@ export default {
       level: 1, // 1 显示相机列表, 2显示相机详情, 3新增相机
       editMap: false,
       isCreate: false, // 新增
-      areaObj: {}
+      areaObj: { centerLnglat: '[114.496577, 30.487779]' }
+    }
+  },
+  computed: {
+    centerLnglat: function() {
+      console.log(this.areaObj.centerLnglat)
+      return JSON.parse(this.areaObj.centerLnglat)
     }
   },
   methods: {

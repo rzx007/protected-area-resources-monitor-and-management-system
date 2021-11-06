@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-15 16:08:30
- * @LastEditTime: 2021-11-03 12:39:20
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\map\index.vue
--->
 <template>
   <div class="map-container">
     <div class="tooldragbar"></div>
@@ -32,12 +24,18 @@ export default {
     pathStr: {
       type: String,
       default: '[]'
+    },
+    centerLnglat: {
+      type: Array,
+      default: () => {
+        return [114.496577, 30.487779]
+      }
     }
   },
   data() {
     return {
       path: [],
-      center: [114.496577, 30.487779], // 中心点
+      center: this.centerLnglat, // 中心点
       mapCreate: false,
       mapFixed: false
     }
@@ -50,11 +48,14 @@ export default {
       },
       deep: true
     },
+    centerLnglat: function(val) {
+      this.center = val
+      this.getPathByAjax()
+    },
     // mapId: function() {
     //   this.getPathByAjax()
     // },
     isEdit: function(bool) {
-      console.log(bool);
       const path = this.getPolygonPath()
       if (path.length > 0) {
         bool ? polyEditor.open() : polyEditor.close()
@@ -191,9 +192,10 @@ export default {
       })
     },
     getPathByAjax() {
+      const center = this.center
       // console.log(this.path);
       // this.mapId 根据Id查询区域
-      this.setCenterZoom([114.496577, 30.487779])
+      this.setCenterZoom(center)
       this.setPloygon(this.path)
       polyEditor.setTarget(polygon)
     }

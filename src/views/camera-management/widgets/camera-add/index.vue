@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 15:27:07
- * @LastEditTime: 2021-10-30 16:56:12
+ * @LastEditTime: 2021-11-03 22:48:02
  * @LastEditors: 阮志雄
  * @Description: 新增相机
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-add\index.vue
@@ -17,7 +17,7 @@
       </p>
       <p class="config-item">
         <span class="teil">保护区编号:</span>
-        <el-input v-model="reserveId" placeholder="相机型号" style="width:220px"></el-input>
+        <el-input v-model="reserveId" placeholder="保护区编号" style="width:220px"></el-input>
       </p>
     </div>
     <div class="config-btn">

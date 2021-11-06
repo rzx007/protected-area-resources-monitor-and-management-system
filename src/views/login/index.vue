@@ -26,7 +26,7 @@
           <div class="bdbox" v-else>
             <el-input v-model="passwords" size="default" placeholder="请输入密码" prefix-icon="el-icon-c-scale-to-original"> </el-input>
           </div>
-          <el-button type="primary" size="default" v-debounce="loginajax" :loading="isLoging" class="login_btn">登录</el-button>
+          <el-button type="primary" size="default" v-debounce="loginHandler" :loading="isLoging" class="login_btn">登录</el-button>
           <p class="login-tips">
             <span @click="loginByPwd = !loginByPwd">{{ loginByPwd ? '短信登录' : '密码登录' }}</span>
             <span @click="close = true">没有账号? 立即注册</span>
@@ -40,8 +40,9 @@
   </div>
 </template>
 <script>
-import { setToken } from '@/utils/auth'
-import { loginByMobile, loginByPwd, getCaptcha } from '@/api'
+const { VUE_APP_ADMIN } = process.env
+import { setToken, isAdmin } from '@/utils/auth'
+import { loginByMobile, loginByPwd, getCaptcha, findAreaByDoMain } from '@/api'
 import { title } from '@/settings'
 import signUp from './widgets/sign-up.vue'
 import md5 from 'md5-js'
@@ -57,29 +58,67 @@ export default {
       isTry: false, // 60秒 是否重新获取验证码
       count: 60,
       timer: null,
-      loginByPwd: false
+      loginByPwd: true,
+      domainName: window.location.hostname + window.location.pathname
     }
   },
   components: { signUp },
   methods: {
-    loginajax() {
+    async loginHandler() {
       this.isLoging = true
+      console.log(this.domainName, VUE_APP_ADMIN)
+      if (isAdmin()) {
+        console.log('it`s superAdmin')
+        const data = await this.loginajax()
+        this.isLoging = false
+        setToken('token', data.token)
+        setToken('userName', data.username)
+        setToken('userId', data.userId)
+        this.$router.replace('/')
+      } else {
+        console.log('it`s areaUser or superAdmin')
+        const data = await this.loginajax()
+        const { reserveId } = await this.getAreaByDomain()
+        const routes = await this.getUserMenu({ reserveId, userId: data.userId })
+        this.isLoging = false
+        if (routes.length < 1) {
+          this.isLoging = false
+          this.$message.warning('该用户未分配任何菜单,请联系站长!')
+        } else {
+          setToken('token', data.token)
+          setToken('reserveId', reserveId)
+          setToken('userName', data.username)
+          setToken('userId', data.userId)
+          this.$router.replace('/')
+        }
+      }
+    },
+    async loginajax() {
       const params = { mobile: this.mobile }
       this.loginByPwd ? (params.passwords = md5(this.passwords)) : (params.code = this.code)
       const login = this.loginByPwd ? loginByPwd(params) : loginByMobile(params)
-      login
+      return login
         .then(res => {
-          this.$store.dispatch('GetUserMenu', res.data.userId).then(routes => {
-            this.isLoging = false
-            setToken('token', res.data.token, { expires: 0.25 })
-            setToken('userName', res.data.username)
-            setToken('userId', res.data.userId)
-            this.$router.replace('/')
-          })
+          return res.data
         })
-        .catch(() => {
+        .catch(error => {
           this.isLoging = false
         })
+    },
+    async getAreaByDomain() {
+      return findAreaByDoMain({ domainName: this.domainName })
+        .then(res => {
+          return res.data
+        })
+        .catch(error => {
+          this.isLoging = false
+        })
+    },
+    async getUserMenu(params) {
+      return this.$store.dispatch('GetUserMenu', params).then(routes => {
+        console.log(routes)
+        return routes
+      })
     },
     enterLoginajax(e) {
       // 检测密码是否为空之后进行enter事件的监控

@@ -12,8 +12,6 @@
     </div>
     <div class="header-right">
       <div class="header-user-con">
-        <!-- 用户头像 -->
-
         <!-- 全屏显示 -->
         <div class="btn-fullscreen" @click="handleFullScreen">
           <el-tooltip effect="dark" :content="fullscreen ? `取消全屏` : `全屏`" placement="bottom">
@@ -24,10 +22,6 @@
         <el-tooltip effect="dark" :content="message ? `有${message}条未读消息` : `消息中心`" placement="bottom">
           <i class="el-icon-bell"></i>
         </el-tooltip>
-        <!-- <el-tooltip effect="dark" content="主题切换" placement="bottom">
-          <i class="el-icon-orange" @click="switchThemeBar = true" v-if="showThemeBar"></i>
-        </el-tooltip> -->
-
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <div class="user-block">
@@ -146,6 +140,9 @@ export default {
     handleCommand(command) {
       if (command === 'loginout') {
         removeToken('token')
+        removeToken('reserveId')
+        removeToken('userId')
+        removeToken('userName')
         this.$router.push('/login')
       } else if (command === 'updataPassword') {
         this.close = true

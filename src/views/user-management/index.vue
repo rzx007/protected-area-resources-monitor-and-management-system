@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-08 17:30:04
- * @LastEditTime: 2021-10-22 19:05:21
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\user-management\index.vue
--->
 <template>
   <div class="content">
     <div class="primary-border-color sys-management">
@@ -14,10 +6,11 @@
           <el-button icon="el-icon-plus" size="mini" type="success" @click="isAdd = true">新增用户</el-button>
           <!-- <el-button icon="el-icon-plus" size="mini" type="primary" @click="isUpdate = true">用户审批</el-button> -->
         </template>
-        <template v-slot:operation="Props">
-          <el-button type="primary" plain @click="editUser(Props.rowData.row)" title="编辑">编辑</el-button>
-          <el-button @click="updateStatus(Props.rowData.row)" v-if="Props.rowData.row.state == 1" plain title="停用用户">停用</el-button>
-          <el-button type="success" @click="updateStatus(Props.rowData.row)" v-else plain title="启用用户">启用</el-button>
+        <template v-slot:operation="{ rowData }">
+          <!-- <el-button type="primary" v-if="rowData.row.roleId === 1" title="关联保护区">关联保护区</el-button> -->
+          <el-button type="primary" plain @click="editUser(rowData.row)" title="编辑">编辑</el-button>
+          <el-button @click="updateStatus(rowData.row)" v-if="rowData.row.state == 1" plain title="停用用户">停用</el-button>
+          <el-button type="success" @click="updateStatus(rowData.row)" v-else plain title="启用用户">启用</el-button>
           <el-popconfirm
             icon="el-icon-info"
             iconColor="red"
@@ -52,6 +45,9 @@
         "
       ></update-user>
     </overlay>
+    <overlay :close.sync="isArea" title="关联保护区" owidth="380px">
+      <areaz v-if="isUpdate"></areaz>
+    </overlay>
   </div>
 </template>
 
@@ -59,7 +55,9 @@
 const fromOptions = [{ name: 'mobile', label: '账号', type: 'text' }]
 import { deleteUser, updateUserStatus } from '@/api'
 import signUp from './pages/sign-up.vue'
+import areaz from './pages/area.vue'
 import UpdateUser from './pages/update-user.vue'
+import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
@@ -69,7 +67,7 @@ export default {
         showPanelTool: true,
         defaultPanel: [],
         height: '70vh',
-        params: {},
+        params: { reserveId: getToken('reserveId') },
         dataUrl: '/reserve/appUser/list',
         responseName: 'list',
         columns: [
@@ -87,16 +85,17 @@ export default {
               { value: '已停用', id: 0, type: 'danger' }
             ]
           },
-          { label: '操作', align: 'center', slot: 'operation' }
+          { label: '操作', align: 'end', slot: 'operation', width: 320 }
         ]
       },
       fromOptions,
       isAdd: false,
       isUpdate: false,
+      isArea: false,
       userInfo: {}
     }
   },
-  components: { signUp, UpdateUser },
+  components: { signUp, UpdateUser, areaz },
   methods: {
     getParams(data) {
       this.tableOptions.params.consName = data.consName

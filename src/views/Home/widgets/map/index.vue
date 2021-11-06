@@ -1,10 +1,10 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-10-24 16:45:36
+ * @LastEditTime: 2021-11-04 11:09:41
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\widgets\map\index.vue
 -->
 <template>
   <div id="carmera-map"></div>
@@ -13,6 +13,7 @@
 <script>
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
+import { findAllCarmeraList, findAreaByDoMain } from '@/api'
 let AMap, Map, polygon
 export default {
   data() {
@@ -30,35 +31,18 @@ export default {
   },
   methods: {
     getMapData() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve([
-            [114.496577, 30.487779],
-            [114.500242, 30.485103],
-            [114.508865, 30.477446],
-            [114.503332, 30.468233],
-            [114.483569, 30.464996],
-            [114.467112, 30.470786],
-            [114.478323, 30.474708],
-            [114.476095, 30.484854],
-            [114.484575, 30.49307]
-          ])
-        }, 1000)
+      const hostname = window.location.hostname
+      return findAreaByDoMain({ domainName: hostname }).then(res => {
+        return {
+          path: res.data.lngLat ? JSON.parse(res.data.lngLat) : [],
+          center: JSON.parse(res.data.centerLnglat)
+        }
       })
     },
     getMarkersData() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve([
-            { id: 'KJGRA679SHJ6', state: 1, inUseTime: '2012-10-12', user: '', lnglat: [] },
-            { id: 'KJGRA679SHJ1', state: 0, inUseTime: '', user: '张三', lnglat: [] },
-            { id: 'KJGRA679SHJ2', state: 2, inUseTime: '2012-10-12', user: '李四', lnglat: [] },
-            { id: 'KJGRA679SHJ7', state: 3, inUseTime: '', user: '', lnglat: [] },
-            { id: 'KJGRA679SHJ3', state: 1, inUseTime: '2012-10-12', user: '', lnglat: [] },
-            { id: 'KJGRA679SHJ4', state: 0, inUseTime: '', user: '张三', lnglat: [] },
-            { id: 'KJGRA679SHJ5', state: 2, inUseTime: '2012-10-12', user: '李四', lnglat: [] }
-          ])
-        }, 1000)
+      return findAllCarmeraList().then(res => {
+        const cameraList = res.code === 0 ? res.data.list : []
+        return cameraList.filter(item => item.state !== 1)
       })
     },
     async initMap() {
@@ -80,7 +64,9 @@ export default {
           }
         })
         Map.addControl(controlBar)
-        this.path = await this.getMapData()
+        const { path, center } = await this.getMapData()
+        this.path = path
+        Map.setCenter(center)
         this.cameraList = await this.getMarkersData()
         this.setPloygon(this.path)
         this.addMarkers() // 添加标记点
@@ -109,8 +95,11 @@ export default {
       var markers = Map.getAllOverlays('marker')
       Map.remove(markers)
       for (let index = 0; index < this.cameraList.length; index++) {
-        const item = this.cameraList[index]
-        const lnglat = this.path[index]
+        const element = this.cameraList[index]
+        const item = element
+        // const lnglat = this.path[index]
+        const lnglat = [Number(element['longitudeVal']), Number(element['latitudeVal'])]
+
         const marker = this.createMarker(lnglat, item)
         Map.add(marker)
       }

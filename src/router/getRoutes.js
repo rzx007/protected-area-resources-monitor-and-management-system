@@ -1,6 +1,6 @@
 var addRoutes = []
 function addRouter (routeArr = []) {
-  if (routeArr.length < 1) { return }
+  if (routeArr.length < 1) { return [] }
   routeArr.forEach(item => {
     if (item.type === 1 && item.children.length > 0) {
       addRouter(item.children)

@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-10-30 21:13:58
+ * @LastEditTime: 2021-11-04 10:49:24
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { findAllCarmeraList } from '@/api'
+import { findAllCarmeraList, findAreaByDoMain } from '@/api'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
 let AMap, Map, polygon
@@ -31,40 +31,34 @@ export default {
   },
   methods: {
     getMapData() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve([
-            [114.496577, 30.487779],
-            [114.500242, 30.485103],
-            [114.508865, 30.477446],
-            [114.503332, 30.468233],
-            [114.483569, 30.464996],
-            [114.467112, 30.470786],
-            [114.478323, 30.474708],
-            [114.476095, 30.484854],
-            [114.484575, 30.49307]
-          ])
-        }, 1000)
-      })
-    },
-    getMarkersData() {
-      return findAllCarmeraList().then(res => {
-        const cameraList = res.code === 0 ? res.data.list : []
-        return cameraList.filter(item => item.state !==1)
+      const hostname = window.location.hostname
+      return findAreaByDoMain({ domainName: hostname }).then(res => {
+        return {
+          path: res.data.lngLat ? JSON.parse(res.data.lngLat) : [],
+          center: JSON.parse(res.data.centerLnglat) 
+        }
       })
       // return new Promise((resolve, reject) => {
       //   setTimeout(() => {
       //     resolve([
-      //       { id: 'KJGRA679SHJ6', state: 3, inUseTime: '2012-10-12', user: '', lnglat: [] },
-      //       { id: 'KJGRA679SHJ1', state: 4, inUseTime: '', user: '张三', lnglat: [] },
-      //       { id: 'KJGRA679SHJ2', state: 2, inUseTime: '2012-10-12', user: '李四', lnglat: [] },
-      //       { id: 'KJGRA679SHJ7', state: 3, inUseTime: '', user: '', lnglat: [] },
-      //       { id: 'KJGRA679SHJ3', state: 1, inUseTime: '2012-10-12', user: '', lnglat: [] },
-      //       { id: 'KJGRA679SHJ4', state: 1, inUseTime: '', user: '张三', lnglat: [] },
-      //       { id: 'KJGRA679SHJ5', state: 2, inUseTime: '2012-10-12', user: '李四', lnglat: [] }
+      //       [114.496577, 30.487779],
+      //       [114.500242, 30.485103],
+      //       [114.508865, 30.477446],
+      //       [114.503332, 30.468233],
+      //       [114.483569, 30.464996],
+      //       [114.467112, 30.470786],
+      //       [114.478323, 30.474708],
+      //       [114.476095, 30.484854],
+      //       [114.484575, 30.49307]
       //     ])
       //   }, 1000)
       // })
+    },
+    getMarkersData() {
+      return findAllCarmeraList().then(res => {
+        const cameraList = res.code === 0 ? res.data.list : []
+        return cameraList.filter(item => item.state !== 1)
+      })
     },
     async initMap() {
       // 地图
@@ -85,7 +79,9 @@ export default {
           }
         })
         Map.addControl(controlBar)
-        this.path = await this.getMapData()
+        const { path, center } = await this.getMapData()
+        this.path = path
+        Map.setCenter(center)
         this.cameraList = await this.getMarkersData()
         this.setPloygon(this.path)
         this.addMarkers() // 添加标记点

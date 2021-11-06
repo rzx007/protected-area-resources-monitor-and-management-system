@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-03 12:15:04
+ * @LastEditTime: 2021-11-04 22:45:46
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-config\index.vue
@@ -11,10 +11,10 @@
     <back-bar @back="goBack"></back-bar>
     <div class="anas-block">
       <p class="sub-title">
-        保护区：<span>{{ info.id }}</span>
+        保护区：<span>{{ info.title }}</span>
       </p>
       <p class="sub-title">
-        布设时间：<span>{{ info.inUseTime }}</span>
+        相机数量：<span>{{ info.cameraNum }}</span>
       </p>
     </div>
     <div class="config-block">
@@ -23,7 +23,14 @@
         <span class="teil">保护区名称：</span>
         <el-input v-model="form.title" placeholder="" clearable style="width:250px"></el-input>
       </p>
-      <p class="config-item"><span class="teil">地理位置：</span><span class="sub-teil">114.22343°E,31.33113°N</span></p>
+      <p class="config-item">
+        <span class="teil">保护区绑定域名：</span>
+        <el-input v-model="form.domainName" placeholder="" clearable style="width:250px"></el-input>
+      </p>
+      <p class="config-item">
+        <span class="teil">地理位置：</span
+        ><span class="sub-teil">{{ info.centerLnglat ? JSON.parse(info.centerLnglat).join('~') : '' }}</span>
+      </p>
     </div>
     <div class="config-block">
       <h4 class="title">保护区介绍</h4>
@@ -58,7 +65,7 @@ export default {
     info: {
       type: Object,
       default: function() {
-        return { id: '' }
+        return { reserveId: '' }
       }
     }
   },

@@ -1,20 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { getToken } from '@/utils/auth'
+import { getToken, isAdmin } from '@/utils/auth'
 import { Message } from 'element-ui'
 import store from '@/store/index'
 import Main from '@/components/Layout.vue'
 import getRoutes from './getRoutes'
-// import routeArr from '@/mock/router.js'
+import routeArr from '@/mock/router.js'
 
-const sonRoute = getRoutes([])
+// const sonRoute = getRoutes(routeArr)
 const routes = [
   {
     path: '/',
     name: 'Main',
     component: Main,
-    redirect: '/home',
-    children: []
+    redirect: '/area-management',
+    children: [{
+      path: '/area-management',
+      name: 'area',
+      component: () =>
+        import(/* webpackChunkName: "area-management" */ '../views/area-management/index.vue'),
+      meta: {
+        title: '保护区管理'
+      }
+    }]
   },
   {
     path: '/login',
@@ -42,7 +50,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.path === '/login') {
     next()
   } else {
-    if (!getToken('token')) {
+    if (!sessionStorage.getItem('token')) {
       // Message({
       //   message: '权限已失效，请重新登录！',
       //   type: 'error',
@@ -53,9 +61,12 @@ router.beforeEach(async (to, from, next) => {
       })
     } else {
       // 添加flag防止多次获取动态路由和栈溢出
-      if (!asyncRouterFlag && store.getters.routes.length === 0) {
+      if (!asyncRouterFlag && store.getters.routes.length === 0 && !isAdmin()) {
         asyncRouterFlag++
-        await store.dispatch('GetUserMenu')
+        await store.dispatch('GetUserMenu', {
+          reserveId: getToken('reserveId'),
+          userId: getToken('userId')
+        })
         next({ ...to, replace: true })
       } else {
         next()

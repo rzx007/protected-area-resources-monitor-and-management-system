@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-03 12:20:03
+ * @LastEditTime: 2021-11-03 22:55:40
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-add\index.vue
@@ -20,6 +20,10 @@
         <el-input v-model="lng" placeholder="经度" style="width:120px" type="number" @change="handraulicSetCenter"></el-input>
         -
         <el-input v-model="lat" placeholder="纬度" style="width:120px" type="number" @change="handraulicSetCenter"></el-input>
+      </p>
+      <p class="config-item">
+        <span class="teil">保护区绑定域名：</span>
+        <el-input v-model="domainName" placeholder="" clearable style="width:250px"></el-input>
       </p>
     </div>
     <div class="config-block">
@@ -55,6 +59,7 @@ export default {
       remark: '',
       lng: null,
       lat: null,
+      domainName: '',
       edit: false,
       fixedCnter: false
     }
@@ -81,7 +86,12 @@ export default {
       hub.$emit('create-center', bool)
     },
     saveArea() {
-      this.$emit('cerate-area', { title: this.areaName, center: JSON.stringify([this.lng, this.lat]), remark: this.remark })
+      this.$emit('cerate-area', {
+        title: this.areaName,
+        centerLnglat: JSON.stringify([this.lng, this.lat]),
+        remark: this.remark,
+        domainName: this.domainName
+      })
     },
     handraulicSetCenter() {
       // 手动填入经纬度坐标

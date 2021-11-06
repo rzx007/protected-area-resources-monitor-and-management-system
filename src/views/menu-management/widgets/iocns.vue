@@ -1,19 +1,20 @@
 <!--
  * @Author: rzx007
  * @Date: 2021-05-20 15:03:45
- * @LastEditors: rzx007
- * @LastEditTime: 2021-05-20 17:27:32
- * @FilePath: \vue-tgp-with-elementui\src\views\system-management\menu-management\widgets\iocns.vue
+ * @LastEditors: 阮志雄
+ * @LastEditTime: 2021-11-06 16:58:43
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\menu-management\widgets\iocns.vue
  * @Description: element-ui 图标列表
 -->
 <template>
   <div class="icon_content">
     <div class="icon_list">
       <p v-for="(item, index) in iconsArr" :key="index">
-        <i @click="clickHandler(item)" :class="[item, link===item?'active':'']"></i>
+        <!-- <i @click="clickHandler(item)" :class="[item, link===item?'active':'']"></i> -->
+        <svg-icon type="css" @click="clickHandler(item)" :icon="item" :class="[link === item ? 'active' : '']" class="icon"></svg-icon>
       </p>
       <p @click="clickHandler('')">
-        <i :class="[ link===''?'active':'']">无</i>
+        <i :class="[link === '' ? 'active' : '']">无</i>
       </p>
     </div>
   </div>
@@ -22,7 +23,7 @@
 <script>
 import iconsArr from './icons'
 export default {
-  data () {
+  data() {
     return {
       iconsArr,
       link: this.iconStr
@@ -34,13 +35,13 @@ export default {
   },
   props: ['iconStr'],
   methods: {
-    clickHandler (icon) {
+    clickHandler(icon) {
       this.link = icon
       this.$emit('input', icon)
     }
   },
   watch: {
-    iconStr: function (val) {
+    iconStr: function(val) {
       this.link = val
       this.$emit('input', val)
     }
@@ -48,7 +49,7 @@ export default {
 }
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 .icon_content {
   width: 100%;
   height: 300px;
@@ -76,10 +77,10 @@ export default {
           color: #fff;
         }
       }
-       .active {
-          @include tool-bar-color();
-          color: #fff;
-        }
+      .active {
+        @include tool-bar-color();
+        color: #fff;
+      }
     }
   }
 }

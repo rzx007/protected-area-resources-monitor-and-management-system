@@ -3,7 +3,9 @@
     <v-slidebar v-if="mode" :mode="mode"></v-slidebar>
     <div class="right_container">
       <el-header>
-        <v-header :mode="mode"></v-header>
+        <v-header :mode="mode">
+          <!-- <switch-area></switch-area> -->
+        </v-header>
       </el-header>
       <div class="dashborad">
         <!-- <v-tags class="tag-nav-wrapper" v-if="tagsBar && $route.path != '/home'"></v-tags> -->
@@ -30,6 +32,7 @@ import bus from '@/utils/bus'
 import vSlidebar from '@/components/Mini-slidebar.vue'
 import vTags from '@/components/Tags.vue'
 import vHeader from '@/components/Header.vue'
+import SwitchArea from '@/components/Switch-area.vue'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Layout',
@@ -44,7 +47,7 @@ export default {
   provide() {
     return { reload: this.reload }
   },
-  components: { vTags, vHeader, vSlidebar },
+  components: { vTags, vHeader, vSlidebar, SwitchArea },
   computed: { ...mapGetters(['mode', 'showThemeBar', 'tagsBar']) }, // mode为true时，侧边栏菜单
   methods: {
     reload() {

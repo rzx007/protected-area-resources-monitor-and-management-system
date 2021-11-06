@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 11:35:02
- * @LastEditTime: 2021-10-24 14:34:28
+ * @LastEditTime: 2021-11-04 11:01:18
  * @LastEditors: 阮志雄
  * @Description: 相机部署
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-deploy\index.vue
@@ -49,7 +49,7 @@ export default {
   components: { backBar },
   data() {
     return {
-      name: '1',
+      name: 7,
       lnglat: [],
       options: []
     }
@@ -75,8 +75,8 @@ export default {
       FixUp({
         cameraId: this.camera.id,
         userId: this.name,
-        lng: this.lnglat[0],
-        lat: this.lnglat[1]
+        lng: this.lnglat[0].toString(),
+        lat: this.lnglat[1].toString()
       }).then(res => {
         this.$emit('click-back', { status: true, camera: this.camera })
         res.code === 0 ? this.$message.success('部署任务已下发') : this.$message.warning('部署任务异常')

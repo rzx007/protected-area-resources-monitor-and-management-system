@@ -1,19 +1,22 @@
-/*
- * @Author: rzx007
- * @Date: 2021-05-24 10:25:48
- * @LastEditors: 阮志雄
- * @LastEditTime: 2021-11-03 11:51:34
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\store\modules\menuPermission.js
- * @Description: Do not edit
- */
 import { getSystemFuncList } from '@/api'
 import router from '@/router'
 import getRoutes from '@/router/getRoutes'
-import { getToken } from '@/utils/auth'
-
+import { isAdmin } from '@/utils/auth'
+const setAdminRoute = () => {
+  return isAdmin() ? [{
+    title: '保护区管理',
+    componentName: 'areaManagement',
+    componentPath: '/area-management',
+    icon: 'xitongguanli',
+    parentId: 0,
+    id: '05151',
+    type: 3,
+    path: '/area-management'
+  }] : []
+}
 const permission = {
   state: {
-    routes: JSON.parse(localStorage.getItem('menu')) || []
+    routes: setAdminRoute()
   },
   mutations: {
     SET_USERMENU: (state, menu) => {
@@ -22,25 +25,28 @@ const permission = {
     }
   },
   actions: {
-    GetUserMenu({ commit }, userId = getToken('userId')) {
+    GetUserMenu({ commit }, params) {
       return new Promise((resolve, reject) => {
         let asyncRoutes = []
         router.options.routes[1].children = []
-        getSystemFuncList({ userId })
+        getSystemFuncList({ userId: params.userId, reserveId: params.reserveId })
           .then(res => {
-            if (res.data.length < 1) return
+            if (res.data.length < 1) {
+              resolve([])
+              return
+            }
             res.data.forEach(item => {
               asyncRoutes.push({
                 title: item.menuName,
                 componentName: item.linkUrl,
                 componentPath: item.linkUrl,
-                icon: 'tongji',
+                icon: item.menuIcon,
                 id: item.menuId,
                 path: item.linkUrl
               })
             });
             const routes = getRoutes(asyncRoutes)
-            console.log(router.options)
+            router.options.routes[0].redirect = routes[0].path
             router.options.routes[0].children = routes
             router.options.routes.push(
               {

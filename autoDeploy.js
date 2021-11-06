@@ -363,6 +363,11 @@ async function replaceIP(env, fileConfig) {
 
 // 执行前端部署
 ;(async () => {
+  // 替换接口IP地址
+  const argv = process.argv.slice(2)
+  if (argv.length > 0) {
+    dev.catalog = dev.catalog+'/admin'
+  }
   // 压缩包的名字
   const date = new Date()
   const year = date.getFullYear()

@@ -13,14 +13,18 @@
       <el-form-item label="确认密码" prop="checkPass">
         <el-input type="passwords" v-model="ruleForm.checkPass" autocomplete="off" placeholder="请再次输入密码"></el-input>
       </el-form-item>
-      <el-form-item style="margin-left:0"> </el-form-item>
+      <el-form-item label="角色" prop="roleId">
+        <el-select v-model="ruleForm.roleId" filterable>
+          <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId"> </el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
     <el-button type="primary" @click="submitForm('ruleForm')" class="signup_btn">创建用户</el-button>
   </div>
 </template>
 
 <script>
-import { addUser } from '@/api'
+import { addUser, listRole } from '@/api'
 import md5 from 'md5-js'
 export default {
   data() {
@@ -61,7 +65,8 @@ export default {
         username: '',
         passwords: '',
         checkPass: '',
-        mobile: ''
+        mobile: '',
+        roleId: ''
       },
       rules: {
         username: [
@@ -70,12 +75,22 @@ export default {
         ],
         mobile: [{ required: true, validator: validatePhone, trigger: 'blur' }],
         passwords: [{ required: true, validator: validatePass, trigger: 'blur' }],
-        checkPass: [{ required: true, validator: validatePass2, trigger: 'blur' }]
+        checkPass: [{ required: true, validator: validatePass2, trigger: 'blur' }],
+        roleId: [{ required: true, message: '请分配一个角色', trigger: 'blur' }]
       },
-      isValidPhone: false // 手机号是否正确
+      isValidPhone: false, // 手机号是否正确
+      roleOptions: []
     }
   },
+  created() {
+    this.getRoleData()
+  },
   methods: {
+    getRoleData() {
+      listRole({ start: 0, limit: 100 }).then(res => {
+        this.roleOptions = res.data.list
+      })
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

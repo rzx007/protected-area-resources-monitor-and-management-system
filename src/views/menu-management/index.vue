@@ -7,7 +7,7 @@
         </template>
         <template v-slot:menuIcon="{ rowData }">
           <p style="font-size:18px">
-            <i :class="rowData.row.attributes.menuIcon"></i>
+            <svg-icon type="css" :icon="rowData.row.menuIcon" ></svg-icon>
           </p>
         </template>
         <template v-slot:actions="{ rowData }">
@@ -52,10 +52,11 @@ const tableOptions = {
   dataUrl: '/reserve/appMenu/list',
   responseName: 'list',
   columns: [
-    { label: '菜单名称', prop: 'menuName', align: 'start' },
-    { label: '菜单图标', prop: 'linkUrl', align: 'center' },
+    { label: '菜单名称', prop: 'menuName', align: 'center' },
+    { label: '菜单图标', slot: 'menuIcon', align: 'center' },
     { label: '菜单地址', prop: 'linkUrl', align: 'center' },
     { label: '组件地址', prop: 'componentPath', align: 'center' },
+    { label: '排序', prop: 'sort', align: 'center', width: '120' },
     { label: '操作', slot: 'actions', align: 'center', width: '130px' }
   ]
 }
@@ -80,15 +81,15 @@ export default {
         { name: 'parentId', label: '上级菜单', type: 'select', width: '220', default:-1, options: [{ label: '菜单', value: -1 }], invaild: true },
         { name: 'linkUrl', label: '菜单地址', type: 'text', width: '220' },
         { name: 'componentPath', label: '组件地址', type: 'text', width: '220', disabled: true, invaild: true },
+        { name: 'sort', label: '排序', type: 'number', width: '220', default: 0 },
         {
           name: 'menuIcon',
           label: '菜单图标',
           type: 'text',
-          default: 'el-icon-star-on',
+          default: '',
           width: '220',
           append: 'icons',
           disabled: true,
-          invaild: true
         }
       ],
       postUrl: '',
@@ -118,6 +119,7 @@ export default {
         // sysfuncCode: row.code,
         linkUrl: row.linkUrl,
         componentPath: row.componentPath,
+        sort: Number(row.sort),
         menuIcon: row.menuIcon,
         parentId: Number(row.parentId)
         // ...row

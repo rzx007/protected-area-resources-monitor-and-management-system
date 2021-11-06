@@ -1,11 +1,4 @@
-/*
- * @Author: 阮志雄
- * @Date: 2021-07-08 14:29:08
- * @LastEditTime: 2021-11-02 17:17:57
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\api\api.js
- */
+import { getToken } from '@/utils/auth'
 import http from './http'
 
 //  用采 oms 关联
@@ -15,7 +8,7 @@ export async function relationAsset(params) {
 }
 // 新增用户
 export async function addUser(params) {
-  const res = await http.post('/reserve/appUser/add', params)
+  const res = await http.post('/reserve/appUser/add', {reserveId:getToken('reserveId'),...params})
   return res
 }
 // 删除用户
@@ -25,7 +18,7 @@ export async function deleteUser(params) {
 }
 // 更新用户
 export async function updateUser(params) {
-  const res = await http.post('/reserve/appUser/update', params)
+  const res = await http.post('/reserve/appUser/update', {reserveId:getToken('reserveId'),...params})
   return res
 }
 // 启用禁用用户
@@ -71,6 +64,21 @@ export async function getRoleOwnMenu(params) {
 //设置角色的菜单
 export async function roleGrantMenu(params) {
   const res = await http.post('/reserve/appRoleMenu/add', params)
+  return res
+}
+//照片列表
+export async function galleryList(params) {
+  const res = await http.post('/reserve/appPhoto/list', params)
+  return res
+}
+//修改照片
+export async function galleryUpdate(params) {
+  const res = await http.post('/reserve/appPhoto/update', params)
+  return res
+}
+//修改照片
+export async function galleryDelete(params) {
+  const res = await http.post('/reserve/appPhoto/delete', params)
   return res
 }
 // 不定参数请求
