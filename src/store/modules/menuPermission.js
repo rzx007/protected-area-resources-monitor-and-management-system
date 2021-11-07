@@ -46,7 +46,7 @@ const permission = {
               })
             });
             const routes = getRoutes(asyncRoutes)
-            router.options.routes[0].redirect = routes[0].path
+            // router.options.routes[0].redirect = routes[0].path
             router.options.routes[0].children = routes
             router.options.routes.push(
               {

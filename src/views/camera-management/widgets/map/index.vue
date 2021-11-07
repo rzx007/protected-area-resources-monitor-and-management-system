@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-11-04 10:49:24
+ * @LastEditTime: 2021-11-07 14:50:15
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
@@ -12,6 +12,7 @@
 
 <script>
 import { findAllCarmeraList, findAreaByDoMain } from '@/api'
+import { getToken } from '@/utils/auth'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
 let AMap, Map, polygon
@@ -31,8 +32,7 @@ export default {
   },
   methods: {
     getMapData() {
-      const hostname = window.location.hostname
-      return findAreaByDoMain({ domainName: hostname }).then(res => {
+      return findAreaByDoMain({ domainName: getToken('domainName') }).then(res => {
         return {
           path: res.data.lngLat ? JSON.parse(res.data.lngLat) : [],
           center: JSON.parse(res.data.centerLnglat) 

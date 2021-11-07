@@ -74,11 +74,11 @@ export default {
         setToken('token', data.token)
         setToken('userName', data.username)
         setToken('userId', data.userId)
-        this.$router.replace('/')
+        this.$router.replace('/area-management')
       } else {
         console.log('it`s areaUser or superAdmin')
         const data = await this.loginajax()
-        const { reserveId } = await this.getAreaByDomain()
+        const { reserveId, domainName } = await this.getAreaByDomain()
         const routes = await this.getUserMenu({ reserveId, userId: data.userId })
         this.isLoging = false
         if (routes.length < 1) {
@@ -86,6 +86,7 @@ export default {
           this.$message.warning('该用户未分配任何菜单,请联系站长!')
         } else {
           setToken('token', data.token)
+          setToken('domainName', domainName)
           setToken('reserveId', reserveId)
           setToken('userName', data.username)
           setToken('userId', data.userId)

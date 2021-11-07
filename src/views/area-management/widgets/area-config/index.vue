@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-04 22:45:46
+ * @LastEditTime: 2021-11-07 15:28:27
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-config\index.vue
@@ -28,8 +28,11 @@
         <el-input v-model="form.domainName" placeholder="" clearable style="width:250px"></el-input>
       </p>
       <p class="config-item">
-        <span class="teil">地理位置：</span
-        ><span class="sub-teil">{{ info.centerLnglat ? JSON.parse(info.centerLnglat).join('~') : '' }}</span>
+        <span class="teil">地理位置：</span>
+        <!-- <span class="sub-teil">{{ info.centerLnglat ? JSON.parse(info.centerLnglat).join('~') : '' }}</span> -->
+        <el-input v-model="lng" placeholder="经度" style="width:120px" type="number"></el-input>
+        -
+        <el-input v-model="lat" placeholder="纬度" style="width:120px" type="number"></el-input>
       </p>
     </div>
     <div class="config-block">
@@ -58,7 +61,9 @@ export default {
   data() {
     return {
       edit: false,
-      form: this.info
+      form: this.info,
+      lng: this.info.centerLnglat ? Number(JSON.parse(this.info.centerLnglat)[0]) : null,
+      lat: this.info.centerLnglat ? Number(JSON.parse(this.info.centerLnglat)[1]) : null
     }
   },
   props: {
@@ -74,7 +79,8 @@ export default {
       this.$emit('click-back', { status: false, area: this.form })
     },
     updataArea() {
-      this.$emit('click-back', { status: true, area: this.form })
+      const area = Object.assign({}, this.form, { centerLnglat: JSON.stringify([this.lng, this.lat]) })
+      this.$emit('click-back', { status: true, area })
     },
     swithEdit(bool) {
       this.$emit('update-edit', bool)

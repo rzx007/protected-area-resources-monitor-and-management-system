@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-03 12:36:22
+ * @LastEditTime: 2021-11-07 15:32:02
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-list\index.vue
@@ -53,6 +53,7 @@ $color: #4762b0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  width: 440px;
   .add-camera {
     font-size: 28px;
     position: absolute;
