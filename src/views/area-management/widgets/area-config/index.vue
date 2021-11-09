@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-07 15:28:27
+ * @LastEditTime: 2021-11-09 13:40:18
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-config\index.vue
@@ -48,7 +48,7 @@
     </div>
     <div class="config-btn">
       <el-button type="primary" @click="updataArea()">保存</el-button>
-      <el-button type="danger" @click="goBack">取消</el-button>
+      <el-button type="warning" @click="goBack">取消</el-button>
     </div>
   </div>
 </template>
@@ -84,7 +84,7 @@ export default {
     },
     swithEdit(bool) {
       this.$emit('update-edit', bool)
-    }
+    },
   }
 }
 </script>

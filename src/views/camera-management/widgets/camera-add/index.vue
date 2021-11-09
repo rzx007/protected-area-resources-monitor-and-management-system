@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-15 15:27:07
- * @LastEditTime: 2021-11-03 22:48:02
+ * @LastEditTime: 2021-11-09 15:58:25
  * @LastEditors: 阮志雄
  * @Description: 新增相机
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-add\index.vue
@@ -15,10 +15,10 @@
         <span class="teil">相机IMEI码:</span>
         <el-input v-model="imeiVal" placeholder="相机IMEI码" style="width:220px"></el-input>
       </p>
-      <p class="config-item">
+      <!-- <p class="config-item">
         <span class="teil">保护区编号:</span>
         <el-input v-model="reserveId" placeholder="保护区编号" style="width:220px"></el-input>
-      </p>
+      </p> -->
     </div>
     <div class="config-btn">
       <el-button type="primary" :disabled="!imeiVal" @click="addCarmera">新增</el-button>
@@ -30,12 +30,13 @@
 <script>
 import { addCarmera } from '@/api'
 import backBar from '../../components/backBar.vue'
+import { getToken } from '@/utils/auth'
 export default {
   components: { backBar },
   data() {
     return {
       imeiVal: '',
-      reserveId: ''
+      reserveId: getToken('reserveId')
     }
   },
   methods: {

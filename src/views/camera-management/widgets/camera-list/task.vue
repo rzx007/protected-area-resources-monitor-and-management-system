@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-30 17:01:18
+ * @LastEditTime: 2021-11-09 16:11:04
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\task.vue
@@ -12,13 +12,16 @@
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
-          <span class="state" :style="{ backgroundColor: getStatus(item.state, 2) }">{{ getStatus(item.state) }}</span>
-          <div class="sub-info">
-            <p><span>编号：</span> {{ item.imeival }}</p>
-            <p style="margin-top:6px" v-show="[3, 4].includes(item.state)">
-              <span>布控时间：</span><span>{{ item.inUseTime }}</span>
-            </p>
+          <div class="sub-info-block">
+            <span class="state" :style="{ backgroundColor: getStatus(item.state, 0) }">{{ getStatus(item.state) }}</span>
+            <div class="sub-info">
+              <p><span>编号：</span> {{ item.imeival }}</p>
+              <p style="margin-top:6px">
+                <span>布控时间：</span><span v-show="[3, 4].includes(item.state)">{{ item.setTime }}</span>
+              </p>
+            </div>
           </div>
+          <!-- <i class="next el-icon-arrow-right"></i> -->
           <div class="mask"></div>
         </div>
         <div class="setting">
@@ -30,14 +33,14 @@
 </template>
 
 <script>
-import { findCarmeraList, findAllCarmeraList } from '@/api'
+import { findAllCarmeraList } from '@/api'
 export default {
   name: 'task',
   data() {
     return {
       loading: false,
       code: '',
-      cameraList: [], 
+      cameraList: [],
       statusEnum: [
         // 1 未部署， 2 部署中 3已部署 4 回收中
         { state: 3, color: '#4762b0', title: '已部署' },
@@ -94,10 +97,16 @@ export default {
       .info {
         cursor: pointer;
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
         flex: 1;
         margin-right: 18px;
         position: relative;
+        align-items: center;
+        .sub-info-block {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+        }
         .mask {
           position: absolute;
           top: -15%;
@@ -116,7 +125,7 @@ export default {
           margin-left: 12px;
           justify-content: center;
           span {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 200;
           }
         }

@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-30 17:54:35
+ * @LastEditTime: 2021-11-09 16:04:10
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-config\index.vue
@@ -26,8 +26,7 @@
         <span class="teil">计划回收时间：</span><span class="sub-teil">{{ getVal('backTime') }}</span>
       </p>
       <p class="config-item">
-        <span class="teil">地理位置：</span
-        ><span class="sub-teil">{{ getVal('longitudeVal') }}~{{ getVal('latitudeVal') }}</span>
+        <span class="teil">地理位置：</span><span class="sub-teil">{{ getVal('longitudeVal') }}~{{ getVal('latitudeVal') }}</span>
       </p>
       <p class="config-item">
         <span class="teil">温度(℃)：</span><span class="sub-teil">{{ getVal('temperatureVal') }}</span>
@@ -35,7 +34,7 @@
       <p class="config-item">
         <span class="teil">电量：</span><span class="sub-teil">{{ getVal('batteryVal') }}</span>
       </p>
-       <p class="config-item">
+      <p class="config-item">
         <span class="teil">相机软件版本：</span><span class="sub-teil">{{ getVal('fwVersion') }}</span>
       </p>
     </div>
@@ -56,10 +55,9 @@
         <span class="teil">拍照间隔时间(s):</span><span class="sub-teil">{{ getVal('pirInterval') }}</span>
       </p>
       <p class="config-item">
-        <span class="teil">SD卡容量(M):</span
-        ><span class="sub-teil">{{ getVal('sdUsedpaceVal') }}/{{getVal('sdUsedpaceVal')}}</span>
+        <span class="teil">SD卡容量(M):</span><span class="sub-teil">{{ getVal('sdUsedpaceVal') }}/{{ getVal('sdUsedpaceVal') }}</span>
       </p>
-      
+
       <!-- <p class="config-item"><span class="teil">循环存储:</span><span class="sub-teil">开启</span></p>
       <p class="config-item"><span class="teil">PIR灵敏度:</span><span class="sub-teil">低</span></p>
       <p class="config-item"><span class="teil">PIR触发间隔:</span><span class="sub-teil">0S</span></p>

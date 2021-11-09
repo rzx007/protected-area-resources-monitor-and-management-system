@@ -70,6 +70,7 @@ export default {
   created() {
     this.getAreaByDomain().then(result => {
       this.slogan = result.title + '管理系统'
+      setToken('slogan', this.slogan)
       this.isAdmin = true
     })
   },

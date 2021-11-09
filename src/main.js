@@ -7,6 +7,7 @@ import './plugins/day.js'
 import '@/assets/scss/base.scss'
 import plugin from '@/utils/install' // 全局组件
 import '@/assets/fonts/iconfont.css'
+
 // 防抖节流全局指令
 import Directives from './directive/index.js'
 Vue.use(Directives)

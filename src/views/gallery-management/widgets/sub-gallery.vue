@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-12 15:42:19
- * @LastEditTime: 2021-10-14 00:41:55
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\gallery-management\widgets\sub-gallery.vue
--->
 <template>
   <div class="sub-gallery-viewer">
     <header>

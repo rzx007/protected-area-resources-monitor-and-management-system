@@ -9,7 +9,7 @@
         <div class="grid-gallery animation-gallery" :style="animationDelay(index)">
           <div :class="[checkedArr.indexOf(item.photoId) > -1 ? 'gallery-item-checked' : '', 'gallery-item']">
             <img :src="item.url" alt="" />
-            <div class="mask" title="查看照片" @click="clickImg($event, item)">
+            <div class="mask" title="查看照片" @click="showViewer">
               <span
                 :class="[
                   checkedArr.indexOf(item.photoId) > -1 ? 'checked-span' : '',
@@ -18,11 +18,15 @@
                 ]"
                 @click.stop="checkImg(item.photoId)"
               ></span>
-              <!-- <svg-icon type="css" icon="ditu1" style=" font-size: 36px;"></svg-icon> -->
             </div>
           </div>
-          <p class="time">{{ item.createTime }}</p>
-          <p class="camera-name">{{ item.speciesInfo }}</p>
+          <div class="img-info">
+            <div>
+              <p class="time">{{ item.createTime }}</p>
+              <p class="camera-name">{{ item.speciesInfo }}</p>
+            </div>
+            <i class="el-icon-s-tools" @click="clickImg($event, item)"></i>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -32,6 +36,8 @@
 </template>
 
 <script>
+import 'viewerjs/dist/viewer.css'
+import { api as viewerApi } from 'v-viewer'
 import { galleryList, galleryUpdate, galleryDelete } from '@/api'
 import { getToken } from '@/utils/auth'
 export default {
@@ -55,6 +61,9 @@ export default {
   computed: {
     noMore() {
       return this.pageIndex >= this.totalPage
+    },
+    sourceImageURLs() {
+      return this.img_url.map(item => item.url)
     }
   },
   created() {
@@ -72,12 +81,18 @@ export default {
         })
         .catch(err => {})
     },
-    clickImg(event, obj) {
+    showViewer() {
+      console.log(this.img_url.map(item => item.url))
       if (this.checkedArr.length > 0) {
         this.checkImg(obj.photoId)
       } else {
-        this.$emit('click', { event, obj })
+        const $viewer = viewerApi({
+          images: this.sourceImageURLs
+        })
       }
+    },
+    clickImg(event, obj) {
+      this.$emit('click', { event, obj })
     },
     animationDelay(index) {
       let time = index
@@ -149,7 +164,9 @@ export default {
         for (let index = 0; index < 11; index++) {
           this.img_url.push({
             url: 'https://t7.baidu.com/it/u=2006997523,200382512&fm=193&f=GIF',
-            photoId: Math.random().toString()
+            photoId: Math.random().toString(),
+            createTime: this.$day().format('YYYY-MM-DD HH:mm:ss'),
+            speciesInfo: '碳基生物'
           })
         }
         this.loading = false
@@ -190,6 +207,7 @@ $colors: #3385ff;
   .grid-gallery {
     margin-bottom: 18px;
     .gallery-item {
+      border: 4px solid transparent;
       height: $image-height;
       background-color: #eee;
       overflow: hidden;
@@ -247,21 +265,31 @@ $colors: #3385ff;
     .gallery-item-checked {
       border: 4px solid $colors;
     }
-    .time {
-      @include font_color(null);
-      font-size: 14px;
-      margin-top: 14px;
-    }
-    .camera-name {
-      font-weight: bolder;
-      @include font_color(null);
-      line-height: 30px;
+    .img-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .time {
+        @include font_color(null);
+        font-size: 14px;
+        margin-top: 14px;
+      }
+      .camera-name {
+        font-weight: bolder;
+        @include font_color(null);
+        line-height: 30px;
+      }
+      i {
+        @include font_color(null);
+        font-size: 20px;
+        cursor: pointer;
+      }
     }
   }
   .animation-gallery {
-    transition: all linear;
+    transition: all ease-in-out;
     animation-name: toTop; // toBottom
-    animation-duration: 0.2s; // 注释掉 会没有动画 就是帕帕一帧一帧的出来
+    animation-duration: 0.9s; // 注释掉 会没有动画 就是帕帕一帧一帧的出来
     animation-fill-mode: both;
     transform-style: preserve-3d;
   }

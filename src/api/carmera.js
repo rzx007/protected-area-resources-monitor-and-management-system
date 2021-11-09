@@ -1,11 +1,3 @@
-/*
- * @Author: 阮志雄
- * @Date: 2021-07-08 14:29:08
- * @LastEditTime: 2021-10-30 16:01:00
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\api\carmera.js
- */
 import http from './http'
 
 //  下发回收相机任务

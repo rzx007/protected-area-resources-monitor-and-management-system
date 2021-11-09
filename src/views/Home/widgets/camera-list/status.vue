@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-15 16:47:03
+ * @LastEditTime: 2021-11-09 13:49:31
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\widgets\camera-list\status.vue
@@ -143,6 +143,7 @@ $color: #4762b0;
       .setting {
         font-size: 24px;
         cursor: pointer;
+        transform: rotate(90deg);
         &:hover {
           color: $color;
         }

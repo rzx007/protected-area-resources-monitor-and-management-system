@@ -1,30 +1,32 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-10-30 17:01:12
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\status.vue
--->
 <template>
   <div class="state-list" v-loading="loading">
     <el-input v-model="code" placeholder="相机编号查询" clearable></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
-          <span class="state" :style="{ backgroundColor: getStatus(item.state, 0) }">{{ getStatus(item.state) }}</span>
-          <div class="sub-info">
-            <p><span>编号：</span> {{ item.imeival }}</p>
-            <p style="margin-top:6px" v-show="[3, 4].includes(item.state)">
-              <span>布控时间：</span><span>{{ item.setTime }}</span>
-            </p>
+          <div class="sub-info-block">
+            <span class="state" :style="{ backgroundColor: getStatus(item.state, 0) }">{{ getStatus(item.state) }}</span>
+            <div class="sub-info">
+              <p><span>编号：</span> {{ item.imeival }}</p>
+              <p style="margin-top:6px">
+                <span>布控时间：</span><span v-show="[3, 4].includes(item.state)">{{ item.setTime }}</span>
+              </p>
+            </div>
           </div>
+          <!-- <i class="next el-icon-arrow-right"></i> -->
           <div class="mask"></div>
         </div>
-        <div class="setting">
+        <div class="setting" title="编辑">
           <el-button type="warning" v-if="item.state == 3" @click="clickRecycle(item)">回收</el-button>
           <el-button type="primary" v-if="item.state == 1" @click="clickDeploy(item)">部署</el-button>
-          <span v-if="[4, 2].includes(item.state)">{{ item.user }}</span>
+          <!-- <span v-if="[4, 2].includes(item.state)">{{ item.user }}</span> -->
+          <el-button type="primary" v-if="[4, 2].includes(item.state)" style=" visibility: hidden;">占位</el-button>
+          <el-dropdown trigger="click" @command="handleCommand">
+            <i class="el-icon-more-outline"></i>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item :command="item" icon="el-icon-delete-solid">删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </li>
     </ul>
@@ -32,7 +34,7 @@
 </template>
 
 <script>
-import { findCarmeraList, findAllCarmeraList } from '@/api'
+import { findAllCarmeraList } from '@/api'
 export default {
   name: 'task',
   emits: ['click-camera', 'click-recycle', 'click-deploy'],
@@ -60,19 +62,6 @@ export default {
         this.cameraList = res.code === 0 ? res.data.list : []
         this.loading = false
       })
-      // setTimeout(() => {
-      //   this.loading = false
-      //   this.cameraList = [
-      //     // 1已部署， 0 待部署， 2 待回收 3 未部署
-      //     { id: '23', state: 1, setTime: '2012-10-12', user: '' },
-      //     { id: '2', state: 0, setTime: '', user: '张三' },
-      //     { id: '3', state: 2, setTime: '2012-10-12', user: '李四' },
-      //     { id: '4', state: 3, setTime: '', user: '' },
-      //     { id: '5', state: 1, setTime: '2012-10-12', user: '' },
-      //     { id: '6', state: 0, setTime: '', user: '张三' },
-      //     { id: '7', state: 2, setTime: '2012-10-12', user: '李四' }
-      //   ]
-      // }, 500)
     },
     getStatus(state, type = 1) {
       for (let index = 0; index < this.statusEnum.length; index++) {
@@ -97,11 +86,21 @@ export default {
     clickDeploy(item) {
       // 点击部署
       this.$emit('click-deploy', item)
+    },
+    handleCommand(command) {
+      this.$confirm('操作将删除此相机', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // this.deleteArea(command.reserveId)
+      })
     }
   }
 }
 </script>
 <style lang="scss">
+$color: #4762b0;
 .state-list {
   width: 100%;
   .ul-list {
@@ -114,10 +113,11 @@ export default {
       .info {
         cursor: pointer;
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
         flex: 1;
         margin-right: 18px;
         position: relative;
+        align-items: center;
         .mask {
           position: absolute;
           top: -15%;
@@ -128,6 +128,11 @@ export default {
           border-radius: 8px;
           transition: all 0.3s ease-in-out;
         }
+        .sub-info-block {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+        }
         .sub-info {
           display: flex;
           flex-direction: column;
@@ -136,7 +141,7 @@ export default {
           margin-left: 12px;
           justify-content: center;
           span {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 200;
           }
         }
@@ -149,7 +154,7 @@ export default {
       }
       .state {
         color: #fff;
-        background-color: #4762b0;
+        background-color: $color;
         display: inline-block;
         font-size: 12px;
         width: 50px;
@@ -158,6 +163,16 @@ export default {
         line-height: 50px;
         text-align: center;
         border-radius: 8px;
+      }
+      .setting {
+        i {
+          font-size: 20px;
+          cursor: pointer;
+          transform: rotate(90deg);
+        }
+        &:hover {
+          color: $color;
+        }
       }
     }
   }

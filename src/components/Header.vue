@@ -100,7 +100,7 @@ export default {
       }
     }
     return {
-      slogan: title,
+      slogan: getToken('slogan') || title,
       collapse: false,
       fullscreen: false,
       username: getToken('userName') || '管理员',
@@ -241,11 +241,14 @@ export default {
   }
   .logo {
     cursor: pointer;
-    max-width: 250px;
+    // max-width: 320px;
     line-height: 50px;
     margin-right: 24px;
     // @include font_color(#fff);
     font-weight: bolder;
+    letter-spacing: 2px;
+    font-size: 24px;
+    font-weight: 500;
   }
   i {
     // @include font_color(#fff);

@@ -15,16 +15,21 @@
           <i class="next el-icon-arrow-right"></i>
           <div class="mask"></div>
         </div>
-        <!-- <div class="setting" title="编辑保护区" >
-          <i class="el-icon-setting"></i>
-        </div> -->
+        <div class="setting" title="编辑保护区">
+          <el-dropdown trigger="click" @command="handleCommand">
+            <i class="el-icon-more-outline"></i>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item :command="item" icon="el-icon-delete-solid">删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { areaList } from '@/api'
+import { areaList, deleteArea } from '@/api'
 export default {
   name: 'task',
   emits: ['click-area'],
@@ -43,9 +48,24 @@ export default {
         this.areaList = res.data.list
       })
     },
+    deleteArea(reserveId) {
+      deleteArea({ reserveId }).then(result => {
+        this.$message.success('此保护区域已删除!')
+        this.getAreaList()
+      })
+    },
     clickArea(item) {
       // 点击相机
       this.$emit('click-area', item)
+    },
+    handleCommand(command) {
+      this.$confirm('操作将删除此保护区', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteArea(command.reserveId)
+      })
     }
   }
 }
@@ -113,8 +133,11 @@ $color: #4762b0;
         }
       }
       .setting {
-        font-size: 24px;
-        cursor: pointer;
+        i {
+          font-size: 24px;
+          cursor: pointer;
+          transform: rotate(90deg);
+        }
         &:hover {
           color: $color;
         }

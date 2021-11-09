@@ -1,17 +1,9 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-15 11:35:02
- * @LastEditTime: 2021-11-04 11:01:18
- * @LastEditors: 阮志雄
- * @Description: 相机部署
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-deploy\index.vue
--->
 <template>
   <div class="camera-sub-block">
     <back-bar @back="goBack" title="相机部署"></back-bar>
     <div class="anas-block">
       <p class="sub-title">
-        设备编号：<span>{{ camera.id }}</span>
+        设备编号：<span>{{ camera.imeival }}</span>
       </p>
       <p class="sub-title">
         布设时间：<span>{{ camera.inUseTime }}</span>
@@ -21,9 +13,14 @@
     <div class="config-block">
       <h4 class="title">相机信息</h4>
       <p class="config-item">
-        <span class="teil">相机编号：</span><span class="sub-teil">{{ camera.id }}</span>
+        <span class="teil">相机编号：</span><span class="sub-teil">{{ camera.imeival }}</span>
       </p>
-      <p class="config-item"><span class="teil">相机型号：</span><span class="sub-teil">HW101</span></p>
+      <p class="config-item">
+        <span class="teil">相机电量：</span><span class="sub-teil">{{ camera.batteryVal }}</span>
+      </p>
+      <p class="config-item">
+        <span class="teil">存储容量:</span><span class="sub-teil">{{ camera.sdTotalSpaceVal }}</span>
+      </p>
       <p class="config-item">
         <span class="teil">相机位置：</span><span class="sub-teil">{{ lnglat.join(',') }}</span>
       </p>
@@ -49,7 +46,7 @@ export default {
   components: { backBar },
   data() {
     return {
-      name: 7,
+      name: 1,
       lnglat: [],
       options: []
     }
