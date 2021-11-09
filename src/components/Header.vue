@@ -64,7 +64,7 @@
   </div>
 </template>
 <script>
-import { removeToken, getToken } from '@/utils/auth'
+import { removeAllToken, getToken } from '@/utils/auth'
 import ThemeBar from '@/components/ThemeBar'
 import { updataPassword } from '@/api'
 import { title } from '@/settings'
@@ -139,11 +139,8 @@ export default {
     // 用户名下拉菜单选择事件
     handleCommand(command) {
       if (command === 'loginout') {
-        removeToken('token')
-        removeToken('reserveId')
-        removeToken('userId')
-        removeToken('userName')
-        this.$router.push('/login')
+        removeAllToken()
+        this.$router.replace('/login')
       } else if (command === 'updataPassword') {
         this.close = true
       }

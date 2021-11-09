@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-03 22:55:40
+ * @LastEditTime: 2021-11-07 15:40:01
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-add\index.vue
@@ -115,7 +115,6 @@ export default {
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
-
   .anas-block {
     color: #d5d5d8;
     padding: 12px 18px;

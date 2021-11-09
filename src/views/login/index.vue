@@ -37,6 +37,9 @@
     <overlay :close.sync="close" title="账号注册" owidth="380px">
       <sign-up v-if="close"></sign-up>
     </overlay>
+    <div class="load-container" v-if="!isAdmin">
+      <div class="loader-bounce"></div>
+    </div>
   </div>
 </template>
 <script>
@@ -47,8 +50,9 @@ import { title } from '@/settings'
 import signUp from './widgets/sign-up.vue'
 import md5 from 'md5-js'
 export default {
-  data: function() {
+  data() {
     return {
+      isAdmin: isAdmin(),
       slogan: title,
       mobile: '',
       passwords: '',
@@ -63,6 +67,12 @@ export default {
     }
   },
   components: { signUp },
+  created() {
+    this.getAreaByDomain().then(result => {
+      this.slogan = result.title + '管理系统'
+      this.isAdmin = true
+    })
+  },
   methods: {
     async loginHandler() {
       this.isLoging = true
