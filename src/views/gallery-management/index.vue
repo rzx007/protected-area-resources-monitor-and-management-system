@@ -1,7 +1,7 @@
 <template>
   <div
     class="content"
-    style="overflow:auto;overflow-x:hidden"
+    style="overflow: auto; overflow-x: hidden"
     v-infinite-scroll="load"
     :infinite-scroll-immediate="true"
     infinite-scroll-delay="200"
@@ -12,7 +12,7 @@
       <gallery @click="getImg" @getTotalPage="getTotalPage" :pageIndex="count"></gallery>
     </div>
     <overlay :close.sync="close" owidth="70vw" title="照片信息">
-      <sub-gallery></sub-gallery>
+      <sub-gallery v-if="close" :photoObj="photoObj"></sub-gallery>
     </overlay>
   </div>
 </template>
@@ -33,7 +33,8 @@ export default {
         { name: 'code', label: '动物类型', type: 'select', options: [], multiple: true },
         { name: 'code', label: '天气类型', type: 'select', options: [], multiple: true }
       ],
-      totalPage: 1
+      totalPage: 1,
+      photoObj: {}
     }
   },
   components: { FromDynamic, gallery, subGallery },
@@ -41,8 +42,9 @@ export default {
     getTotalPage(page) {
       this.totalPage = page
     },
-    getImg(msg) {
-      console.log(msg)
+    getImg({obj}) {
+      console.log(obj)
+      this.photoObj = obj
       this.close = true
     },
     load() {

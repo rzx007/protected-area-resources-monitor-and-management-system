@@ -2,7 +2,7 @@
   <div class="sub-gallery-viewer">
     <header>
       <h4>拍摄日期：</h4>
-      <strong>2021/10/15 22:22:10</strong>
+      <strong>{{ model.createTime }}</strong>
     </header>
     <div class="sub-gallery-content">
       <div class="images-wrap">
@@ -11,19 +11,39 @@
         </div>
       </div>
       <div class="info">
-        <h4>相机信息</h4>
+        <!-- <h4>相机信息</h4>
         <div class="block">
           <p class="config-item"><span class="teil">相机编号：</span><span class="sub-teil">AS8A9868C68</span></p>
           <p class="config-item"><span class="teil">位置：</span><span class="sub-teil">经度123 维度34</span></p>
           <p class="config-item"><span class="teil">布控时间：</span><span class="sub-teil">2021年08月20日</span></p>
           <p class="config-item"><span class="teil">计划回收时间：</span><span class="sub-teil">2021年08月20日</span></p>
-        </div>
+        </div> -->
         <h4>照片信息</h4>
         <div class="block">
-          <p class="config-item"><span  class="teil">鉴定人:</span></p>
-          <p class="config-item"><span  class="teil">物种信息:</span></p>
-          <p class="config-item"><span  class="teil">物种性别:</span></p>
-          <p class="config-item"><span  class="teil">天气:</span></p>
+          <p class="config-item">
+            <span class="teil">鉴定人:</span>
+            <el-select v-model="userId" placeholder="鉴定人员" filterable>
+              <el-option v-for="item in options" :key="item.userId" :label="item.username" :value="item.userId"> </el-option>
+            </el-select>
+          </p>
+          <p class="config-item">
+            <span class="teil">物种类别:</span>
+            <el-select v-model="speciesId" placeholder="物种类别" filterable>
+              <el-option v-for="item in options" :key="item.userId" :label="item.username" :value="item.userId"> </el-option>
+            </el-select>
+          </p>
+          <p class="config-item">
+            <span class="teil">物种性别:</span>
+            <el-radio-group v-model="speciesSex">
+              <el-radio :label="0">未知</el-radio>
+              <el-radio :label="1">雄性</el-radio>
+              <el-radio :label="2">雌性</el-radio>
+            </el-radio-group>
+          </p>
+          <p class="config-item">
+            <span class="teil">物种信息:</span>
+            <el-input type="textarea" :autosize="{ minRows: 7, maxRows: 20 }" placeholder="请输入内容" v-model="speciesInfo"> </el-input>
+          </p>
         </div>
         <div class="btn">
           <el-button type="primary">保存信息</el-button>
@@ -37,7 +57,22 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      userId: '',
+      options: [],
+      speciesId:'',
+      speciesSex:0,
+      speciesInfo:'',
+      model: this.photoObj
+    }
+  },
+  props: {
+    photoObj: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    }
   }
 }
 </script>
@@ -89,6 +124,7 @@ export default {
         .config-item {
           line-height: 30px;
           font-size: 13px;
+          margin-bottom: 12px;
           span {
             display: inline-block;
           }

@@ -4,7 +4,7 @@
       <i class="el-icon-delete" @click="deleteImg"></i>
       <span class="cancel" title="取消选择" @click="cancelAllCheck()">取消</span>
     </div>
-    <el-row :gutter="20" style="min-height: 80vh;">
+    <el-row :gutter="20" style="min-height: 80vh">
       <el-col :xs="8" :sm="6" :md="6" :lg="4" :xl="4" v-for="(item, index) in img_url" :key="index">
         <div class="grid-gallery animation-gallery" :style="animationDelay(index)">
           <div :class="[checkedArr.indexOf(item.photoId) > -1 ? 'gallery-item-checked' : '', 'gallery-item']">
@@ -17,6 +17,8 @@
                   'check-span'
                 ]"
                 @click.stop="checkImg(item.photoId)"
+              >
+                <i :class="{ 'el-icon-check': checkedArr.indexOf(item.photoId) > -1 }"></i
               ></span>
             </div>
           </div>
@@ -63,7 +65,7 @@ export default {
       return this.pageIndex >= this.totalPage
     },
     sourceImageURLs() {
-      return this.img_url.map(item => item.url)
+      return this.img_url.map((item) => item.url)
     }
   },
   created() {
@@ -73,13 +75,13 @@ export default {
     galleryList() {
       this.loading = true
       galleryList({ start: (this.pageIndex - 1) * this.pageSize, limit: this.pageSize, reserveId: getToken('reserveId') })
-        .then(res => {
+        .then((res) => {
           this.loading = false
           this.totalPage = Math.ceil(res.data.totalNum / this.pageSize)
           this.$emit('getTotalPage', this.totalPage)
           this.img_url = [...this.img_url, ...res.data.list]
         })
-        .catch(err => {})
+        .catch((err) => {})
     },
     showViewer(obj) {
       if (this.checkedArr.length > 0) {
@@ -116,7 +118,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        galleryDelete({ photoId: this.checkedArr.join(',') }).then(res => {
+        galleryDelete({ photoId: this.checkedArr.join(',') }).then((res) => {
           this.galleryList()
           this.checkedArr = []
           this.$message({
@@ -153,19 +155,20 @@ export default {
   //   }, 0)
   // },
   watch: {
-    img_url: function(newVal, oldVal) {
+    img_url: function (newVal, oldVal) {
       this.dellyCount = newVal.length - oldVal.length
     },
-    pageIndex: function(val) {
+    pageIndex: function (val) {
       // this.galleryList()
       // this.loading = true
       setTimeout(() => {
         for (let index = 0; index < 11; index++) {
           this.img_url.push({
-            url: 'https://t7.baidu.com/it/u=2006997523,200382512&fm=193&f=GIF',
+            url: 'https://t7.baidu.com/it/u=2596442915,284398145&fm=193&f=GIF',
             photoId: Math.random().toString(),
             createTime: this.$day().format('YYYY-MM-DD HH:mm:ss'),
-            speciesInfo: '碳基生物'
+            speciesInfo: '碳基生物',
+            userId: 1
           })
         }
         this.loading = false
@@ -226,7 +229,7 @@ $colors: #3385ff;
         // display: flex;
         // justify-content: center;
         // align-items: center;
-        color: $colors;
+        // color: $colors;
         .check-span {
           position: absolute;
           top: 10px;

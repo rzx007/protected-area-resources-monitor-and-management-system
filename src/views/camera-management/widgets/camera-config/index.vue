@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-09 16:04:10
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-config\index.vue
--->
 <template>
   <div class="camera-sub-block">
     <back-bar @back="goBack"></back-bar>

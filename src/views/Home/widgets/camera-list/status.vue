@@ -1,24 +1,16 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-11-09 13:49:31
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\widgets\camera-list\status.vue
--->
 <template>
   <div class="home-cameral-list">
     <el-input v-model="code" placeholder="相机编号查询" clearable></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
-          <!-- <span class="status" :style="{ backgroundColor: getStatus(item.status, 2) }">{{ getStatus(item.status) }}</span> -->
+          <!-- <span class="state" :style="{ backgroundColor: getStatus(item.state, 2) }">{{ getStatus(item.state) }}</span> -->
           <div class="sub-info-block">
-            <svg-icon type='css' icon='zhaoxiangji' class="marks"></svg-icon>
+            <svg-icon type="css" icon="zhaoxiangji" class="marks"></svg-icon>
             <div class="sub-info">
-              <p><span>编号：</span> {{ item.id }}</p>
-              <p style="margin-top:6px" v-show="[1, 3].includes(item.status)">
-                <span>布控时间：</span><span>{{ item.inUseTime }}</span>
+              <p><span>编号：</span> {{ item.imeival }}</p>
+              <p style="margin-top: 6px" v-show="[3, 4].includes(item.state)">
+                <span>布控时间：</span><span>{{ item.setTime }}</span>
               </p>
             </div>
           </div>
@@ -34,35 +26,38 @@
 </template>
 
 <script>
+import { findAllCarmeraList } from '@/api'
 export default {
   name: 'task',
   emits: ['click-camera', 'click-recycle', 'click-deploy'],
   data() {
     return {
+      loading: false,
       code: '',
-      cameraList: [
-        // 1已部署， 2 待部署， 3 待回收 4 未部署
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '' },
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '', user: '张三' },
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '李四' },
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '', user: '' },
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '' },
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '', user: '张三' },
-        { id: 'KJGRA679SHJO', status: 1, inUseTime: '2012-10-12', user: '李四' }
-      ],
+      cameraList: [],
       statusEnum: [
-        { status: 1, color: '#4762b0', title: '已部署' },
-        { status: 2, color: '#1890FF', title: '待部署' },
-        { status: 3, color: '#E6A23C', title: '待回收' },
-        { status: 4, color: '#67C23A', title: '未部署' }
+        { state: 3, color: '#4762b0', title: '已部署' },
+        { state: 2, color: '#1890FF', title: '部署中' },
+        { state: 4, color: '#E6A23C', title: '回收中' },
+        { state: 1, color: '#67C23A', title: '未部署' }
       ]
     }
   },
+  created() {
+    this.getCarmeraList()
+  },
   methods: {
-    getStatus(status, type = 1) {
+    getCarmeraList() {
+      this.loading = true
+      findAllCarmeraList().then((res) => {
+        this.cameraList = res.code === 0 ? res.data.list : []
+        this.loading = false
+      })
+    },
+    getStatus(state, type = 1) {
       for (let index = 0; index < this.statusEnum.length; index++) {
         const element = this.statusEnum[index]
-        if (element.status === status) {
+        if (element.state === state) {
           if (type == 1) {
             return element.title
           } else {
@@ -143,7 +138,6 @@ $color: #4762b0;
       .setting {
         font-size: 24px;
         cursor: pointer;
-        transform: rotate(90deg);
         &:hover {
           color: $color;
         }

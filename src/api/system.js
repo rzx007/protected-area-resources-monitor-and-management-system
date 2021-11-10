@@ -1,14 +1,11 @@
-/*
- * @Author: 阮志雄
- * @Date: 2021-11-10 15:05:10
- * @LastEditTime: 2021-11-10 15:40:09
- * @LastEditors: 阮志雄
- * @Description: 用户 角色 菜单 物种
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\api\system.js
- */
 import { getToken } from '@/utils/auth'
 import http from './http'
 
+// 用户列表
+export async function listUser(params) {
+  const res = await http.post('/reserve/appUser/list', {reserveId:getToken('reserveId'),...params})
+  return res
+}
 // 新增用户
 export async function addUser(params) {
   const res = await http.post('/reserve/appUser/add', {reserveId:getToken('reserveId'),...params})

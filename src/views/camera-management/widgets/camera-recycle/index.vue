@@ -21,26 +21,26 @@
       <p class="config-item"><span class="teil">计划回收时间:</span><span class="sub-teil">{{camera.backTime}}</span></p>
       <p class="config-item">
         <span class="teil">指定回收人员:</span>
-        <el-select v-model="name" placeholder="回收人员" filterable>
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        <el-select v-model="userId" placeholder="回收人员" filterable>
+          <el-option v-for="item in options" :key="item.userId" :label="item.username" :value="item.userId"> </el-option>
         </el-select>
       </p>
     </div>
     <div class="config-btn">
-      <el-button type="primary" :disabled="!name" @click="psotRecycle()">确定</el-button>
+      <el-button type="primary" :disabled="!userId" @click="psotRecycle()">确定</el-button>
       <el-button type="danger" @click="goBack">取消</el-button>
     </div>
   </div>
 </template>
 <script>
-import { FixDown } from '@/api'
+import { FixDown, listUser } from '@/api'
 import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
   data() {
     return {
-      name: '',
-      options: [{ label: 'ben', value: '1' }]
+      userId: '',
+      options: []
     }
   },
   props: {
@@ -51,12 +51,22 @@ export default {
       }
     }
   },
+  created() {
+    this.getUserList()
+  },
   methods: {
     goBack() {
       this.$emit('click-back', { status: false, camera: this.camera })
     },
+    getUserList() {
+      listUser().then((res) => {
+        if (res.code === 0) {
+          this.options = res.data.list
+        }
+      })
+    },
     psotRecycle() {
-      FixDown({ cameraId: this.camera.id, userId: this.name }).then(res => {
+      FixDown({ cameraId: this.camera.id, userId: this.userId }).then(res => {
         res.code === 0 ? this.$message.success('回收任务已下发') : this.$message.warning('回收任务异常')
         this.$emit('click-back', { status: true, camera: this.camera })
       })
