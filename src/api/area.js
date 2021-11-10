@@ -1,11 +1,3 @@
-/*
- * @Author: 阮志雄
- * @Date: 2021-10-30 19:41:34
- * @LastEditTime: 2021-10-30 20:23:22
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\api\area.js
- */
 import http from './http'
 
 //  保护区列表

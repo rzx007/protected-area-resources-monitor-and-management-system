@@ -9,7 +9,7 @@
         <div class="grid-gallery animation-gallery" :style="animationDelay(index)">
           <div :class="[checkedArr.indexOf(item.photoId) > -1 ? 'gallery-item-checked' : '', 'gallery-item']">
             <img :src="item.url" alt="" />
-            <div class="mask" title="查看照片" @click="showViewer">
+            <div class="mask" title="查看照片" @click="showViewer(item)">
               <span
                 :class="[
                   checkedArr.indexOf(item.photoId) > -1 ? 'checked-span' : '',
@@ -81,8 +81,7 @@ export default {
         })
         .catch(err => {})
     },
-    showViewer() {
-      console.log(this.img_url.map(item => item.url))
+    showViewer(obj) {
       if (this.checkedArr.length > 0) {
         this.checkImg(obj.photoId)
       } else {

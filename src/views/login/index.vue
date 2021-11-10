@@ -181,7 +181,7 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  @include font_color(null);
+  
   &::after {
     content: '';
     position: absolute;
@@ -235,6 +235,7 @@ export default {
         letter-spacing: 2px;
       }
       .sub-title {
+        @include font_color(null);
         text-align: center;
         font-size: 20px;
       }

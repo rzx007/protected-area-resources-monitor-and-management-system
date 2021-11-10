@@ -1,0 +1,69 @@
+<template>
+  <div class="signup-main">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" size="normal" label-width="80px" class="demo-ruleForm">
+      <el-form-item label="物种名称" prop="title">
+        <el-input v-model="ruleForm.title" placeholder="请输入物种名称"></el-input>
+      </el-form-item>
+    </el-form>
+    <el-button type="primary" @click="submitForm('ruleForm')" class="signup_btn">更新</el-button>
+  </div>
+</template>
+
+<script>
+import { speciesUpdate } from '@/api'
+export default {
+  props: {
+    info: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      ruleForm: {
+        title: ''
+      },
+      rules: {
+        title: [
+          { required: true, message: '请输入物种名称', trigger: 'blur' },
+          { min: 1, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  created() {
+    this.ruleForm = Object.assign({}, this.ruleForm, JSON.parse(JSON.stringify(this.info)))
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const { title, id} = this.ruleForm
+          const params = { title, speciesId:id}
+          speciesUpdate(params).then((res) => {
+            this.$emit('success')
+            this.$message.success('更新物种成功!')
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
+  }
+}
+</script>
+<style lang="scss">
+.signup-main {
+  box-sizing: border-box;
+  padding: 24px;
+  width: 100%;
+  .signup_btn {
+    width: 100%;
+    border-radius: 4px;
+    transition: all 500ms;
+    // @include font_color(null);
+    cursor: pointer;
+    font-size: 16px;
+  }
+}
+</style>
