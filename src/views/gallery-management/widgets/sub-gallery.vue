@@ -7,7 +7,7 @@
     <div class="sub-gallery-content">
       <div class="images-wrap">
         <div class="images">
-          <img src="https://t7.baidu.com/it/u=3039972918,1763345442&fm=193&f=GIF" alt="" />
+          <img :src="model.url" alt="" />
         </div>
       </div>
       <div class="info">
@@ -22,15 +22,11 @@
         <div class="block">
           <p class="config-item">
             <span class="teil">鉴定人:</span>
-            <el-select v-model="userId" placeholder="鉴定人员" filterable>
-              <el-option v-for="item in options" :key="item.userId" :label="item.username" :value="item.userId"> </el-option>
-            </el-select>
+            <user-select v-model="userId"></user-select>
           </p>
           <p class="config-item">
             <span class="teil">物种类别:</span>
-            <el-select v-model="speciesId" placeholder="物种类别" filterable>
-              <el-option v-for="item in options" :key="item.userId" :label="item.username" :value="item.userId"> </el-option>
-            </el-select>
+            <user-select type='sp' v-model="speciesId"></user-select>
           </p>
           <p class="config-item">
             <span class="teil">物种性别:</span>
@@ -46,7 +42,7 @@
           </p>
         </div>
         <div class="btn">
-          <el-button type="primary">保存信息</el-button>
+          <el-button type="primary" @click="galleryUpdate">保存信息</el-button>
           <el-button type="danger">删除</el-button>
         </div>
       </div>
@@ -55,14 +51,15 @@
 </template>
 
 <script>
+import { galleryUpdate } from '@/api'
 export default {
   data() {
     return {
       userId: '',
       options: [],
-      speciesId:'',
-      speciesSex:0,
-      speciesInfo:'',
+      speciesId: '',
+      speciesSex: 0,
+      speciesInfo: '',
       model: this.photoObj
     }
   },
@@ -72,6 +69,19 @@ export default {
       default: function () {
         return {}
       }
+    }
+  },
+  methods: {
+    galleryUpdate() {
+      galleryUpdate({
+        photoId: this.photoObj.photoId,
+        userId: this.userId,
+        speciesId: this.speciesId,
+        speciesSex: this.speciesSex,
+        speciesInfo: this.speciesInfo
+      }).then((res) => {
+        this.$message.success('已修改!')
+      })
     }
   }
 }

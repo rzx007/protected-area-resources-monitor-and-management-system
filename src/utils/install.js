@@ -5,7 +5,8 @@ import overlay from '@/components/overlay'
 import CurdView from '@/components/CurdViews/index'
 import BreadNav from '@/components/Bread_nav'
 import FromData from '@/components/FromData/index'
-const components = { svgIcon, overlay, CurdView, BreadNav, FromData }
+import userSelect from '@/widgets/user-select'
+const components = { svgIcon, overlay, CurdView, BreadNav, FromData, userSelect }
 
 function plugin (Vue) {
   if (plugin.installed) {

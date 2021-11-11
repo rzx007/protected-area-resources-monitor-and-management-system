@@ -9,7 +9,7 @@
         <div class="grid-gallery animation-gallery" :style="animationDelay(index)">
           <div :class="[checkedArr.indexOf(item.photoId) > -1 ? 'gallery-item-checked' : '', 'gallery-item']">
             <img :src="item.url" alt="" />
-            <div class="mask" title="查看照片" @click="showViewer(item)">
+            <div class="mask" title="查看照片" @click="showViewer(item, index)">
               <span
                 :class="[
                   checkedArr.indexOf(item.photoId) > -1 ? 'checked-span' : '',
@@ -83,12 +83,15 @@ export default {
         })
         .catch((err) => {})
     },
-    showViewer(obj) {
+    showViewer(obj, index) {
       if (this.checkedArr.length > 0) {
         this.checkImg(obj.photoId)
       } else {
         const $viewer = viewerApi({
-          images: this.sourceImageURLs
+          images: this.sourceImageURLs,
+          options: {
+            initialViewIndex: index
+          }
         })
       }
     },
@@ -129,31 +132,17 @@ export default {
       })
     }
   },
-  // mounted() {
-  //   setTimeout(() => {
-  //     this.img_url = [
-  //       'https://t7.baidu.com/it/u=2596442915,284398145&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2006997523,200382512&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=3039972918,1763345442&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2178362500,3992351697&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=1306161837,1467065791&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2596442915,284398145&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2006997523,200382512&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=3039972918,1763345442&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2178362500,3992351697&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=1306161837,1467065791&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2596442915,284398145&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=3039972918,1763345442&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2178362500,3992351697&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=1306161837,1467065791&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2006997523,200382512&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=3039972918,1763345442&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2178362500,3992351697&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=1306161837,1467065791&fm=193&f=GIF',
-  //       'https://t7.baidu.com/it/u=2006997523,200382512&fm=193&f=GIF'
-  //     ]
-  //   }, 0)
-  // },
+  mounted() {
+    for (let index = 0; index < 21; index++) {
+      this.img_url.push({
+        url: 'http://picture.ik123.com/uploads/allimg/161203/3-1612030ZG5.jpg',
+        photoId: Math.random().toString(),
+        createTime: this.$day().format('YYYY-MM-DD HH:mm:ss'),
+        speciesInfo: '碳基生物',
+        userId: 1
+      })
+    }
+  },
   watch: {
     img_url: function (newVal, oldVal) {
       this.dellyCount = newVal.length - oldVal.length
@@ -223,13 +212,7 @@ $colors: #3385ff;
         left: 0%;
         width: 100%;
         height: 100%;
-        // background-color: rgba(255, 255, 255, 0);
         transition: background-color 0.4s ease-in-out;
-        // transition: bottom 0.6s ease-in-out;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
-        // color: $colors;
         .check-span {
           position: absolute;
           top: 10px;
@@ -251,7 +234,7 @@ $colors: #3385ff;
         }
         &:hover {
           background-color: rgba(0, 0, 0, 0.3);
-          // backdrop-filter: blur(10px);
+          // backdrop-filter: blur(1px);
           .check-span {
             transform: scale(1);
           }
@@ -285,6 +268,14 @@ $colors: #3385ff;
         @include font_color(null);
         font-size: 20px;
         cursor: pointer;
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+      }
+      &:hover {
+        i {
+          opacity: 1;
+          color: $colors;
+        }
       }
     }
   }
