@@ -1,6 +1,6 @@
 <template>
   <div class="map-container">
-    <div class="tooldragbar"></div>
+    <map-tool @on-select="selectTool"></map-tool>
     <div id="area-container"></div>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <script>
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
-let AMap, Map, polygon, polyEditor
+let AMap, Map, polygon, polyEditor, satelliteLayer
 export default {
   name: 'home-map',
   props: {
@@ -42,26 +42,26 @@ export default {
   },
   watch: {
     pathStr: {
-      handler: function(newPath) {
+      handler: function (newPath) {
         this.path = JSON.parse(newPath)
         this.getPathByAjax()
       },
       deep: true
     },
-    centerLnglat: function(val) {
+    centerLnglat: function (val) {
       this.center = val
       this.getPathByAjax()
     },
     // mapId: function() {
     //   this.getPathByAjax()
     // },
-    isEdit: function(bool) {
+    isEdit: function (bool) {
       const path = this.getPolygonPath()
       if (path.length > 0) {
         bool ? polyEditor.open() : polyEditor.close()
       }
     },
-    isCreate: function(bool) {
+    isCreate: function (bool) {
       this.clearPlogon()
       if (bool) {
         Map.on('click', this.getCenterLnglat)
@@ -70,11 +70,11 @@ export default {
         polyEditor.close()
       }
     },
-    mapCreate: function(val) {
+    mapCreate: function (val) {
       // 新增时多边形是否可编辑
       val ? polyEditor.open() : polyEditor.close()
     },
-    mapFixed: function(val) {
+    mapFixed: function (val) {
       // 新增时多边形是否固定中心点
       val ? Map.off('click', this.getCenterLnglat) : Map.on('click', this.getCenterLnglat)
     }
@@ -82,6 +82,7 @@ export default {
   async mounted() {
     const { AMaps } = await AMapLoader()
     AMap = AMaps
+    satelliteLayer = new AMap.TileLayer.Satellite()
     this.initMap()
     this.hubEvent()
   },
@@ -145,7 +146,7 @@ export default {
     getPolygonPath() {
       const path = []
       const polyPath = polygon.getPath()
-      polyPath.forEach(element => {
+      polyPath.forEach((element) => {
         const subPath = [element.lng, element.lat]
         path.push(subPath)
       })
@@ -180,13 +181,13 @@ export default {
     },
     hubEvent() {
       // 外部组件事件
-      hub.$on('create-edit', bool => {
+      hub.$on('create-edit', (bool) => {
         this.mapCreate = bool
       })
-      hub.$on('create-center', bool => {
+      hub.$on('create-center', (bool) => {
         this.mapFixed = bool
       })
-      hub.$on('handraulic-center', lnglat => {
+      hub.$on('handraulic-center', (lnglat) => {
         this.setCenterZoom(lnglat)
         this.setDefaultPloygon()
       })
@@ -198,6 +199,11 @@ export default {
       this.setCenterZoom(center)
       this.setPloygon(this.path)
       polyEditor.setTarget(polygon)
+    },
+    selectTool({ type, activeIndex }) {
+      if (type === 1) {
+        activeIndex === 0 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
+      }
     }
   },
   destroyed() {

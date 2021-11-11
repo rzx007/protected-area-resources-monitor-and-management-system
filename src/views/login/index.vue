@@ -101,7 +101,7 @@ export default {
           setToken('reserveId', reserveId)
           setToken('userName', data.username)
           setToken('userId', data.userId)
-          this.$router.replace('/')
+          this.$router.replace('/index')
         }
       }
     },

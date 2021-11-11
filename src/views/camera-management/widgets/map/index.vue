@@ -1,13 +1,15 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-11-07 14:50:15
+ * @LastEditTime: 2021-11-11 22:47:23
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
 -->
 <template>
-  <div id="carmera-map"></div>
+  <div id="carmera-map">
+    <map-tool @on-select="selectTool"></map-tool>
+  </div>
 </template>
 
 <script>
@@ -15,7 +17,7 @@ import { findAllCarmeraList, findAreaByDoMain } from '@/api'
 import { getToken } from '@/utils/auth'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
-let AMap, Map, polygon
+let AMap, Map, polygon, satelliteLayer
 export default {
   data() {
     return {
@@ -28,6 +30,7 @@ export default {
   async mounted() {
     const { AMaps } = await AMapLoader()
     AMap = AMaps
+    satelliteLayer = new AMap.TileLayer.Satellite()
     this.initMap()
   },
   methods: {
@@ -230,6 +233,11 @@ export default {
     async ajaxRefreshMarkers() {
       this.cameraList = await this.getMarkersData()
       this.addMarkers()
+    },
+    selectTool({ type, activeIndex }) {
+      if (type === 1) {
+        activeIndex === 0 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
+      } 
     }
   }
 }

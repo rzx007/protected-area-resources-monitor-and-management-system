@@ -6,7 +6,8 @@ import CurdView from '@/components/CurdViews/index'
 import BreadNav from '@/components/Bread_nav'
 import FromData from '@/components/FromData/index'
 import userSelect from '@/widgets/user-select'
-const components = { svgIcon, overlay, CurdView, BreadNav, FromData, userSelect }
+import mapTool from '@/widgets/map-tool'
+const components = { svgIcon, overlay, CurdView, BreadNav, FromData, userSelect, mapTool }
 
 function plugin (Vue) {
   if (plugin.installed) {

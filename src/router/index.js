@@ -13,7 +13,7 @@ const routes = [
     path: '/',
     name: 'Main',
     component: Main,
-    redirect: '/Home',
+    redirect: '/area-management',
     children: [{
       path: '/area-management',
       name: 'area',

@@ -1,13 +1,7 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-11-07 14:49:25
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\widgets\map\index.vue
--->
 <template>
-  <div id="carmera-map"></div>
+  <div id="carmera-map">
+    <map-tool @on-select="selectTool"></map-tool>
+  </div>
 </template>
 
 <script>
@@ -15,7 +9,7 @@ import { getToken } from '@/utils/auth'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
 import { findAllCarmeraList, findAreaByDoMain } from '@/api'
-let AMap, Map, polygon
+let AMap, Map, polygon, satelliteLayer
 export default {
   data() {
     return {
@@ -28,11 +22,12 @@ export default {
   async mounted() {
     const { AMaps } = await AMapLoader()
     AMap = AMaps
+    satelliteLayer = new AMap.TileLayer.Satellite()
     this.initMap()
   },
   methods: {
     getMapData() {
-      return findAreaByDoMain({ domainName: getToken('domainName') }).then(res => {
+      return findAreaByDoMain({ domainName: getToken('domainName') }).then((res) => {
         return {
           path: res.data.lngLat ? JSON.parse(res.data.lngLat) : [],
           center: JSON.parse(res.data.centerLnglat)
@@ -40,9 +35,9 @@ export default {
       })
     },
     getMarkersData() {
-      return findAllCarmeraList().then(res => {
+      return findAllCarmeraList().then((res) => {
         const cameraList = res.code === 0 ? res.data.list : []
-        return cameraList.filter(item => item.state !== 1)
+        return cameraList.filter((item) => item.state !== 1)
       })
     },
     async initMap() {
@@ -164,10 +159,10 @@ export default {
       var overlays = Map.getAllOverlays('marker')
       for (let index = 0; index < overlays.length; index++) {
         const marker = overlays[index]
-        marker.on('click', function(e) {
+        marker.on('click', function (e) {
           let carmeraInfo = marker.getExtData()
           const { lng, lat } = marker.getPosition()
-          overlays.forEach(marker => {
+          overlays.forEach((marker) => {
             const extData = marker.getExtData()
             const { iconPath } = _this.setIconImg(extData.state)
             marker.setIcon(_this.createIcon(iconPath))
@@ -215,6 +210,11 @@ export default {
     async ajaxRefreshMarkers() {
       this.cameraList = await this.getMarkersData()
       this.addMarkers()
+    },
+    selectTool({ type, activeIndex }) {
+      if (type === 1) {
+        activeIndex === 0 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
+      } 
     }
   }
 }

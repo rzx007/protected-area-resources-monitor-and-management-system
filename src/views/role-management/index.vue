@@ -13,7 +13,7 @@
             iconColor="red"
             title="确定删除该用户吗?"
             @confirm="deleteRole(Props.rowData.row)"
-            style="margin: 0 5px;"
+            style="margin: 0 5px"
           >
             <el-button type="danger" slot="reference" title="删除" plain>删除</el-button>
           </el-popconfirm>
@@ -78,8 +78,10 @@ export default {
         responseName: 'list',
         columns: [
           { type: 'index', label: '序号', align: 'center', width: 80 },
-          { label: '角色名称', align: 'center', prop: 'roleName' },
           { label: '角色编号', align: 'center', prop: 'roleId' },
+          { label: '角色名称', align: 'center', prop: 'roleName' },
+
+          { label: '角色编码', align: 'center', prop: 'roleCode' },
           { label: '操作', align: 'center', slot: 'operation' }
         ]
       },
@@ -102,7 +104,7 @@ export default {
       console.log(row)
     },
     deleteRole(row) {
-      deleteRole({ roleId: row.roleId }).then(res => {
+      deleteRole({ roleId: row.roleId }).then((res) => {
         res.code === 0 && this.$refs.table.refresh()
       })
     },

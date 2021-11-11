@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-13 12:24:04
- * @LastEditTime: 2021-11-04 21:37:28
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\Mini-slidebar.vue
--->
 <template>
   <div class="min-slide-mian">
     <div class="slide-logo">
@@ -78,11 +70,13 @@ $activeColor: #409eff;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      // justify-content: space-between;
+      
       .menu-item {
         cursor: pointer;
         text-align: center;
         position: relative;
+        margin-bottom: 38px;
         .icon-block {
           text-align: center;
           margin-bottom: 6px;

@@ -2,6 +2,7 @@ import { getSystemFuncList } from '@/api'
 import router from '@/router'
 import getRoutes from '@/router/getRoutes'
 import { isAdmin } from '@/utils/auth'
+import Main from '@/components/Layout.vue'
 const setAdminRoute = () => {
   return isAdmin() ? [{
     title: '保护区管理',
@@ -28,7 +29,7 @@ const permission = {
     GetUserMenu({ commit }, params) {
       return new Promise((resolve, reject) => {
         let asyncRoutes = []
-        router.options.routes[1].children = []
+        // router.options.routes[1].children = []
         getSystemFuncList({ userId: params.userId, reserveId: params.reserveId })
           .then(res => {
             if (res.data.length < 1) {
@@ -47,7 +48,13 @@ const permission = {
             });
             const routes = getRoutes(asyncRoutes)
             // router.options.routes[0].redirect = routes[0].path
-            router.options.routes[0].children = routes
+            router.options.routes.splice(0, 1, {
+              path: '/index',
+              name: 'Main',
+              component: Main,
+              redirect: routes[0].path,
+              children: routes
+            })
             router.options.routes.push(
               {
                 component: () => import('@/components/notFound.vue'),
