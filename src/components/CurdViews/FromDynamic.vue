@@ -137,7 +137,9 @@
         <i :class="[expend ? 'el-icon-arrow-up' : 'el-icon-arrow-down']"></i>
       </div>
       <div class="btns">
-        <el-button type="primary" v-if="searchDynamic.length > 0 && mode !== 'simple'" size="mini" @click="query()">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" v-if="searchDynamic.length > 0 && mode !== 'simple'" size="mini" @click="query()"
+          >查询</el-button
+        >
         <slot name="tool"></slot>
       </div>
     </div>
@@ -164,7 +166,7 @@ export default {
     },
     searchDynamic: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     },
@@ -231,14 +233,14 @@ export default {
       if (this.searchDynamic.length < 1) {
         return
       }
-      this.searchDynamic.forEach(item => {
+      this.searchDynamic.forEach((item) => {
         for (const key in item) {
           if (key === 'name') {
             const str = item[key]
             this.$set(this.fromData, [str], '')
           }
           if (key === 'remoteMethod' && item.remoteMethod && item.type === 'select') {
-            item.remoteMethod.then(res => {
+            item.remoteMethod.then((res) => {
               item.options = res
             })
           }
@@ -273,7 +275,7 @@ export default {
         if (!sonElements) {
           return
         }
-        sonElements.forEach(item => {
+        sonElements.forEach((item) => {
           sonWidth += Number(item.offsetWidth)
         })
         if (sonWidth >= parentWidth - 50) {
@@ -283,7 +285,7 @@ export default {
     },
     debounce(fn, wait) {
       var timeout = null
-      return function() {
+      return function () {
         if (timeout !== null) clearTimeout(timeout)
         timeout = setTimeout(fn, wait)
       }
@@ -296,7 +298,7 @@ export default {
   },
   watch: {
     fromData: {
-      handler: function(params) {
+      handler: function (params) {
         const fromData = {}
         for (const key in params) {
           if (params[key] instanceof Array) {

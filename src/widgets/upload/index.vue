@@ -1,0 +1,85 @@
+<template>
+  <div class="x-upload-mian" :class="collspe ? 'x-upload-mian-collspe' : 'x-upload-mian-nocollspe'">
+    <p class="x-upload-title" @click="collspe = !collspe">
+      <span>图片上传</span>
+      <i :class="collspe ? 'el-icon-arrow-up' : 'el-icon-arrow-down'" ></i>
+    </p>
+    <div class="x-upload-content">
+      <el-upload
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :file-list="fileList"
+        list-type="picture"
+        drag
+        multiple
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      collspe: false,
+      fileList: [
+        {
+          name: 'food.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+        },
+        {
+          name: 'food2.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+        }
+      ]
+    }
+  },
+  methods: {
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    }
+  }
+}
+</script>
+<style lang="scss">
+.x-upload-mian-collspe {
+  transition: all 0.5s ease-in-out;
+  top: 95% !important;
+}
+.x-upload-mian-nocollspe {
+  transition: all 0.5s ease-in-out;
+  bottom: 12px !important;
+}
+.x-upload-mian {
+  @include box-shadow();
+  @include content-background();
+  padding: 16px;
+  border-radius: 12px;
+  position: fixed;
+  right: 12px;
+  // top: 95%;
+  transition: all 0.5s ease-in-out;
+  z-index: 10;
+  .x-upload-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+    @include font_color(null);
+    margin-bottom: 10px;
+  }
+  .x-upload-content {
+    max-height: 76vh;
+    overflow: auto;
+  }
+}
+</style>

@@ -8,25 +8,33 @@
   >
     <div class="gallery-main">
       <!-- <ul><li v-for="i in count" :key="i">{{i}}</li></ul> -->
-      <from-dynamic class="mb" :searchDynamic="fromOptions"></from-dynamic>
+      <from-dynamic class="mb" :searchDynamic="fromOptions">
+        <template v-slot:tool>
+          <el-button type="success" icon="el-icon-upload" @click="isupload = !isupload">上传</el-button>
+        </template>
+      </from-dynamic>
       <gallery @click="getImg" @getTotalPage="getTotalPage" :pageIndex="count"></gallery>
     </div>
     <overlay :close.sync="close" owidth="70vw" title="照片信息">
       <sub-gallery v-if="close" :photoObj="photoObj"></sub-gallery>
     </overlay>
+    <transition name="fade">
+      <upload v-show="isupload"></upload>
+    </transition>
   </div>
 </template>
 
 <script>
-import { galleryList, galleryUpdate, galleryDelete } from '@/api'
 import FromDynamic from '@/components/CurdViews/FromDynamic'
 import gallery from './widgets/gallery.vue'
 import subGallery from './widgets/sub-gallery.vue'
+import upload from '@/widgets/upload'
 export default {
   data() {
     return {
       count: 1,
       close: false,
+      isupload: false,
       fromOptions: [
         { name: 'description', label: '相机', type: 'select', options: [] },
         { name: 'occurTime', label: '日期', type: 'daterange', format: 'YYYY-MM-DD' },
@@ -37,12 +45,12 @@ export default {
       photoObj: {}
     }
   },
-  components: { FromDynamic, gallery, subGallery },
+  components: { FromDynamic, gallery, subGallery, upload },
   methods: {
     getTotalPage(page) {
       this.totalPage = page
     },
-    getImg({obj}) {
+    getImg({ obj }) {
       console.log(obj)
       this.photoObj = obj
       this.close = true
