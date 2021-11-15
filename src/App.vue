@@ -16,16 +16,18 @@ export default {
 }
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  height: 100%;
   min-width: 1000px;
 }
 .content {
   box-sizing: border-box;
-  padding: 10px 18px; 
+  padding: 10px 18px;
   width: 100%;
   height: 100%;
 }

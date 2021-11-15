@@ -2,8 +2,11 @@
   <div class="x-upload-mian" :class="collspe ? 'x-upload-mian-collspe' : 'x-upload-mian-nocollspe'">
     <p class="x-upload-title" @click="collspe = !collspe">
       <span>图片上传</span>
-      <i :class="collspe ? 'el-icon-arrow-up' : 'el-icon-arrow-down'" ></i>
+      <i :class="collspe ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
     </p>
+    <el-select v-model="cameraId" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
+      <el-option v-for="item in cameraList" :key="item.id" :label="item.imeival" :value="item.id"> </el-option>
+    </el-select>
     <div class="x-upload-content">
       <el-upload
         action="https://jsonplaceholder.typicode.com/posts/"
@@ -23,9 +26,12 @@
 </template>
 
 <script>
+import { findAllCarmeraList } from '@/api'
 export default {
   data() {
     return {
+      cameraId: '',
+      cameraList: [],
       collspe: false,
       fileList: [
         {
@@ -39,12 +45,18 @@ export default {
       ]
     }
   },
+  created() { this.getCamera() },
   methods: {
     handleRemove(file, fileList) {
       console.log(file, fileList)
     },
     handlePreview(file) {
       console.log(file)
+    },
+    getCamera() {
+      findAllCarmeraList().then((res) => {
+        this.cameraList = res.code === 0 ? res.data.list : []
+      })
     }
   }
 }

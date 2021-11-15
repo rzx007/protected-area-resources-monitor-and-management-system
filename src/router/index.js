@@ -29,6 +29,12 @@ const routes = [
     name: 'login',
     component: () =>
       import(/* webpackChunkName: "Login" */ '../views/login/index.vue')
+  },
+  {
+    path: '/bigscreen',
+    name: 'bigscreen',
+    component: () =>
+      import(/* webpackChunkName: "Login" */ '../views/analysis-big-screen/index.vue')
   }
 ]
 Vue.use(VueRouter)
