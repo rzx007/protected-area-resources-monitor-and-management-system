@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-11-11 22:47:23
+ * @LastEditTime: 2021-11-16 10:52:23
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
@@ -68,7 +68,7 @@ export default {
       Map = new AMap.Map('carmera-map', {
         mapStyle: 'amap://styles/b0de2f829295042fd24e20c6233cef55',
         viewMode: '3D',
-        zoom: 14,
+        zoom: 15,
         zooms: [7, 18],
         showBuildingBlock: true,
         center: this.center
@@ -90,7 +90,7 @@ export default {
         this.addMarkers() // 添加标记点
         this.markerEvent()
         setTimeout(() => {
-          Map.add(this.createMarker(Map.getCenter(), { state: 0 }))
+          Map.add(this.createMarker(Map.getCenter(), { state: 3 }))
           this.markerEvent()
         }, 3000)
       })
@@ -132,14 +132,14 @@ export default {
       })
       return marker
     },
-    createIcon(iconPath = 'camera3') {
+    createIcon(iconPath = 'camera1', size = { x: 30, y: 32 }) {
       const startIcon = new AMap.Icon({
         // 图标尺寸
-        size: new AMap.Size(25, 20),
+        size: new AMap.Size(size.x, size.y),
         // 图标的取图地址
         image: `./static/${iconPath}.png`,
         // 图标所用图片大小
-        imageSize: new AMap.Size(25, 20)
+        imageSize: new AMap.Size(size.x, size.y)
         // 图标取图偏移量
         // imageOffset: new AMap.Pixel(-9, -3)
       })
@@ -182,15 +182,17 @@ export default {
       var overlays = Map.getAllOverlays('marker')
       for (let index = 0; index < overlays.length; index++) {
         const marker = overlays[index]
-        marker.on('click', function(e) {
+        marker.on('click', function (e) {
           let carmeraInfo = marker.getExtData()
           const { lng, lat } = marker.getPosition()
-          overlays.forEach(marker => {
-            const extData = marker.getExtData()
+          const extData = marker.getExtData()
+          const { iconPath } = _this.setIconImg(extData.state)
+          overlays.forEach((markerItem) => {
+            const extData = markerItem.getExtData()
             const { iconPath } = _this.setIconImg(extData.state)
-            marker.setIcon(_this.createIcon(iconPath))
+            markerItem.setIcon(_this.createIcon(iconPath))
           })
-          marker.setIcon(_this.createIcon('camera3'))
+          marker.setIcon(_this.createIcon(iconPath, { x: 50, y: 52 }))
           _this.setInfoWindow([lng, lat], carmeraInfo)
           _this.$emit('click-map-carmera', carmeraInfo)
         })
@@ -237,7 +239,10 @@ export default {
     selectTool({ type, activeIndex }) {
       if (type === 1) {
         activeIndex === 0 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
-      } 
+      } else if (type === 2) {
+        Map.setCenter(this.center)
+        Map.setZoom(15)
+      }
     }
   }
 }

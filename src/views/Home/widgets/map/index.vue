@@ -45,7 +45,7 @@ export default {
       Map = new AMap.Map('carmera-map', {
         mapStyle: 'amap://styles/b0de2f829295042fd24e20c6233cef55',
         viewMode: '3D',
-        zoom: 14,
+        zoom: 15,
         zooms: [7, 18],
         showBuildingBlock: true,
         center: this.center
@@ -66,6 +66,7 @@ export default {
         this.setPloygon(this.path)
         this.addMarkers() // 添加标记点
         this.markerEvent()
+        this.mapEvent()
         setTimeout(() => {
           Map.add(this.createMarker(Map.getCenter(), { state: 0 }))
           this.markerEvent()
@@ -94,7 +95,6 @@ export default {
         const item = element
         // const lnglat = this.path[index]
         const lnglat = [Number(element['longitudeVal']), Number(element['latitudeVal'])]
-
         const marker = this.createMarker(lnglat, item)
         Map.add(marker)
       }
@@ -109,34 +109,34 @@ export default {
       })
       return marker
     },
-    createIcon(iconPath = 'camera1') {
+    createIcon(iconPath = 'camera1', size = { x: 30, y: 32 }) {
       const startIcon = new AMap.Icon({
         // 图标尺寸
-        size: new AMap.Size(25, 20),
+        size: new AMap.Size(size.x, size.y),
         // 图标的取图地址
         image: `./static/${iconPath}.png`,
         // 图标所用图片大小
-        imageSize: new AMap.Size(25, 20)
+        imageSize: new AMap.Size(size.x, size.y)
         // 图标取图偏移量
         // imageOffset: new AMap.Pixel(-9, -3)
       })
       return startIcon
     },
     setIconImg(state) {
-      let iconPath = 'camera1'
-      let stutusName = '已部署'
+      let iconPath = 'camera3'
+      let stutusName = '部署中'
       switch (state) {
-        case 1:
-          iconPath = 'camera1'
-          stutusName = '已部署'
-          break
         case 2:
-          iconPath = 'camera2'
-          stutusName = '待回收'
-          break
-        case 0:
           iconPath = 'camera3'
-          stutusName = '待部署'
+          stutusName = '部署中'
+          break
+        case 4:
+          iconPath = 'camera2'
+          stutusName = '回收中'
+          break
+        case 3:
+          iconPath = 'camera4'
+          stutusName = '已部署'
           break
         default:
           break
@@ -162,16 +162,29 @@ export default {
         marker.on('click', function (e) {
           let carmeraInfo = marker.getExtData()
           const { lng, lat } = marker.getPosition()
-          overlays.forEach((marker) => {
-            const extData = marker.getExtData()
+          const extData = marker.getExtData()
+          const { iconPath } = _this.setIconImg(extData.state)
+          overlays.forEach((markerItem) => {
+            const extData = markerItem.getExtData()
             const { iconPath } = _this.setIconImg(extData.state)
-            marker.setIcon(_this.createIcon(iconPath))
+            markerItem.setIcon(_this.createIcon(iconPath))
           })
-          marker.setIcon(_this.createIcon('camera3'))
+          marker.setIcon(_this.createIcon(iconPath, { x: 50, y: 52 }))
           _this.setInfoWindow([lng, lat], carmeraInfo)
           _this.$emit('click-map-carmera', carmeraInfo)
         })
       }
+    },
+    mapEvent() {
+      Map.on('click', (e) => {
+        const _this = this
+        var overlays = Map.getAllOverlays('marker')
+        overlays.forEach((markerItem) => {
+          const extData = markerItem.getExtData()
+          const { iconPath } = _this.setIconImg(extData.state)
+          markerItem.setIcon(_this.createIcon(iconPath))
+        })
+      })
     },
     addCarmeraHabdle(event) {
       // 部署操作时,点击地图添加相机
@@ -214,7 +227,10 @@ export default {
     selectTool({ type, activeIndex }) {
       if (type === 1) {
         activeIndex === 0 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
-      } 
+      } else if (type === 2) {
+        Map.setCenter(this.center)
+        Map.setZoom(15)
+      }
     }
   }
 }

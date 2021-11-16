@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-18 23:17:58
- * @LastEditTime: 2021-11-11 22:46:01
+ * @LastEditTime: 2021-11-16 10:21:43
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\widgets\map-tool\index.vue
@@ -12,7 +12,7 @@
       <p :class="['layer_item', activeIndex===index?'active': '']"
        @click=" activeIndex = activeIndex ===null ? index: null; eventHandle (item.type, activeIndex)"
        v-for="(item ,index) in toolList" :key="index">
-        <i :class="item.icon"></i>
+        <svg-icon type='css' :icon='item.icon' style="vertical-align: middle; margin-left:2px"></svg-icon>
         <span>{{item.name}}</span>
       </p>
     </div>
@@ -25,8 +25,8 @@ export default {
     return {
       activeIndex: null,
       toolList: [
-        { type: 1, name: '卫星', icon: '', nickName: 'Satellite' },
-        // { type: 2, name: '测距', icon: '', nickName: 'Satellite' },
+        { type: 1, name: '卫星', icon: 'tuceng', nickName: 'Satellite' },
+        { type: 2, name: '定位', icon: 'dingwei', nickName: 'Satellite' },
         // { type: 3, name: '隐藏网格', icon: '', nickName: 'Satellite' },
         // { type: 4, name: '热力图', icon: '', nickName: 'Satellite' }
       ]
