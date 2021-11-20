@@ -1,6 +1,6 @@
 <template>
   <div class="map-container">
-    <map-tool @on-select="selectTool"></map-tool>
+    <map-tool @on-select="selectTool" :tools="['weixin']" ></map-tool>
     <div id="area-container"></div>
   </div>
 </template>
@@ -98,7 +98,15 @@ export default {
       })
       Map.on('complete', () => {
         console.log('complete')
+        Map.add(satelliteLayer)
         Map.addControl(new AMap.Scale()) // 比例尺
+        const controlBar = new AMap.ControlBar({
+          position: {
+            bottom: '60px',
+            left: '6px'
+          }
+        })
+        Map.addControl(controlBar)
         this.setPloygon(this.path)
         this.setPloygonEmphasis()
         this.polyEditor()
@@ -108,10 +116,10 @@ export default {
       polygon = new AMap.Polygon({
         path,
         strokeColor: '#3f9dfd',
-        strokeWeight: 2,
+        strokeWeight: 4,
         strokeStyle: 'dashed',
         strokeOpacity: 0.8,
-        fillOpacity: 0.1,
+        fillOpacity: 0.4,
         fillColor: '#000',
         zIndex: 50,
         bubble: true
@@ -202,7 +210,7 @@ export default {
     },
     selectTool({ type, activeIndex }) {
       if (type === 1) {
-        activeIndex === 0 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
+        activeIndex === 1 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
       }
     }
   },

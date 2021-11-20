@@ -7,7 +7,7 @@
             <svg-icon type="css" icon="ditu1" class="marks"></svg-icon>
             <div class="sub-info">
               <p><span>名称:</span> {{ item.title }}</p>
-              <p style="margin-top:6px">
+              <p style="margin-top: 6px">
                 <span>相机数量：</span><span>{{ item.cameraNum }}</span>
               </p>
             </div>
@@ -29,27 +29,34 @@
 </template>
 
 <script>
-import { areaList, deleteArea } from '@/api'
+import { getToken, isAdmin } from '@/utils/auth'
+import { areaList, deleteArea, findAreaByDoMain } from '@/api'
 export default {
   name: 'task',
   emits: ['click-area'],
   data() {
     return {
+      isAdmin: isAdmin(),
       code: '',
       areaList: []
     }
   },
   created() {
-    this.getAreaList()
+    this.isAdmin ? this.getAreaList() : this.findAreaByDoMain()
   },
   methods: {
     getAreaList() {
-      areaList({ start: 0, limit: 1000, title: '' }).then(res => {
+      areaList({ start: 0, limit: 1000, title: '' }).then((res) => {
         this.areaList = res.data.list
       })
     },
+    findAreaByDoMain() {
+      findAreaByDoMain({ domainName: getToken('domainName') }).then((res) => {
+       this.areaList = [res.data]
+      })
+    },
     deleteArea(reserveId) {
-      deleteArea({ reserveId }).then(result => {
+      deleteArea({ reserveId }).then((result) => {
         this.$message.success('此保护区域已删除!')
         this.getAreaList()
       })

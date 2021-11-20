@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-18 23:17:58
- * @LastEditTime: 2021-11-16 10:21:43
+ * @LastEditTime: 2021-11-20 15:01:56
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\widgets\map-tool\index.vue
@@ -9,32 +9,48 @@
 <template>
   <div class="map_tool_block">
     <div class="show_list">
-      <p :class="['layer_item', activeIndex===index?'active': '']"
-       @click=" activeIndex = activeIndex ===null ? index: null; eventHandle (item.type, activeIndex)"
-       v-for="(item ,index) in toolList" :key="index">
-        <svg-icon type='css' :icon='item.icon' style="vertical-align: middle; margin-left:2px"></svg-icon>
-        <span>{{item.name}}</span>
-      </p>
+      <template v-for="(item, index) in toolList">
+        <p
+          :class="['layer_item', activeIndex === index + 1 ? 'active' : '']"
+          @click="
+            activeIndex = activeIndex === null ? index + 1 : null
+            eventHandle(item.type, activeIndex)
+          "
+          :key="index"
+          v-if="tools.includes(item.nickName)"
+        >
+          <svg-icon type="css" :icon="item.icon" style="vertical-align: middle; margin-left: 2px"></svg-icon>
+          <span>{{ item.name }}</span>
+        </p>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      activeIndex: null,
+      activeIndex: 1,
       toolList: [
-        { type: 1, name: '卫星', icon: 'tuceng', nickName: 'Satellite' },
-        { type: 2, name: '定位', icon: 'dingwei', nickName: 'Satellite' },
+        { type: 1, name: '卫星', icon: 'tuceng', nickName: 'weixin' },
+        { type: 2, name: '定位', icon: 'dingwei', nickName: 'dingwei' }
         // { type: 3, name: '隐藏网格', icon: '', nickName: 'Satellite' },
         // { type: 4, name: '热力图', icon: '', nickName: 'Satellite' }
       ]
     }
   },
+  props: {
+    tools: {
+      type: Array,
+      default: function () {
+        return ['weixin', 'dingwei']
+      }
+    }
+  },
   methods: {
-    eventHandle (type, activeIndex) {
-      this.$emit('on-select', {type, activeIndex})
+    eventHandle(type, activeIndex) {
+      this.$emit('on-select', { type, activeIndex })
     }
   }
 }
@@ -47,14 +63,14 @@ export default {
   padding: 14px 0 13px;
   background: #fff;
   border-radius: 3px;
-  height: 18px;;
+  height: 18px;
   z-index: 100;
   @include box-shadow();
   .show_list {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .layer_item{
+    .layer_item {
       height: 18px;
       padding: 0 12px;
       font-size: 12px;

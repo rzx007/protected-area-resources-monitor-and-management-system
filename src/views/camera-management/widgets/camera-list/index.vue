@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-10-30 17:40:00
+ * @LastEditTime: 2021-11-20 15:30:01
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\index.vue
@@ -111,7 +111,7 @@ $color: #4762b0;
       line-height: 35px;
       font-size: 16px;
       font-weight: 600;
-      color: #bfbfbf;
+      color: #8d8b8b;
       letter-spacing: 2px;
       cursor: pointer;
       transition: all 0.3s ease-in-out;

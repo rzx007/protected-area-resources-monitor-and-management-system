@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-10-24 16:49:20
+ * @LastEditTime: 2021-11-20 12:58:25
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\index.vue
@@ -17,7 +17,7 @@
         <camera-list v-show="level === 1" @click-camera="clickCamera"></camera-list>
       </transition>
       <transition name="slide-fade">
-        <camera-config v-if="level === 2" @click-back="level = 1" :info="cameraObj"></camera-config>
+        <camera-config v-if="level === 2" @click-back="level = 1" :camera="cameraObj"></camera-config>
       </transition>
     </div>
   </div>

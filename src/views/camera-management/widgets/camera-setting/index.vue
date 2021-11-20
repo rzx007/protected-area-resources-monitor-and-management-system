@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-15 11:36:17
- * @LastEditTime: 2021-10-30 19:41:06
- * @LastEditors: 阮志雄
- * @Description: 相机任务下发(相机设置)
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-setting\index.vue
--->
 <template>
   <div class="camera-sub-block">
     <back-bar @back="goBack" title="配置下发"></back-bar>
@@ -19,104 +11,69 @@
     </div>
     <div class="config-block">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="图片大小">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
+        <el-form-item label="电信IMEI码">
+          <el-input v-model="form.imeival" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="信号">
+          <el-input v-model="form.signalVal" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="电量">
+          <el-input v-model="form.batteryVal" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="温度">
+          <el-input v-model="form.temperatureVal" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="sd卡总容量">
+          <el-input v-model="form.sdTotalSpaceVal" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="sd卡使用空间">
+          <el-input v-model="form.sdUsedpaceVal" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="经度">
+          <el-input v-model="form.longitudeVal" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="纬度">
+          <el-input v-model="form.latitudeVal" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="相机软件版本">
+          <el-input v-model="form.FWVersion" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="拍照间隔">
+          <el-select v-model="form.pirInterval" placeholder="拍照间隔">
+            <el-option label="10" value="10"></el-option>
+            <el-option label="20" value="20"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="	照片大小">
+          <el-select v-model="form.vSize" placeholder="照片大小">
             <el-option label="5M" value="1"></el-option>
             <el-option label="10M" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="视频清晰度">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
+          <el-select v-model="form.vSize" placeholder="视频清晰度">
             <el-option label="720p" value="1"></el-option>
             <el-option label="1089p" value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="连拍张数">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
-            <el-option label="10" value="1"></el-option>
-            <el-option label="20" value="2"></el-option>
+        <el-form-item label="视频长度">
+          <el-select v-model="form.vLength" placeholder="视频长度">
+            <el-option label="20S" value="1"></el-option>
+            <el-option label="30S" value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="拍照间隔">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
-            <el-option label="10" value="1"></el-option>
-            <el-option label="20" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="工作方式">
-          <el-checkbox-group v-model="form.type">
-            <el-checkbox label="视频" name="type"></el-checkbox>
-            <el-checkbox label="照片" name="type"></el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-        <el-form-item label="录像时长">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
-            <el-option label="10" value="1"></el-option>
-            <el-option label="20" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="附件大小">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
-            <el-option label="10" value="1"></el-option>
-            <el-option label="20" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="PIR灵敏度">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
-            <el-option label="10" value="1"></el-option>
-            <el-option label="20" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="PIR触发间隔">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
-            <el-option label="10" value="1"></el-option>
-            <el-option label="20" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="发送方式">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
-            <el-option label="10" value="1"></el-option>
-            <el-option label="20" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="发送模式">
-          <el-select v-model="form.size" placeholder="请选择活动区域">
-            <el-option label="10" value="1"></el-option>
-            <el-option label="20" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="GPS开关">
-          <el-switch v-model="form.delivery"></el-switch>
-        </el-form-item>
-        <el-form-item label="循环存储">
-          <el-radio-group v-model="form.resource">
-            <el-radio label="是"></el-radio>
-            <el-radio label="否"></el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="工作时间">
+        <!-- <el-form-item label="工作时间">
           <el-date-picker
             v-model="value1"
-            style="width:280px"
+            style="width: 280px"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           >
           </el-date-picker>
-        </el-form-item>
-        <el-form-item label="工作时段">
-          <el-time-picker
-            is-range
-            style="width:280px"
-            v-model="value1"
-            range-separator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            placeholder="选择时间范围"
-          >
-          </el-time-picker>
-        </el-form-item>
+        </el-form-item> -->
+
         <el-form-item>
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
           <el-button>取消</el-button>
@@ -127,35 +84,48 @@
 </template>
 
 <script>
-import { uploadStatus } from '@/api'
+import { uploadStatus, findCarmeraInfo } from '@/api'
 import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
   data() {
     return {
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        imeiVal: '',
+        signalVal: '',
+        pSize: '',
+        vLength: '',
+        vSize:'',
+        batteryVal: '',
+        longitudeVal: '',
+        latitudeVal:'',
+        sdTotalSpaceVal: '',
+        sdUsedpaceVal:'',
+        temperatureVal: '',
+        fwVersion:'',
+        pirInterval:'',
       }
     }
   },
   props: {
     camera: {
       type: Object,
-      default: function() {
+      default: function () {
         return { id: '' }
       }
     }
   },
+  created(){
+    this.getData()
+  },
   methods: {
     goBack() {
       this.$emit('click-back')
+    },
+    getData() {
+      findCarmeraInfo({ cameraId: this.camera.id }).then((res) => {
+        this.form = res.data ? res.data : {}
+      })
     },
     uploadStatus() {
       uploadStatus({
@@ -166,13 +136,13 @@ export default {
         PSize: '10M',
         VSize: '720P',
         VLength: 1000 * 60 * 60,
-        SignalVal:'',
-        BatteryVal:'',
-        TemperatureVal:'',
-        SDUsedpaceVal:'',
-        LongitudeVal:'',
-        LatitudeVal:'',
-      }).then(res => {
+        SignalVal: '',
+        BatteryVal: '',
+        TemperatureVal: '',
+        SDUsedpaceVal: '',
+        LongitudeVal: '',
+        LatitudeVal: ''
+      }).then((res) => {
         this.$emit('click-back')
       })
     },

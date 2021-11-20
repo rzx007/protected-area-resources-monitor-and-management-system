@@ -8,7 +8,7 @@
 import { getToken } from '@/utils/auth'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
-import { findAllCarmeraList, findAreaByDoMain } from '@/api'
+import { findCarmeraList, findAreaByDoMain } from '@/api'
 let AMap, Map, polygon, satelliteLayer
 export default {
   data() {
@@ -35,8 +35,8 @@ export default {
       })
     },
     getMarkersData() {
-      return findAllCarmeraList().then((res) => {
-        const cameraList = res.code === 0 ? res.data.list : []
+      return findCarmeraList().then((res) => {
+        const cameraList = res.code === 0 ? res.data : []
         return cameraList.filter((item) => item.state !== 1)
       })
     },
@@ -52,35 +52,38 @@ export default {
       })
       Map.on('complete', async () => {
         console.log('complete')
+        Map.add(satelliteLayer)
         const controlBar = new AMap.ControlBar({
           position: {
-            bottom: '100px',
-            right: '0px'
+            bottom: '60px',
+            left: '6px'
           }
         })
         Map.addControl(controlBar)
         const { path, center } = await this.getMapData()
         this.path = path
+        this.center = center
         Map.setCenter(center)
+        Map.addControl(new AMap.Scale()) // 比例尺
         this.cameraList = await this.getMarkersData()
         this.setPloygon(this.path)
         this.addMarkers() // 添加标记点
         this.markerEvent()
         this.mapEvent()
-        setTimeout(() => {
-          Map.add(this.createMarker(Map.getCenter(), { state: 0 }))
-          this.markerEvent()
-        }, 3000)
+        // setTimeout(() => {
+        //   Map.add(this.createMarker(Map.getCenter(), { state: 0 }))
+        //   this.markerEvent()
+        // }, 3000)
       })
     },
     setPloygon(path) {
       polygon = new AMap.Polygon({
         path,
         strokeColor: '#3f9dfd',
-        strokeWeight: 2,
+        strokeWeight: 4,
         strokeStyle: 'dashed',
         strokeOpacity: 0.8,
-        fillOpacity: 0.1,
+        fillOpacity: 0.4,
         fillColor: '#000',
         zIndex: 50,
         bubble: true
@@ -226,7 +229,7 @@ export default {
     },
     selectTool({ type, activeIndex }) {
       if (type === 1) {
-        activeIndex === 0 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
+        activeIndex === 1 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
       } else if (type === 2) {
         Map.setCenter(this.center)
         Map.setZoom(15)

@@ -64,7 +64,7 @@ export default {
         responseName: 'list',
         columns: [
           { type: 'index', label: '序号', align: 'center', width: 80 },
-          { label: '用户名称', align: 'center', prop: 'title' },
+          { label: '物种名称', align: 'center', prop: 'title' },
           { label: '编号', align: 'center', prop: 'id' },
           { label: '操作', align: 'end', slot: 'operation', width: 320 }
         ]

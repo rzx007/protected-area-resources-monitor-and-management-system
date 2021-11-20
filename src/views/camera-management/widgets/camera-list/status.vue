@@ -1,6 +1,6 @@
 <template>
   <div class="state-list" v-loading="loading">
-    <el-input v-model="code" placeholder="相机编号查询" clearable></el-input>
+    <el-input v-model="code" placeholder="相机编号查询" clearable @change="getCarmeraList"></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { findAllCarmeraList } from '@/api'
+import { findCarmeraList } from '@/api'
 export default {
   name: 'task',
   emits: ['click-camera', 'click-recycle', 'click-deploy'],
@@ -58,8 +58,8 @@ export default {
   methods: {
     getCarmeraList() {
       this.loading = true
-      findAllCarmeraList().then(res => {
-        this.cameraList = res.code === 0 ? res.data.list : []
+      findCarmeraList().then(res => {
+        this.cameraList = res.code === 0 ? res.data : []
         this.loading = false
       })
     },

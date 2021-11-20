@@ -15,7 +15,10 @@
         <span class="teil">相机型号：</span><span class="sub-teil">{{ getVal('imeival') }}</span>
       </p>
       <p class="config-item">
-        <span class="teil">计划回收时间：</span><span class="sub-teil">{{ getVal('backTime') }}</span>
+        <span class="teil" :title="getVal('planBackTime')">计划回收时间：</span><span class="sub-teil">{{ getVal('planBackTime') }}</span>
+      </p>
+      <p class="config-item">
+        <span class="teil">所属保护区</span><span class="sub-teil">{{ getVal('reserveTitle') }}</span>
       </p>
       <p class="config-item">
         <span class="teil">地理位置：</span><span class="sub-teil">{{ getVal('longitudeVal') }}~{{ getVal('latitudeVal') }}</span>
@@ -49,18 +52,16 @@
       <p class="config-item">
         <span class="teil">SD卡容量(M):</span><span class="sub-teil">{{ getVal('sdUsedpaceVal') }}/{{ getVal('sdUsedpaceVal') }}</span>
       </p>
-
-      <!-- <p class="config-item"><span class="teil">循环存储:</span><span class="sub-teil">开启</span></p>
-      <p class="config-item"><span class="teil">PIR灵敏度:</span><span class="sub-teil">低</span></p>
-      <p class="config-item"><span class="teil">PIR触发间隔:</span><span class="sub-teil">0S</span></p>
-      <p class="config-item"><span class="teil">发送方式:</span><span class="sub-teil">云</span></p>
-      <p class="config-item"><span class="teil">发送模式:</span><span class="sub-teil">立即</span></p> -->
+    </div>
+    <div class="config-block">
+      <h4 class="title">相机图像</h4>
+      <img :src=" getVal('fixupImg')" :alt=" getVal('reserveTitle')" width="350">
     </div>
   </div>
 </template>
 
 <script>
-import { findCarmeraList } from '@/api'
+import { findCarmeraInfo } from '@/api'
 import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
@@ -72,7 +73,7 @@ export default {
   props: {
     camera: {
       type: Object,
-      default: function() {
+      default: function () {
         return { id: '' }
       }
     }
@@ -82,8 +83,8 @@ export default {
   },
   methods: {
     getData() {
-      findCarmeraList({ reserveId: this.camera.id }).then(res => {
-        this.cameraObj = res.data.length > 0 ? res.data[0] : {}
+      findCarmeraInfo({ cameraId: this.camera.id }).then((res) => {
+        this.cameraObj = res.data ? res.data : {}
       })
     },
     getVal(key) {
@@ -102,7 +103,7 @@ export default {
   box-sizing: border-box;
   height: 100%;
   overflow: auto;
-  min-width: 390px;
+  min-width: 400px;
   .anas-block {
     color: #d5d5d8;
     padding: 12px 18px;
@@ -126,7 +127,7 @@ export default {
   .config-block {
     margin-top: 24px;
     .config-item {
-      line-height: 30px;
+      line-height: 34px;
       font-size: 13px;
       span {
         display: inline-block;
@@ -139,6 +140,12 @@ export default {
       .sub-teil {
         font-size: 17px;
         font-weight: 600;
+        display: inline-block;
+        max-width: 240px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
       }
     }
     .title {

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { findAllCarmeraList } from '@/api'
+import { findCarmeraList } from '@/api'
 export default {
   name: 'task',
   emits: ['click-camera', 'click-recycle', 'click-deploy'],
@@ -49,8 +49,8 @@ export default {
   methods: {
     getCarmeraList() {
       this.loading = true
-      findAllCarmeraList().then((res) => {
-        this.cameraList = res.code === 0 ? res.data.list : []
+      findCarmeraList().then((res) => {
+        this.cameraList = res.code === 0 ? res.data : []
         this.loading = false
       })
     },

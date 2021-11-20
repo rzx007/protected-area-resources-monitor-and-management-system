@@ -1,3 +1,11 @@
+<!--
+ * @Author: 阮志雄
+ * @Date: 2021-07-08 14:29:08
+ * @LastEditTime: 2021-11-17 00:06:51
+ * @LastEditors: 阮志雄
+ * @Description: In User Settings Edit
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\widgets\upload\index.vue
+-->
 <template>
   <div class="x-upload-mian" :class="collspe ? 'x-upload-mian-collspe' : 'x-upload-mian-nocollspe'">
     <p class="x-upload-title" @click="collspe = !collspe">
@@ -9,9 +17,11 @@
     </el-select>
     <div class="x-upload-content">
       <el-upload
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="customize"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
+        :data="{ img_rul: 'wqewqe1.jpg' }"
+        :http-request="uploadFile"
         :file-list="fileList"
         list-type="picture"
         drag
@@ -26,7 +36,8 @@
 </template>
 
 <script>
-import { findAllCarmeraList } from '@/api'
+import { apiPost } from '@/api'
+import qs from 'qs'
 export default {
   data() {
     return {
@@ -36,16 +47,17 @@ export default {
       fileList: [
         {
           name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+          url:
+            'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
         },
         {
           name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+          url:
+            'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
         }
       ]
     }
   },
-  created() { this.getCamera() },
   methods: {
     handleRemove(file, fileList) {
       console.log(file, fileList)
@@ -53,10 +65,17 @@ export default {
     handlePreview(file) {
       console.log(file)
     },
-    getCamera() {
-      findAllCarmeraList().then((res) => {
-        this.cameraList = res.code === 0 ? res.data.list : []
-      })
+    uploadFile(params) {
+      const { file, data } = params
+      // 通过 FormData 对象上传文件
+      var formData = new FormData()
+      formData.append('file', file)
+      formData.append('name', file.name)
+      formData.append('lastModifiedDate', this.$day(file.lastModified).format('YYYY-MM-DD HH:mm:ss'))
+      // this.$day(params.lastModifiedDate).format('YYYY-MM-DD HH:mm:ss')
+      // /admin/carousel/addFile
+      apiPost('/admin/carousel/addFile', formData)
+      console.log(params)
     }
   }
 }

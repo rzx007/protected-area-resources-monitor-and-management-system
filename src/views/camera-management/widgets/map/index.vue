@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-11-16 10:52:23
+ * @LastEditTime: 2021-11-20 14:58:34
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { findAllCarmeraList, findAreaByDoMain } from '@/api'
+import { findCarmeraList, findAreaByDoMain } from '@/api'
 import { getToken } from '@/utils/auth'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
@@ -35,32 +35,17 @@ export default {
   },
   methods: {
     getMapData() {
-      return findAreaByDoMain({ domainName: getToken('domainName') }).then(res => {
+      return findAreaByDoMain({ domainName: getToken('domainName') }).then((res) => {
         return {
           path: res.data.lngLat ? JSON.parse(res.data.lngLat) : [],
-          center: JSON.parse(res.data.centerLnglat) 
+          center: JSON.parse(res.data.centerLnglat)
         }
       })
-      // return new Promise((resolve, reject) => {
-      //   setTimeout(() => {
-      //     resolve([
-      //       [114.496577, 30.487779],
-      //       [114.500242, 30.485103],
-      //       [114.508865, 30.477446],
-      //       [114.503332, 30.468233],
-      //       [114.483569, 30.464996],
-      //       [114.467112, 30.470786],
-      //       [114.478323, 30.474708],
-      //       [114.476095, 30.484854],
-      //       [114.484575, 30.49307]
-      //     ])
-      //   }, 1000)
-      // })
     },
     getMarkersData() {
-      return findAllCarmeraList().then(res => {
-        const cameraList = res.code === 0 ? res.data.list : []
-        return cameraList.filter(item => item.state !== 1)
+      return findCarmeraList().then((res) => {
+        const cameraList = res.code === 0 ? res.data : []
+        return cameraList.filter((item) => item.state !== 1)
       })
     },
     async initMap() {
@@ -75,34 +60,38 @@ export default {
       })
       Map.on('complete', async () => {
         console.log('complete')
+        Map.add(satelliteLayer)
         const controlBar = new AMap.ControlBar({
           position: {
-            bottom: '100px',
-            right: '0px'
+            bottom: '60px',
+            left: '6px'
           }
         })
         Map.addControl(controlBar)
         const { path, center } = await this.getMapData()
         this.path = path
+        this.center = center
         Map.setCenter(center)
+        Map.addControl(new AMap.Scale()) // 比例尺
         this.cameraList = await this.getMarkersData()
         this.setPloygon(this.path)
         this.addMarkers() // 添加标记点
         this.markerEvent()
-        setTimeout(() => {
-          Map.add(this.createMarker(Map.getCenter(), { state: 3 }))
-          this.markerEvent()
-        }, 3000)
+        this.mapEvent()
+        // setTimeout(() => {
+        //   Map.add(this.createMarker(Map.getCenter(), { state: 3 }))
+        //   this.markerEvent()
+        // }, 3000)
       })
     },
     setPloygon(path) {
       polygon = new AMap.Polygon({
         path,
         strokeColor: '#3f9dfd',
-        strokeWeight: 2,
+        strokeWeight: 4,
         strokeStyle: 'dashed',
         strokeOpacity: 0.8,
-        fillOpacity: 0.1,
+        fillOpacity: 0.4,
         fillColor: '#000',
         zIndex: 50,
         bubble: true
@@ -198,6 +187,17 @@ export default {
         })
       }
     },
+    mapEvent() {
+      Map.on('click', (e) => {
+        const _this = this
+        var overlays = Map.getAllOverlays('marker')
+        overlays.forEach((markerItem) => {
+          const extData = markerItem.getExtData()
+          const { iconPath } = _this.setIconImg(extData.state)
+          markerItem.setIcon(_this.createIcon(iconPath))
+        })
+      })
+    },
     addCarmeraHabdle(event) {
       // 部署操作时,点击地图添加相机
       const _this = this
@@ -238,7 +238,7 @@ export default {
     },
     selectTool({ type, activeIndex }) {
       if (type === 1) {
-        activeIndex === 0 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
+        activeIndex === 1 ? Map.add(satelliteLayer) : Map.remove(satelliteLayer)
       } else if (type === 2) {
         Map.setCenter(this.center)
         Map.setZoom(15)
