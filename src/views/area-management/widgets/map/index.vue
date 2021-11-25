@@ -1,6 +1,6 @@
 <template>
   <div class="map-container">
-    <map-tool @on-select="selectTool" :tools="['weixin']" ></map-tool>
+    <map-tool @on-select="selectTool" :tools="['weixin']" :grid='false'></map-tool>
     <div id="area-container"></div>
   </div>
 </template>

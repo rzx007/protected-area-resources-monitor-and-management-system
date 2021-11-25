@@ -1,7 +1,7 @@
 // 测试环境
 const dev = {
   host: '114.55.176.189', // 服务器ip地址或域名
-  password: 'pa$$w0rd', // 密码
+  password: 'RocWh^&87312871', // 密码
   catalog: '/usr/local/nginx/html', // 前端文件压缩目录
   port: 22, // 服务器ssh连接端口号
   username: 'root' // ssh登录用户

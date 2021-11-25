@@ -21,7 +21,7 @@
         <span class="teil">所属保护区</span><span class="sub-teil">{{ getVal('reserveTitle') }}</span>
       </p>
       <p class="config-item">
-        <span class="teil">地理位置：</span><span class="sub-teil">{{ getVal('longitudeVal') }}~{{ getVal('latitudeVal') }}</span>
+        <span class="teil">地理位置：</span><span class="sub-teil">{{ getVal('fixupLongitudeVal') }}~{{ getVal('fixupLatitudeVal') }}</span>
       </p>
       <p class="config-item">
         <span class="teil">温度(℃)：</span><span class="sub-teil">{{ getVal('temperatureVal') }}</span>

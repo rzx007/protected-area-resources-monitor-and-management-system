@@ -1,14 +1,6 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-18 10:03:28
- * @LastEditTime: 2021-11-20 14:58:34
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\map\index.vue
--->
 <template>
   <div id="carmera-map">
-    <map-tool @on-select="selectTool"></map-tool>
+    <map-tool @on-select="selectTool" @on-select-grid="selectGrid"></map-tool>
   </div>
 </template>
 
@@ -18,6 +10,7 @@ import { getToken } from '@/utils/auth'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
 let AMap, Map, polygon, satelliteLayer
+import PolygonGrid from '@/utils/ScanFill'
 export default {
   data() {
     return {
@@ -75,13 +68,10 @@ export default {
         Map.addControl(new AMap.Scale()) // 比例尺
         this.cameraList = await this.getMarkersData()
         this.setPloygon(this.path)
+        this.createPolylineGrid()
         this.addMarkers() // 添加标记点
         this.markerEvent()
         this.mapEvent()
-        // setTimeout(() => {
-        //   Map.add(this.createMarker(Map.getCenter(), { state: 3 }))
-        //   this.markerEvent()
-        // }, 3000)
       })
     },
     setPloygon(path) {
@@ -105,7 +95,7 @@ export default {
         const element = this.cameraList[index]
         const item = element
         // const lnglat = this.path[index]
-        const lnglat = [Number(element['longitudeVal']), Number(element['latitudeVal'])]
+        const lnglat = [Number(element['fixupLongitudeVal']), Number(element['fixupLatitudeVal'])]
 
         const marker = this.createMarker(lnglat, item)
         Map.add(marker)
@@ -242,6 +232,23 @@ export default {
       } else if (type === 2) {
         Map.setCenter(this.center)
         Map.setZoom(15)
+      }
+    },
+    selectGrid(parma) {
+      this.createPolylineGrid(parma.y)
+    },
+    createPolylineGrid(interval = 273) {
+      const _this = this
+      var polylines = Map.getAllOverlays('polyline')
+      if (polylines.length) {
+        polylines.forEach((polyline) => {
+          polyline.hide()
+          polyline.destroy()
+        })
+      }
+      if (interval) {
+        new PolygonGrid({ mapInstance: Map, interval, allPoints: _this.path })
+        new PolygonGrid({ mapInstance: Map, angel: 90, interval, allPoints: _this.path })
       }
     }
   }

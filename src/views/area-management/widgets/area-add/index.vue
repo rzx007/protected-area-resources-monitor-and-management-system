@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-07 15:40:01
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-add\index.vue
--->
 <template>
   <div class="area-sub-add-block">
     <back-bar @back="goBack"></back-bar>
