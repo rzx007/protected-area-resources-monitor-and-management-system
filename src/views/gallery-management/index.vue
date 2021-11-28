@@ -8,12 +8,12 @@
   >
     <div class="gallery-main">
       <!-- <ul><li v-for="i in count" :key="i">{{i}}</li></ul> -->
-      <from-dynamic class="mb" :searchDynamic="fromOptions">
+      <from-dynamic class="mb" :searchDynamic="fromOptions" @params-change="handleChange">
         <template v-slot:tool>
           <el-button type="success" icon="el-icon-upload" @click="isupload = !isupload">上传</el-button>
         </template>
       </from-dynamic>
-      <gallery @click="getImg" @getTotalPage="getTotalPage" :pageIndex="count"></gallery>
+      <gallery @click="getImg" @getTotalPage="getTotalPage" v-model="count" ref="gallery"></gallery>
     </div>
     <overlay :close.sync="close" owidth="70vw" title="照片信息">
       <sub-gallery v-if="close" :photoObj="photoObj"></sub-gallery>
@@ -29,6 +29,7 @@ import FromDynamic from '@/components/CurdViews/FromDynamic'
 import gallery from './widgets/gallery.vue'
 import subGallery from './widgets/sub-gallery.vue'
 import upload from '@/widgets/upload'
+import { findCarmeraList, speciesList } from '@/api'
 export default {
   data() {
     return {
@@ -36,10 +37,10 @@ export default {
       close: false,
       isupload: false,
       fromOptions: [
-        { name: 'description', label: '相机', type: 'select', options: [] },
-        { name: 'occurTime', label: '日期', type: 'daterange', format: 'YYYY-MM-DD' },
-        { name: 'code', label: '动物类型', type: 'select', options: [], multiple: true },
-        { name: 'code', label: '天气类型', type: 'select', options: [], multiple: true }
+        { name: 'cameraId', label: '相机', type: 'select', options: [], remoteMethod: this.getCarmeraList() },
+        { name: 'speciesId', label: '动物类型', type: 'select', options: [], remoteMethod: this.speciesList(), multiple: true },
+        // { name: 'code', label: '天气类型', type: 'select', options: [], multiple: true }
+        { name: 'occurTime', label: '日期', type: 'daterange', format: 'yyyy-MM-dd' }
       ],
       totalPage: 1,
       photoObj: {}
@@ -47,6 +48,37 @@ export default {
   },
   components: { FromDynamic, gallery, subGallery, upload },
   methods: {
+    getCarmeraList() {
+      return findCarmeraList().then((res) => {
+        const cameraList = []
+        res.data.forEach((item) => {
+          cameraList.push({
+            label: item.imeival,
+            value: item.id
+          })
+        })
+        return cameraList
+      })
+    },
+    speciesList() {
+      return speciesList({ limit: 100, start: 0 }).then((res) => {
+        if (res.code === 0) {
+          const options = []
+          res.data.list.forEach((item) => {
+            options.push({
+              label: item.title,
+              value: item.id
+            })
+          })
+          return options
+        }
+      })
+    },
+    handleChange(params) {
+      console.log(params)
+      this.$refs.gallery.exrData = params
+      console.log(this.$refs.gallery.exrData);
+    },
     getTotalPage(page) {
       this.totalPage = page
     },
@@ -56,7 +88,7 @@ export default {
       this.close = true
     },
     load() {
-      if (this.count >= 12) return
+      if (this.count >= this.totalPage) return
       this.count += 1
       console.log(this.count)
       // alert(this.count)

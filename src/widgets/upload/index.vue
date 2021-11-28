@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-07-08 14:29:08
- * @LastEditTime: 2021-11-17 00:06:51
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\widgets\upload\index.vue
--->
 <template>
   <div class="x-upload-mian" :class="collspe ? 'x-upload-mian-collspe' : 'x-upload-mian-nocollspe'">
     <p class="x-upload-title" @click="collspe = !collspe">
@@ -13,69 +5,92 @@
       <i :class="collspe ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
     </p>
     <el-select v-model="cameraId" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
-      <el-option v-for="item in cameraList" :key="item.id" :label="item.imeival" :value="item.id"> </el-option>
+      <el-option v-for="item in cameraList" :key="item.id" :label="item.imeival" :value="item.imeival"> </el-option>
     </el-select>
     <div class="x-upload-content">
       <el-upload
+        :disabled="!cameraId"
+        :limit="10"
         action="customize"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
-        :data="{ img_rul: 'wqewqe1.jpg' }"
         :http-request="uploadFile"
+        :on-change="handleChange"
+        :on-exceed="handleExceed"
         :file-list="fileList"
-        list-type="picture"
+        :before-upload="beforeAvatarUpload"
+        list-type="text"
         drag
         multiple
       >
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        <div>
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">选择相机后,将文件拖到此处，或<em>点击上传</em></div>
+        </div>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png/jpeg/gif文件，且不超过5M</div>
       </el-upload>
     </div>
   </div>
 </template>
 
 <script>
-import { apiPost } from '@/api'
-import qs from 'qs'
+import { findCarmeraList, uploadImage } from '@/api'
 export default {
   data() {
     return {
       cameraId: '',
       cameraList: [],
       collspe: false,
-      fileList: [
-        {
-          name: 'food.jpeg',
-          url:
-            'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        },
-        {
-          name: 'food2.jpeg',
-          url:
-            'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }
-      ]
+      fileList: [],
+      imageType: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png', 'image/svg']
     }
   },
+  created() {
+    this.getCarmeraList()
+  },
   methods: {
+    getCarmeraList() {
+      findCarmeraList().then((res) => {
+        this.cameraList = res.code === 0 ? res.data : []
+      })
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList)
     },
     handlePreview(file) {
       console.log(file)
     },
+    beforeAvatarUpload(file) {
+      const isJPG = this.imageType.includes(file.type)
+      const isLt5M = file.size / 1024 / 1024 < 5
+
+      if (!isJPG) {
+        this.$message.error('文件上传类型不对!')
+      }
+      if (!isLt5M) {
+        this.$message.error('文件上传大小不能超过 5MB!')
+      }
+      return isJPG && isLt5M
+    },
+    handleExceed() {
+      this.$message.warning('超出单次上传文件数量!')
+    },
+    handleChange(file, fileList) {
+      console.log(file, fileList)
+    },
     uploadFile(params) {
       const { file, data } = params
       // 通过 FormData 对象上传文件
       var formData = new FormData()
-      formData.append('file', file)
-      formData.append('name', file.name)
+      formData.append('Image', file)
+      formData.append('ImeiVal', this.cameraId)
+      // formData.append('name', file.name)
       formData.append('lastModifiedDate', this.$day(file.lastModified).format('YYYY-MM-DD HH:mm:ss'))
       // this.$day(params.lastModifiedDate).format('YYYY-MM-DD HH:mm:ss')
       // /admin/carousel/addFile
-      apiPost('/admin/carousel/addFile', formData)
-      console.log(params)
+      uploadImage(formData).then((res) => {
+        res.code === 0 ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
+      })
     }
   }
 }

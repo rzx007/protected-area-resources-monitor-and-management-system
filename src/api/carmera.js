@@ -40,3 +40,9 @@ export async function uploadStatus(params) {
   const res = await http.post('/reserve/appCamera/uploadStatus', params)
   return res
 }
+
+//  上传相机图片
+export async function uploadImage(params) {
+  const res = await http.post('/reserve/appPhoto/uploadImage', params)
+  return res
+}

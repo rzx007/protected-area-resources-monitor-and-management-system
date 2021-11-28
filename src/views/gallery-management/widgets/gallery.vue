@@ -40,7 +40,7 @@
 <script>
 import 'viewerjs/dist/viewer.css'
 import { api as viewerApi } from 'v-viewer'
-import { galleryList, galleryUpdate, galleryDelete } from '@/api'
+import { galleryList, galleryDelete } from '@/api'
 import { getToken } from '@/utils/auth'
 export default {
   data() {
@@ -49,9 +49,11 @@ export default {
       load_ing: [],
       loading: false,
       pageSize: 20,
+      pageCount: 1,
       totalPage: 1,
       dellyCount: 0,
-      checkedArr: []
+      checkedArr: [],
+      exrData: {}
     }
   },
   props: {
@@ -59,6 +61,10 @@ export default {
       type: Number,
       default: 1
     }
+  },
+  model: {
+    prop: 'pageIndex',
+    event: 'change'
   },
   computed: {
     noMore() {
@@ -69,12 +75,12 @@ export default {
     }
   },
   created() {
-    this.galleryList()
+    // this.galleryList()
   },
   methods: {
     galleryList() {
       this.loading = true
-      galleryList({ start: (this.pageIndex - 1) * this.pageSize, limit: this.pageSize, reserveId: getToken('reserveId') })
+      galleryList({ start: (this.pageCount - 1) * this.pageSize, limit: this.pageSize, reserveId: getToken('reserveId'), ...this.exrData })
         .then((res) => {
           this.loading = false
           this.totalPage = Math.ceil(res.data.totalNum / this.pageSize)
@@ -105,7 +111,7 @@ export default {
         time = index - len
         return { animationDelay: time * 50 + 100 + 'ms' }
       } else {
-        return this.pageIndex < 2 && { animationDelay: time * 100 + 200 + 'ms' }
+        return this.pageCount < 2 && { animationDelay: time * 100 + 200 + 'ms' }
       }
     },
     checkImg(id) {
@@ -122,6 +128,9 @@ export default {
         type: 'warning'
       }).then(() => {
         galleryDelete({ photoId: this.checkedArr.join(',') }).then((res) => {
+          this.pageCount = 1
+          this.$emit('change', this.pageCount)
+          this.img_url = []
           this.galleryList()
           this.checkedArr = []
           this.$message({
@@ -133,35 +142,44 @@ export default {
     }
   },
   mounted() {
-    for (let index = 0; index < 21; index++) {
-      this.img_url.push({
-        url: 'http://picture.ik123.com/uploads/allimg/161203/3-1612030ZG5.jpg',
-        photoId: Math.random().toString(),
-        createTime: this.$day().format('YYYY-MM-DD HH:mm:ss'),
-        speciesInfo: '碳基生物',
-        userId: 1
-      })
-    }
+    // for (let index = 0; index < 21; index++) {
+    //   this.img_url.push({
+    //     url: 'http://picture.ik123.com/uploads/allimg/161203/3-1612030ZG5.jpg',
+    //     photoId: Math.random().toString(),
+    //     createTime: this.$day().format('YYYY-MM-DD HH:mm:ss'),
+    //     speciesInfo: '碳基生物',
+    //     userId: 1
+    //   })
+    // }
   },
   watch: {
     img_url: function (newVal, oldVal) {
       this.dellyCount = newVal.length - oldVal.length
     },
     pageIndex: function (val) {
-      // this.galleryList()
+      this.pageCount = val
+      this.galleryList()
       // this.loading = true
-      setTimeout(() => {
-        for (let index = 0; index < 11; index++) {
-          this.img_url.push({
-            url: 'https://t7.baidu.com/it/u=2596442915,284398145&fm=193&f=GIF',
-            photoId: Math.random().toString(),
-            createTime: this.$day().format('YYYY-MM-DD HH:mm:ss'),
-            speciesInfo: '碳基生物',
-            userId: 1
-          })
-        }
-        this.loading = false
-      }, 1000)
+      // setTimeout(() => {
+      //   for (let index = 0; index < 11; index++) {
+      //     this.img_url.push({
+      //       url: 'https://t7.baidu.com/it/u=2596442915,284398145&fm=193&f=GIF',
+      //       photoId: Math.random().toString(),
+      //       createTime: this.$day().format('YYYY-MM-DD HH:mm:ss'),
+      //       speciesInfo: '碳基生物',
+      //       userId: 1
+      //     })
+      //   }
+      //   this.loading = false
+      // }, 1000)
+    },
+    exrData: {
+      handler: function () {
+        this.pageCount = 1
+        this.img_url = []
+        this.galleryList()
+      },
+      deep: true
     }
   }
 }
