@@ -1,30 +1,26 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-16 13:09:24
- * @LastEditTime: 2021-10-16 15:33:06
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis\widgets\device.vue
--->
 <template>
   <div class="analysis-item">
     <div class="title">设备状态</div>
     <div class="device-content">
       <div class="device-total">
-        <span>总数: <strong>30</strong></span>
+        <span
+          >总数: <strong>{{ cameraList.length }}</strong></span
+        >
         <div class="sub-title">
-          <span style="margin-right:12px">在线: <strong>27</strong></span>
-          <span>离线: <strong>3</strong></span>
+          <span style="margin-right: 12px"
+            >在线: <strong>{{ cameraList.length }}</strong></span
+          >
+          <span>离线: <strong>0</strong></span>
         </div>
       </div>
-      <el-progress :text-inside="true" :stroke-width="18" :percentage="70"></el-progress>
+      <el-progress :text-inside="true" :stroke-width="18" :percentage="100"></el-progress>
       <div class="device-status">
         <ul class="status-list">
-          <li v-for="(item, index) in list" :key="index">
-            <span class="time">{{ item.time }}</span>
+          <li v-for="(item, index) in cameraList" :key="index">
+            <span class="time">{{ item.setTime }}</span>
             <span class="num ellipsis" :title="item.id">{{ item.id }}</span>
-            <span class="name">{{ item.name }}</span>
-            <span :class="['status', { recly: item.status === 3 }]">待回收</span>
+            <span class="name">{{ item.imeival }}</span>
+            <span :class="['status', { recly: item.state === 3 }]">{{ getStatus(item.state) }}</span>
           </li>
         </ul>
       </div>
@@ -33,17 +29,49 @@
 </template>
 
 <script>
+import { findCarmeraList } from '@/api'
 export default {
   data() {
     return {
-      list: [
+      cameraList: [
         { time: '10/21 09:12:34', id: 'ADA8AD786AC', name: '张思', status: 2 },
         { time: '10/21 09:12:34', id: 'ADA8AD786AC', name: '张思', status: 3 },
         { time: '10/21 09:12:34', id: 'ADA8AD786AC', name: '张思', status: 2 },
         { time: '10/21 09:12:34', id: 'ADA8AD786AC', name: '张思', status: 3 },
         { time: '10/21 09:12:34', id: 'ADA8AD786AC', name: '张思', status: 2 },
         { time: '10/21 09:12:34', id: 'ADA8AD786AC', name: '张思', status: 3 }
+      ],
+      statusEnum: [
+        // 1 未部署， 2 部署中 3已部署 4 回收中
+        { state: 3, color: '#4762b0', title: '已部署' },
+        { state: 2, color: '#1890FF', title: '部署中' },
+        { state: 4, color: '#E6A23C', title: '回收中' },
+        { state: 1, color: '#67C23A', title: '未部署' }
       ]
+    }
+  },
+  created() {
+    this.getCarmeraList()
+  },
+  methods: {
+    getStatus(state, type = 1) {
+      for (let index = 0; index < this.statusEnum.length; index++) {
+        const element = this.statusEnum[index]
+        if (element.state === state) {
+          if (type == 1) {
+            return element.title
+          } else {
+            return element.color
+          }
+        }
+      }
+    },
+    getCarmeraList() {
+      this.loading = true
+      findCarmeraList().then((res) => {
+        this.cameraList = res.code === 0 ? res.data : []
+        this.loading = false
+      })
     }
   }
 }
@@ -92,12 +120,18 @@ export default {
           padding-bottom: 6px;
           .time {
             font-size: 12px;
+            flex: 1;
           }
           .num {
             display: inline-block;
-            max-width: 80px;
+            width: 60px;
+            text-align: center;
             vertical-align: middle;
             font-weight: bolder;
+          }
+          .name {
+            width: 100px;
+            text-align: center;
           }
           .status {
             display: inline-block;

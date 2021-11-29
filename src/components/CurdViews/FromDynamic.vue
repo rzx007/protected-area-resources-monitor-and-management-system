@@ -263,7 +263,7 @@ export default {
           fromData[key] = params[key]
         }
       }
-      this.$emit('query', params)
+      this.$emit('query', fromData)
     },
     toolsMediaQuery() {
       // 对查询条件过多，进行条件部分隐藏

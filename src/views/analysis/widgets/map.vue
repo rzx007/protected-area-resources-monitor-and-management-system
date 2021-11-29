@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-15 16:08:30
- * @LastEditTime: 2021-10-18 17:43:34
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis\widgets\map.vue
--->
 <template>
   <div class="analysis-container">
     <div id="container"></div>
@@ -14,7 +6,7 @@
 
 <script>
 import AMapLoader from '@/utils/map'
-
+let AMap, Map, polygon, satelliteLayer
 export default {
   name: 'home-map',
   data() {
@@ -24,46 +16,87 @@ export default {
       map: {}
     }
   },
-  mounted() {
+  props: {
+    path: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
+    center: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    }
+  },
+  async mounted() {
+    const { AMaps } = await AMapLoader()
+    AMap = AMaps
     this.initMap()
+  },
+  watch: {
+    path: {
+      handler: function (val) {
+        setTimeout(() => {
+          this.setPloygon(val)
+        }, 2000)
+      },
+      deep: true
+    }
+    // center: {
+    //   handler: function (val) {
+    //     this.center = val
+    //     setTimeout(() => {
+    //       Map.setCenter(val)
+    //     }, 1000)
+    //   },
+    //   deep: true
+    // }
   },
   methods: {
     async initMap() {
-      // 地图
-      const { AMaps } = await AMapLoader()
-      this.AMaps = AMaps
-      this.map = new this.AMaps.Map('container', {
+      Map = new AMap.Map('container', {
         viewMode: '3D',
-        zoom: 10,
-        zooms: [7, 14],
+        zoom: 14,
+        zooms: [7, 17],
         showBuildingBlock: true,
         center: [108.8196, 28.8666]
       })
-      this.map.on('complete', () => {
+      Map.on('complete', () => {
         console.log('complete')
-        const controlBar = new AMaps.ControlBar({
+        satelliteLayer = new AMap.TileLayer.Satellite()
+        Map.add(satelliteLayer)
+        const controlBar = new AMap.ControlBar({
           position: {
             bottom: '100px',
             right: '0px'
           }
         })
-        this.map.addControl(new AMaps.Scale()) // 比例尺
-        this.map.addControl(new AMaps.ToolBar()) // 放大缩小按钮
-        this.map.addControl(controlBar)
-        this.addMarker(AMaps) // 添加标记点
+        Map.addControl(new AMap.Scale()) // 比例尺
+        Map.addControl(new AMap.ToolBar()) // 放大缩小按钮
+        Map.addControl(controlBar)
+        // this.setPloygon(this.path)
+        Map.setCenter(this.center)
       })
     },
-    addMarker(AMaps) {
-      this.map.add(
-        new AMaps.Marker({
-          position: this.map.getCenter(),
-          anchor: 'bottom-center'
-        })
-      )
+    setPloygon(path) {
+      polygon = new AMap.Polygon({
+        path,
+        strokeColor: '#3f9dfd',
+        strokeWeight: 4,
+        strokeStyle: 'dashed',
+        strokeOpacity: 0.8,
+        fillOpacity: 0.4,
+        fillColor: '#000',
+        zIndex: 50,
+        bubble: true
+      })
+      Map.add([polygon])
     }
   },
   destroyed() {
-    this.map.destroy()
+    Map.destroy()
   }
 }
 </script>

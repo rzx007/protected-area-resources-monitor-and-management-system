@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-08-26 13:41:18
- * @LastEditTime: 2021-10-16 16:30:18
+ * @LastEditTime: 2021-11-29 12:19:51
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\echarts\pieChart.vue
@@ -40,11 +40,11 @@ export default {
       type: Array,
       default: function() {
         return [
-          {value: 48, name: '遥信变位'},
-          {value: 35, name: 'SOE告警'},
-          {value: 80, name: '稳定监控'},
-          {value: 84, name: '遥测越位'},
-          {value: 13, name: '控制操作'}
+          {value: 48, name: '狮子'},
+          {value: 35, name: '狗'},
+          {value: 80, name: '猫'},
+          {value: 84, name: '鼠'},
+          {value: 13, name: '虎'}
         ]
       }
     },

@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-08-26 13:41:03
- * @LastEditTime: 2021-10-16 16:55:19
+ * @LastEditTime: 2021-11-29 12:19:14
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\echarts\lineBar.vue
@@ -49,7 +49,7 @@ export default {
     xAxis: {
       type: Array,
       default: function() {
-        return ['母线', '变压器', '绕组', '电表', '线端', '开关']
+        return ['狮子', '猫', '狗', '鸟', '虎', '鼠']
       }
     },
     yAxis: {

@@ -8,7 +8,7 @@
   >
     <div class="gallery-main">
       <!-- <ul><li v-for="i in count" :key="i">{{i}}</li></ul> -->
-      <from-dynamic class="mb" :searchDynamic="fromOptions" @params-change="handleChange">
+      <from-dynamic class="mb" :searchDynamic="fromOptions" @params-change="handleChange" @query="handleChange">
         <template v-slot:tool>
           <el-button type="success" icon="el-icon-upload" @click="isupload = !isupload">上传</el-button>
         </template>
@@ -76,8 +76,8 @@ export default {
     },
     handleChange(params) {
       console.log(params)
-      this.$refs.gallery.exrData = params
-      console.log(this.$refs.gallery.exrData);
+      this.$refs.gallery.exrData = Object.assign({}, params)
+      console.log(this.$refs.gallery.exrData)
     },
     getTotalPage(page) {
       this.totalPage = page

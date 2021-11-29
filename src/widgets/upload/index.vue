@@ -1,9 +1,10 @@
 <template>
   <div class="x-upload-mian" :class="collspe ? 'x-upload-mian-collspe' : 'x-upload-mian-nocollspe'">
-    <p class="x-upload-title" @click="collspe = !collspe">
-      <span>图片上传</span>
+    <el-progress v-show="fileList.length" :percentage="percentage" class="progress" :stroke-width="3" :show-text="false"></el-progress>
+    <div class="x-upload-title" @click="collspe = !collspe">
+      <p class="left"><span>图片上传</span></p>
       <i :class="collspe ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
-    </p>
+    </div>
     <el-select v-model="cameraId" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
       <el-option v-for="item in cameraList" :key="item.id" :label="item.imeival" :value="item.imeival"> </el-option>
     </el-select>
@@ -42,6 +43,8 @@ export default {
       cameraList: [],
       collspe: false,
       fileList: [],
+      percentage: 0,
+      activeIndex: 0,
       imageType: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png', 'image/svg']
     }
   },
@@ -77,6 +80,7 @@ export default {
     },
     handleChange(file, fileList) {
       console.log(file, fileList)
+      this.fileList = fileList
     },
     uploadFile(params) {
       const { file, data } = params
@@ -90,6 +94,12 @@ export default {
       // /admin/carousel/addFile
       uploadImage(formData).then((res) => {
         res.code === 0 ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
+        this.activeIndex++
+        if (this.activeIndex === this.fileList.length) {
+          this.activeIndex = 0
+          this.fileList =[]
+        }
+        this.percentage = (this.activeIndex / this.fileList.length) * 100
       })
     }
   }
@@ -114,6 +124,12 @@ export default {
   // top: 95%;
   transition: all 0.5s ease-in-out;
   z-index: 10;
+  .progress {
+    position: absolute;
+    width: 90%;
+    top: 5px;
+    left: 5%;
+  }
   .x-upload-title {
     display: flex;
     justify-content: space-between;
@@ -122,6 +138,11 @@ export default {
     cursor: pointer;
     @include font_color(null);
     margin-bottom: 10px;
+    .left {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
   }
   .x-upload-content {
     max-height: 76vh;

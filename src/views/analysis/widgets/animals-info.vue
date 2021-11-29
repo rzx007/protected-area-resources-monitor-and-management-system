@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-16 13:09:24
- * @LastEditTime: 2021-10-16 16:53:41
+ * @LastEditTime: 2021-11-29 12:19:24
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis\widgets\animals-info.vue
@@ -11,7 +11,7 @@
     <div class="title">物种信息</div>
     <div class="analysis-content">
       <div class="left">
-        <linBar height="284px" chartType="bar" :itemStyle="itemStyle"></linBar>
+        <linBar height="284px" chartType="bar"  :itemStyle="itemStyle"></linBar>
       </div>
       <div class="right">
         <pieChart height="284px"></pieChart>
