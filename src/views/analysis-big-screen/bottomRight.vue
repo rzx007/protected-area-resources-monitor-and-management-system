@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-11-12 17:28:06
- * @LastEditTime: 2021-11-15 17:32:31
+ * @LastEditTime: 2021-11-29 13:56:53
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis-big-screen\bottomRight.vue
@@ -14,7 +14,7 @@
           <icon name="chart-area" class="text-icon"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2">工单修复以及满意度统计图</span>
+          <span class="fs-xl text mx-2">每日拍摄照片数量统计图</span>
           <div class="decoration2">
             <dv-decoration-2 :reverse="true" style="width: 5px; height: 6rem" />
           </div>

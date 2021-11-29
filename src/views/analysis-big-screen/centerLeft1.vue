@@ -6,7 +6,7 @@
           <icon name="chart-bar" class="text-icon"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2">任务通过率</span>
+          <span class="fs-xl text mx-2">相机照片比率</span>
           <dv-decoration-3 class="dv-dec-3" />
         </div>
       </div>
@@ -21,12 +21,12 @@
           :key="index"
         >
           <div class="d-flex">
-            <span class="coin">￥</span>
+            <span class="coin">^</span>
             <dv-digital-flop class="dv-digital-flop" :config="item.number" />
           </div>
           <p class="text" style="text-align: center;">
             {{ item.text }}
-            <span class="colorYellow">(件)</span>
+            <span class="colorYellow">(张)</span>
           </p>
         </div>
       </div>
@@ -50,7 +50,7 @@ export default {
               fontSize: 24
             }
           },
-          text: '今日构建总量'
+          text: '今日拍摄照片'
         },
         {
           number: {
@@ -62,32 +62,9 @@ export default {
               fontSize: 24
             }
           },
-          text: '总共完成数量'
+          text: '总拍摄照片'
         },
-        {
-          number: {
-            number: [361],
-            toFixed: 1,
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 24
-            }
-          },
-          text: '正在编译数量'
-        },
-        {
-          number: {
-            number: [157],
-            toFixed: 1,
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 24
-            }
-          },
-          text: '未通过数量'
-        }
+       
       ]
     }
   },
@@ -140,6 +117,7 @@ $box-height: 100%;
   }
 
   .bottom-data {
+    margin-top: 40px;
     .item-box {
       & > div {
         padding-right: 5px;

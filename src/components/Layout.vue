@@ -17,7 +17,7 @@
                 <router-view v-if="$route.meta.isCache"></router-view>
               </keep-alive>
             </template>
-            <template v-if="isShow">
+            <template>
               <router-view v-if="!$route.meta.isCache"></router-view>
             </template>
           </div>
@@ -40,7 +40,7 @@ export default {
     return {
       isMini: false,
       tagsList: [],
-      isShow: true // 控制router-view的隐藏与展示,达到刷新效果
+      isShow: false // 控制router-view的隐藏与展示,达到刷新效果
     }
   },
   // 提供可注入子组件属性

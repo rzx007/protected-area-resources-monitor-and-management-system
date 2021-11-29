@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-11-12 17:28:06
- * @LastEditTime: 2021-11-15 17:32:25
+ * @LastEditTime: 2021-11-29 13:57:39
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis-big-screen\bottomLeft.vue
@@ -14,7 +14,7 @@
           <icon name="chart-bar" class="text-icon"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2">数据统计图</span>
+          <span class="fs-xl text mx-2">物种数量统计图</span>
         </div>
       </div>
       <div>

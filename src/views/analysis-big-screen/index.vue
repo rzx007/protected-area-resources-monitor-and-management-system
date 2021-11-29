@@ -22,7 +22,7 @@
             <div class="d-flex aside-width">
               <div class="react-left ml-4 react-l-s">
                 <span class="react-before"></span>
-                <span class="text">数据分析1</span>
+                <span class="text">数据分析</span>
               </div>
             </div>
             <div class="d-flex aside-width">

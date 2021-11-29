@@ -40,6 +40,7 @@ export default {
       handler: function (val) {
         setTimeout(() => {
           this.setPloygon(val)
+           Map.setCenter(this.center)
         }, 2000)
       },
       deep: true
@@ -95,8 +96,8 @@ export default {
       Map.add([polygon])
     }
   },
-  destroyed() {
-    Map.destroy()
+  beforeDestroy() {
+    // Map.destroy()
   }
 }
 </script>
