@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-07-17 13:54:29
- * @LastEditTime: 2021-11-20 12:58:25
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\index.vue
--->
 <template>
   <div class="content mapBox">
     <home-map @click-map-carmera="getMapCarmera" ref="map"></home-map>

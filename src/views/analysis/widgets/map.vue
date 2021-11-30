@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
 import AMapLoader from '@/utils/map'
 let AMap, Map, polygon, satelliteLayer
 export default {
@@ -26,7 +27,7 @@ export default {
     center: {
       type: Array,
       default: function () {
-        return []
+        return JSON.parse(getToken('center'))
       }
     }
   },
@@ -40,7 +41,7 @@ export default {
       handler: function (val) {
         setTimeout(() => {
           this.setPloygon(val)
-           Map.setCenter(this.center)
+          Map.setCenter(this.center)
         }, 2000)
       },
       deep: true
@@ -57,12 +58,14 @@ export default {
   },
   methods: {
     async initMap() {
+      const _this = this
+      console.log(_this.center)
       Map = new AMap.Map('container', {
         viewMode: '3D',
         zoom: 14,
         zooms: [7, 17],
         showBuildingBlock: true,
-        center: [108.8196, 28.8666]
+        center: JSON.parse(getToken('center')) || [114.489377, 30.47579]
       })
       Map.on('complete', () => {
         console.log('complete')
@@ -78,7 +81,7 @@ export default {
         Map.addControl(new AMap.ToolBar()) // 放大缩小按钮
         Map.addControl(controlBar)
         // this.setPloygon(this.path)
-        Map.setCenter(this.center)
+        // Map.setCenter(this.center)
       })
     },
     setPloygon(path) {

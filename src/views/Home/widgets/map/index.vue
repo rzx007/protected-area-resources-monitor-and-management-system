@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getToken } from '@/utils/auth'
+import { getToken, setToken } from '@/utils/auth'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
 import PolygonGrid from '@/utils/ScanFill'
@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       path: [],
-      center: [114.489377, 30.47579],
+      center: JSON.parse(getToken('center')) || [114.489377, 30.47579],
       cameraList: [], // 1已部署， 0 待部署， 2 待回收 3 未部署
       carmera: {}
     }
@@ -29,6 +29,7 @@ export default {
   methods: {
     getMapData() {
       return findAreaByDoMain({ domainName: getToken('domainName') }).then((res) => {
+        setToken('center', res.data.centerLnglat)
         return {
           path: res.data.lngLat ? JSON.parse(res.data.lngLat) : [],
           center: JSON.parse(res.data.centerLnglat)
