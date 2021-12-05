@@ -38,9 +38,16 @@ export default {
       isupload: false,
       fromOptions: [
         { name: 'cameraId', label: '相机', type: 'select', options: [], remoteMethod: this.getCarmeraList() },
+        // { name: 'type', label: '多媒体类型', type: 'select', options: [{label:'照片', value:1},{label:'视频', value:2}], default:null },
         { name: 'speciesId', label: '动物类型', type: 'select', options: [], remoteMethod: this.speciesList(), multiple: true },
         // { name: 'code', label: '天气类型', type: 'select', options: [], multiple: true }
-        { name: 'occurTime', label: '日期', type: 'daterange', format: 'yyyy-MM-dd' }
+        {
+          name: 'occurTime',
+          label: '日期',
+          type: 'daterange',
+          format: 'yyyy-MM-dd'
+          // default: [this.$day().add(-1, 'day').format('YYYY-MM-DD'), this.$day().format('YYYY-MM-DD')]
+        }
       ],
       totalPage: 1,
       photoObj: {}
@@ -75,9 +82,15 @@ export default {
       })
     },
     handleChange(params) {
-      console.log(params)
-      this.$refs.gallery.exrData = Object.assign({}, params)
-      console.log(this.$refs.gallery.exrData)
+     const times = params.occurTime ? params.occurTime.split(',') : []
+      if (times.length > 1) {
+        params.startTime = times[0]
+        params.endTime = times[1]
+      }
+      const param = Object.assign({}, params)
+      delete param.occurTime
+      this.$refs.gallery.exrData = Object.assign({}, param)
+      // console.log(this.$refs.gallery.exrData)
     },
     getTotalPage(page) {
       this.totalPage = page

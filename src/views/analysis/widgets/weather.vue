@@ -1,25 +1,25 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-16 13:09:24
- * @LastEditTime: 2021-10-16 15:32:51
+ * @LastEditTime: 2021-12-04 22:53:14
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\analysis\widgets\weather.vue
 -->
 <template>
   <div class="analysis-item">
-    <div class="title">天气情况</div>
+    <div class="title">保护区天气情况</div>
     <div class="container">
       <div class="weather-side">
         <div class="weather-gradient"></div>
         <div class="date-container">
-          <h2 class="date-dayname">Tuesday</h2>
-          <span class="date-day">15 Jan 2019</span><i class="location-icon" data-feather="map-pin"></i>
+          <h2 class="date-dayname">星期{{wether.week}}</h2>
+          <span class="date-day">{{wether.date}}</span><i class="location-icon" data-feather="map-pin"></i>
         </div>
         <div class="weather-container">
           <i class="weather-icon" data-feather="sun"></i>
-          <h1 class="weather-temp">29°C</h1>
-          <h3 class="weather-desc">Sunny</h3>
+          <h1 class="weather-temp">{{wether.daytemp}}°C</h1>
+          <h3 class="weather-desc">{{wether.dayweather}}</h3>
         </div>
       </div>
     </div>
@@ -27,9 +27,31 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
+import { findWeather } from '@/api'
 export default {
   data() {
-    return {}
+    return {
+      wether: {
+        dayweather:'',
+        date:'',
+        daytemp:'',
+        week:''
+      }
+    }
+  },
+  created() {
+    this.findWeather()
+  },
+  methods: {
+    findWeather() {
+      const center = JSON.parse(getToken('center'))
+      findWeather({ lng: center[0], lat: center[1] }).then((res) => {
+        const data = JSON.parse(res.data).forecasts
+        this.wether = data[0].casts[0]
+        // console.log(data)
+      })
+    }
   }
 }
 </script>

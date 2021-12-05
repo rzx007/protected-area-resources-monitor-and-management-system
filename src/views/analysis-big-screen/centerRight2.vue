@@ -5,7 +5,7 @@
         <span>
           <icon name="align-left" class="text-icon"></icon>
         </span>
-        <span class="fs-xl text mx-2">产品销售渠道分析</span>
+        <span class="fs-xl text mx-2">近几日拍摄数量分析</span>
       </div>
       <div class="d-flex ai-center flex-column body-box">
         <dv-capsule-chart class="dv-cap-chart" :config="config" />
@@ -17,7 +17,8 @@
 
 <script>
 import centerRight2Chart1 from './echart/centerRight/centerRightChart'
-
+import { getToken } from '@/utils/auth'
+import { findByDay } from '@/api'
 export default {
   data() {
     return {
@@ -47,7 +48,23 @@ export default {
       }
     }
   },
-  components: { centerRight2Chart1 }
+  created() {
+    this.findByDay()
+  },
+  components: { centerRight2Chart1 },
+  methods: {
+    // 根据自己的业务情况修改
+    findByDay() {
+      findByDay({ reserveId: getToken('reserveId') }).then((res) => {
+        const data = res.data
+        let config = { data: [] }
+        data.forEach((element) => {
+          config.data.push({name:element.createTime, value:element.num})
+        })
+        this.config = Object.assign({}, this.config, config)
+      })
+    }
+  }
 }
 </script>
 
@@ -62,7 +79,7 @@ export default {
   box-sizing: border-box;
   .bg-color-black {
     padding: 5px;
-    height:93%;
+    height: 93%;
     margin-top: 3%;
     width: $box-width;
     border-radius: 10px;

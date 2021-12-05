@@ -6,7 +6,7 @@
           <icon name="chart-line" class="text-icon"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2">任务完成排行榜</span>
+          <span class="fs-xl text mx-2">物种排行榜</span>
         </div>
       </div>
       <div class="d-flex jc-center body-box">
@@ -17,22 +17,24 @@
 </template>
 
 <script>
+import { findSpeciesNum } from '@/api'
+import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
       config: {
-        header: ['组件', '分支', '覆盖率'],
+        header: ['物种', '数量'],
         data: [
-          ['组件1', 'dev-1', "<span  class='colorGrass'>↑75%</span>"],
-          ['组件2', 'dev-2', "<span  class='colorRed'>↓33%</span>"],
-          ['组件3', 'dev-3', "<span  class='colorGrass'>↑100%</span>"],
-          ['组件4', 'rea-1', "<span  class='colorGrass'>↑94%</span>"],
-          ['组件5', 'rea-2', "<span  class='colorGrass'>↑95%</span>"],
-          ['组件6', 'fix-2', "<span  class='colorGrass'>↑63%</span>"],
-          ['组件7', 'fix-4', "<span  class='colorGrass'>↑84%</span>"],
-          ['组件8', 'fix-7', "<span  class='colorRed'>↓46%</span>"],
-          ['组件9', 'dev-2', "<span  class='colorRed'>↓13%</span>"],
-          ['组件10', 'dev-9', "<span  class='colorGrass'>↑76%</span>"]
+          ['组件1', "<span  class='colorGrass'>↑75%</span>"],
+          ['组件2', "<span  class='colorRed'>↓33%</span>"],
+          ['组件3', "<span  class='colorGrass'>↑100%</span>"],
+          ['组件4', "<span  class='colorGrass'>↑94%</span>"],
+          ['组件5', "<span  class='colorGrass'>↑95%</span>"],
+          ['组件6', "<span  class='colorGrass'>↑63%</span>"],
+          ['组件7', "<span  class='colorGrass'>↑84%</span>"],
+          ['组件8', "<span  class='colorRed'>↓46%</span>"],
+          ['组件9', "<span  class='colorRed'>↓13%</span>"],
+          ['组件10', "<span  class='colorGrass'>↑76%</span>"]
         ],
         rowNum: 7, //表格行数
         headerHeight: 35,
@@ -45,9 +47,23 @@ export default {
       }
     }
   },
+  mounted() {
+    this.findSpeciesNum()
+  },
   components: {},
-  mounted() {},
-  methods: {}
+
+  methods: {
+    findSpeciesNum() {
+      findSpeciesNum({ reserveId: getToken('reserveId') }).then((res) => {
+        let config = { data: [] }
+        const data = res.data.list
+        data.forEach((element) => {
+          config.data.push([element.title, `<span  class='colorGrass'>${element.num}</span>`])
+        })
+        this.config = Object.assign({}, this.config, config)
+      })
+    }
+  }
 }
 </script>
 

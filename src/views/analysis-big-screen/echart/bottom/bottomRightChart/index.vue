@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
+import { findByDay } from '@/api'
 import Chart from './chart.vue'
 export default {
   data () {
@@ -15,7 +17,7 @@ export default {
         weekCategory: [],
         radarData: [],
         radarDataAvg: [],
-        maxData: 12000,
+        // maxData: 12000,
         weekMaxData: [],
         weekLineData: []
       }
@@ -25,12 +27,29 @@ export default {
     Chart,
   },
   mounted () {
+    this.findByDay()
     this.drawTimingFn();
   },
   beforeDestroy () {
     clearInterval(this.drawTiming);
   },
   methods: {
+     // 根据自己的业务情况修改
+    findByDay() {
+      findByDay({ reserveId: getToken('reserveId') }).then((res) => {
+         this.cdata.weekCategory = [];
+      this.cdata.weekMaxData = [];
+      this.cdata.weekLineData = [];
+        const data = res.data
+       console.log(data);
+        data.forEach((element) => {
+          // this.cdata.barData.push(element.num)
+          this.cdata.weekLineData.push(element.num)
+          this.cdata.weekCategory.push(element.createTime)
+        })
+        
+      })
+    },
     drawTimingFn () {
       this.setData();
       this.drawTiming = setInterval(() => {
@@ -39,9 +58,9 @@ export default {
     },
     setData () {
       // 清空轮询数据
-      this.cdata.weekCategory = [];
-      this.cdata.weekMaxData = [];
-      this.cdata.weekLineData = [];
+      // this.cdata.weekCategory = [];
+      // this.cdata.weekMaxData = [];
+      // this.cdata.weekLineData = [];
       this.cdata.radarData = [];
       this.cdata.radarDataAvg = [];
 
@@ -49,14 +68,14 @@ export default {
       this.cdata.year = dateBase.getFullYear();
       // 周数据
       for (let i = 0; i < 7; i++) {
-        // 日期
-        let date = new Date();
-        this.cdata.weekCategory.unshift([date.getMonth() + 1, date.getDate()-i].join("/"));
+        // // 日期
+        // let date = new Date();
+        // this.cdata.weekCategory.unshift([date.getMonth() + 1, date.getDate()-i].join("/"));
 
-        // 折线图数据
-        this.cdata.weekMaxData.push(this.cdata.maxData);
+        // // 折线图数据
+        // this.cdata.weekMaxData.push(this.cdata.maxData);
         let distance = Math.round(Math.random() * 11000 + 500);
-        this.cdata.weekLineData.push(distance);
+        // this.cdata.weekLineData.push(distance);
 
         // 雷达图数据
         // 我的指标

@@ -11,20 +11,16 @@
         </div>
       </div>
       <div class="d-flex jc-center">
-        <CenterLeft1Chart />
+        <CenterLeft1Chart @getTotal="getData" />
       </div>
       <!-- 4个主要的数据 -->
       <div class="bottom-data">
-        <div
-          class="item-box mt-2"
-          v-for="(item, index) in numberData"
-          :key="index"
-        >
+        <div class="item-box mt-2" v-for="(item, index) in numberDatas" :key="index">
           <div class="d-flex">
             <span class="coin">^</span>
             <dv-digital-flop class="dv-digital-flop" :config="item.number" />
           </div>
-          <p class="text" style="text-align: center;">
+          <p class="text" style="text-align: center">
             {{ item.text }}
             <span class="colorYellow">(张)</span>
           </p>
@@ -42,8 +38,8 @@ export default {
       numberData: [
         {
           number: {
-            number: [15],
-            toFixed: 1,
+            number: [0],
+            toFixed: 0,
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -54,8 +50,8 @@ export default {
         },
         {
           number: {
-            number: [1144],
-            toFixed: 1,
+            number: [0],
+            toFixed: 0,
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -63,28 +59,28 @@ export default {
             }
           },
           text: '总拍摄照片'
-        },
-       
-      ]
+        }
+      ],
+      numberDatas: this.numberDatas
     }
   },
   components: {
     CenterLeft1Chart
   },
-  mounted() {
-    this.changeTiming()
-  },
   methods: {
-    changeTiming() {
-      setInterval(() => {
-        this.changeNumber()
-      }, 3000)
-    },
-    changeNumber() {
-      this.numberData.forEach((item, index) => {
-        item.number.number[0] += ++index
-        item.number = { ...item.number }
-      })
+    getData(data) {
+      console.log(data)
+      this.numberData[0]['number']['number'][0] = data['todayNum']
+      this.numberData[1]['number']['number'] = [data['total']]
+      console.log(this.numberData)
+    }
+  },
+  watch: {
+    numberData: {
+      handler: function (val) {
+        this.numberDatas = Object.assign({}, val)
+      },
+      deep: true
     }
   }
 }

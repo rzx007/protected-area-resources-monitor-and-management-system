@@ -1,23 +1,35 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-08-26 13:41:03
- * @LastEditTime: 2021-11-29 12:19:14
+ * @LastEditTime: 2021-12-04 23:06:44
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\components\echarts\lineBar.vue
 -->
 <template>
   <div class="line-main">
+    <!-- <header class="title">{{ title }}</header> -->
     <div :id="randomId" :style="{ height }" class="bar-content"></div>
+    <iframe class="chart-resize" :id="iframeId"></iframe>
   </div>
 </template>
 
 <script>
 import * as echarts from 'echarts/core'
-import { DatasetComponent, TitleComponent,ToolboxComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components'
+import {
+  DatasetComponent,
+  TitleComponent,
+  ToolboxComponent,
+  TooltipComponent,
+  GridComponent,
+  MarkAreaComponent,
+  LegendComponent,
+  DataZoomComponent,
+  MarkLineComponent,
+  MarkPointComponent
+} from 'echarts/components'
 import { BarChart, LineChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
-
 echarts.use([
   DatasetComponent,
   TooltipComponent,
@@ -27,14 +39,30 @@ echarts.use([
   LineChart,
   TitleComponent,
   CanvasRenderer,
-  ToolboxComponent
+  ToolboxComponent,
+  DataZoomComponent,
+  MarkLineComponent,
+  MarkAreaComponent,
+  MarkPointComponent
 ])
-
 export default {
   data() {
     return {
+      iframeId: 'iframe' + Math.random(),
       randomId: 'bar' + Math.random(),
-      barChart: null
+      barChart: null,
+      markPoint: {
+        data: [
+          { type: 'max', name: 'Max' },
+          { type: 'min', name: 'Min' }
+        ]
+      },
+      markLine: {
+        data: [{ type: 'average', name: 'Avg' }]
+      },
+      lineStyle: {
+        width: 1
+      }
     }
   },
   props: {
@@ -49,7 +77,7 @@ export default {
     xAxis: {
       type: Array,
       default: function() {
-        return ['狮子', '猫', '狗', '鸟', '虎', '鼠']
+        return []
       }
     },
     yAxis: {
@@ -64,7 +92,7 @@ export default {
     legend: {
       type: Array,
       default: () => {
-        return ['总数', '投运']
+        return []
       }
     },
     title: {
@@ -75,10 +103,44 @@ export default {
       type: String,
       default: '210px'
     },
-    itemStyle: {
-      type:Object,
-      default: function(){
-        return {}
+    dataZoom: {
+      type: Boolean,
+      default: false
+    },
+    unit: {
+      type: String,
+      default: '张'
+    },
+    showPoint: {
+      type: Boolean,
+      default: false
+    },
+    markArea: {
+      type: Object,
+      default: function() {
+        return { data: [] }
+      }
+    },
+    colors: {
+      type: Array,
+      default: function() {
+        return ['#0098d9', '#e6b600', '#c12e34', '#72ccff', '#d87a80', '#8d98b3', '#e5cf0d', '#97b552', '#95706d']
+      }
+    },
+    formatter: {
+      type: Function,
+      default: function(params) {
+       
+        if (Array.isArray(params)) {
+          let str = ''
+          for (let index = 0; index < params.length; index++) {
+            const element = params[index]
+             console.log(element);
+            const data = element.data
+             str += `<div>${element.name} :${element.value}</div>`
+          }
+          return str
+        }
       }
     }
   },
@@ -87,24 +149,9 @@ export default {
       var _this = this
       var chartDom = document.getElementById(this.randomId)
       this.barChart = echarts.init(chartDom)
-      let series = []
-      // const areaStyle = { areaStyle: {}, emphasis: { focus: 'series' } }
-      const areaStyle = {}
-      for (let index = 0; index < _this.yAxis.length; index++) {
-        const item = _this.yAxis[index]
-        if (Array.isArray(item)) {
-          series.push({ name: _this.legend[index], type: _this.chartType, data: item, itemStyle: _this.itemStyle, ...areaStyle, })
-        } else {
-          series = [{ type: _this.chartType, data: _this.yAxis, itemStyle: _this.itemStyle, ...areaStyle }]
-          break
-        }
-      }
+      let series = this.setSeries()
       const option = {
-        // title: {
-        //   text: '世界人口总量',
-        //   subtext: '数据来自网络'
-        // },
-        color: ['#5470c6','#91cc75', '#ffb980',  '#5ab1ef','#d87a80', '#8d98b3', '#e5cf0d', '#97b552', '#95706d'],
+        // color: _this.colors,
         toolbox: {
           feature: {
             saveAsImage: {}
@@ -114,15 +161,20 @@ export default {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
-          }
+          },
+          formatter: _this.formatter
         },
         legend: {
-          data: _this.legend
+          data: _this.legend,
+          textStyle: {
+            color: 'rgba(190,176,176,1)'
+          }
         },
+        dataZoom: _this.getDataZoom(),
         grid: {
           left: '3%',
           right: '4%',
-          bottom: '6%',
+          bottom: '16%',
           containLabel: true
         },
         xAxis: {
@@ -130,33 +182,113 @@ export default {
           data: _this.xAxis
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          name: _this.unit,
+          splitLine: {
+            show: false
+          },
+          min: function(value) {
+            return value.min - 1
+          },
+          max: function(value) {
+            return value.max
+          }
         },
         series
       }
       option && this.barChart.setOption(option)
+    },
+    getDataZoom() {
+      let option = []
+      if (this.dataZoom) {
+        option = [
+          { type: 'inside', start: 0, end: 100 },
+          { start: 0, end: 100 }
+        ]
+      }
+      return option
+    },
+    setSeries() {
+      let series = [],
+        _this = this
+      const markPoint = _this.showPoint ? _this.markPoint : {}
+      const markLine = _this.showPoint ? _this.markLine : {}
+      // const areaStyle = { areaStyle: {}, emphasis: { focus: 'series' } }
+      const restSeries = {
+        lineStyle: _this.lineStyle,
+        markArea: _this.markArea,
+        showSymbol: false,
+        type: _this.chartType,
+        markPoint,
+        markLine
+      }
+      for (let index = 0; index < _this.yAxis.length; index++) {
+        const item = _this.yAxis[index]
+        if (Array.isArray(item)) {
+          series.push({
+            name: _this.legend[index],
+            data: item,
+            ...restSeries
+          })
+        } else {
+          series = [{ name: _this.legend[0], data: _this.yAxis, ...restSeries }]
+          break
+        }
+      }
+      return series
     }
   },
-  updated() {
-    var chartDom = document.getElementById(this.randomId)
-    this.barChart = echarts.init(chartDom).dispose()
-    this.barChartRender()
+  watch: {
+    colors: {
+      handler: function() {
+        this.barChart.setOption({ color: this.colors })
+      },
+      deep: true
+    },
+    yAxis: {
+      handler: function() {
+        let series = this.setSeries()
+        this.barChart.setOption({
+          xAxis: {
+            type: 'category',
+            data: this.xAxis
+          },
+          series
+        })
+      },
+      deep: true
+    }
   },
+  // destroyed() {
+  //   var chartDom = document.getElementById(this.randomId)
+  //   this.barChart = echarts.init(chartDom).dispose()
+  // },
   mounted() {
     this.barChartRender()
-    window.addEventListener('resize', this.barChart.resize)
+    const iframeWindow = document.getElementById(this.iframeId).contentWindow
+    iframeWindow.addEventListener('resize', this.barChart.resize)
   }
 }
 </script>
 <style lang="scss">
 .line-main {
-  // border: 1px solid transparent;
+  border: 1px solid transparent;
   @include content-background();
-  // margin-bottom: 12px;
+  margin-bottom: 12px;
   // @include box-shadow();
-  // @include border-color();
+  @include border-color();
+  position: relative;
+  padding: 10px;
   .bar-content {
     width: 100%;
+  }
+  .chart-resize {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    visibility: hidden;
   }
 }
 </style>

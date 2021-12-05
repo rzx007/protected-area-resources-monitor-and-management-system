@@ -80,7 +80,13 @@ export default {
   methods: {
     galleryList() {
       this.loading = true
-      galleryList({ start: (this.pageCount - 1) * this.pageSize, limit: this.pageSize, reserveId: getToken('reserveId'), ...this.exrData })
+      galleryList({
+        type: 1,
+        start: (this.pageCount - 1) * this.pageSize,
+        limit: this.pageSize,
+        reserveId: getToken('reserveId'),
+        ...this.exrData
+      })
         .then((res) => {
           this.loading = false
           this.totalPage = Math.ceil(res.data.totalNum / this.pageSize)
@@ -231,6 +237,14 @@ $colors: #3385ff;
         width: 100%;
         height: 100%;
         transition: background-color 0.4s ease-in-out;
+        .video-iocns {
+          font-size: 56px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          // transform: translateX(-50%);
+          transform: translate(-50%, -50%);
+        }
         .check-span {
           position: absolute;
           top: 10px;

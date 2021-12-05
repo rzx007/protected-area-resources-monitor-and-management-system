@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-11-24 23:21:00
- * @LastEditTime: 2021-11-24 23:31:26
+ * @LastEditTime: 2021-12-04 22:19:20
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\video-management\widgets\videoPlayer.vue
@@ -9,7 +9,7 @@
 <template>
   <div class="video-content">
     <div class="video-tool">
-      <h1>视频标题</h1>
+      <h4>正在播放:{{videoObj.speciesTitle}}{{videoObj.createTime}}</h4>
     </div>
     <div class="video-block">
       <div id="mse"></div>
@@ -24,19 +24,18 @@ export default {
   name: 'xgplayer',
   data() {
     return {
-      imgurl: ''
+      videoObj: {createTime:'',speciesTitle:''}
     }
   },
   mounted() {
     this.initVideo()
-    setTimeout(()=>{}, 4000)
   },
   methods: {
     initVideo() {
       player = new Player({
         id: 'mse',
-        url: '//sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-360p.mp4',
-        poster: '//abc.com/**/*.png',
+        url: '',
+        // poster: '//abc.com/**/*.png',
         videoInit: true, // 显示首帧
         lang: 'zh-cn',
         download: true,
@@ -64,7 +63,10 @@ export default {
         console.log(screenShotImg, this.imgurl)
       })
     },
-
+    setPlayerUrl(item) {
+      this.videoObj = item
+      player.src  = item.url
+    },
     // base64转文件
     getBaseImage(dataUrl, fileName) {
       let arr = dataUrl.split(','),
@@ -77,8 +79,19 @@ export default {
       }
       return new File([u8arr], fileName, { type: mime })
     }
+  },
+  beforeDestroy() {
+    player.once('destroy', () => {
+      console.log('destroy')
+    })
   }
 }
 </script>
-<style lang='scss'>
+<style lang="scss">
+.video-content {
+  h4 {
+    @include font_color(#222);
+    margin-bottom: 10px;
+  }
+}
 </style>

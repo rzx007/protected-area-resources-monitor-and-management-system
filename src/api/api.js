@@ -21,6 +21,26 @@ export async function galleryDelete(params) {
   const res = await http.post('/reserve/appPhoto/delete', params)
   return res
 }
+//  查天气
+export async function findWeather(params) {
+  const res = await http.post('/reserve/appPhoto/findWeather', params)
+  return res
+}
+//  查询物种发现次数
+export async function findSpeciesNum(params) {
+  const res = await http.post('/reserve/appPhoto/findSpeciesNum', params)
+  return res
+}
+//  查询相机拍摄次数
+export async function findCameraNum(params) {
+  const res = await http.post('/reserve/appPhoto/findCameraNum', params)
+  return res
+}
+//  按日期查询拍摄次数
+export async function findByDay(params) {
+  const res = await http.post('/reserve/appPhoto/findByDay', params)
+  return res
+}
 // 不定参数请求
 // get
 export async function apiGet(url, params) {

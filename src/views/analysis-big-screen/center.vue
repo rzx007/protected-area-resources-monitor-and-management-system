@@ -1,17 +1,10 @@
 <template>
   <div id="center">
     <div class="up">
-      <div
-        class="bg-color-black item"
-        v-for="item in titleItem"
-        :key="item.title"
-      >
+      <div class="bg-color-black item" v-for="item in titleItem" :key="item.title">
         <p class="ml-3 colorBlue fw-b fs-xl">{{ item.title }}</p>
         <div>
-          <dv-digital-flop
-            class="dv-dig-flop ml-1 mt-2 pl-3"
-            :config="item.number"
-          />
+          <dv-digital-flop class="dv-dig-flop ml-1 mt-2 pl-3" :config="item.number" />
         </div>
       </div>
     </div>
@@ -20,25 +13,17 @@
         <span>
           <icon name="chart-pie" class="text-icon"></icon>
         </span>
-        <span class="fs-xl text mx-2 mb-1 pl-3">年度负责人组件达标榜</span>
+        <span class="fs-xl text mx-2 mb-1 pl-3">相机拍摄排行榜</span>
         <dv-scroll-ranking-board class="dv-scr-rank-board mt-1" :config="ranking" />
       </div>
       <div class="percent">
         <div class="item bg-color-black">
-          <span>今日任务通过率</span>
-          <CenterChart
-            :id="rate[0].id"
-            :tips="rate[0].tips"
-            :colorObj="rate[0].colorData"
-          />
+          <span>今日拍摄率</span>
+          <CenterChart :id="rate[0].id" :tips="tips[0]" :colorObj="rate[0].colorData" />
         </div>
         <div class="item bg-color-black">
-          <span>今日任务达标率</span>
-          <CenterChart
-            :id="rate[1].id"
-            :tips="rate[1].tips"
-            :colorObj="rate[1].colorData"
-          />
+          <span>昨日拍摄率</span>
+          <CenterChart :id="rate[1].id" :tips="tips[1]" :colorObj="rate[1].colorData" />
         </div>
         <div class="water">
           <dv-water-level-pond class="dv-wa-le-po" :config="water" />
@@ -49,6 +34,8 @@
 </template>
 
 <script>
+import { findCameraNum } from '@/api'
+import { getToken } from '@/utils/auth'
 import CenterChart from './echart/center/centerChartRate'
 
 export default {
@@ -56,10 +43,10 @@ export default {
     return {
       titleItem: [
         {
-          title: '今年累计任务建次数',
+          title: '相机总数',
           number: {
-            number: [120],
-            toFixed: 1,
+            number: [3],
+
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -68,10 +55,10 @@ export default {
           }
         },
         {
-          title: '本月累计任务次数',
+          title: '已部署相机',
           number: {
-            number: [18],
-            toFixed: 1,
+            number: [1],
+
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -80,10 +67,10 @@ export default {
           }
         },
         {
-          title: '今日累计任务次数',
+          title: '待回收相机',
           number: {
-            number: [2],
-            toFixed: 1,
+            number: [1],
+
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -92,10 +79,10 @@ export default {
           }
         },
         {
-          title: '今年失败任务次数',
+          title: '待部署相机',
           number: {
-            number: [14],
-            toFixed: 1,
+            number: [1],
+
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -104,10 +91,10 @@ export default {
           }
         },
         {
-          title: '今年成功任务次数',
+          title: '已经拍摄照片总数',
           number: {
             number: [106],
-            toFixed: 1,
+
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -116,10 +103,10 @@ export default {
           }
         },
         {
-          title: '今年达标任务个数',
+          title: '昨日拍摄照片总数',
           number: {
             number: [100],
-            toFixed: 1,
+
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -172,7 +159,7 @@ export default {
           }
         ],
         carousel: 'single',
-        unit: '人'
+        unit: '张'
       },
       water: {
         data: [24, 45],
@@ -180,6 +167,7 @@ export default {
         formatter: '{value}%',
         waveNum: 3
       },
+      tips: [60, 40],
       // 通过率和达标率的组件复用数据
       rate: [
         {
@@ -215,6 +203,29 @@ export default {
   },
   components: {
     CenterChart
+  },
+  mounted() {
+    this.findCameraNum()
+  },
+  methods: {
+    findCameraNum() {
+      findCameraNum({ reserveId: getToken('reserveId') }).then((res) => {
+        let rank = { data: [] }
+        let water = {
+          data: []
+        }
+        let total = 0
+        const data = res.data.list
+        data.forEach((element) => {
+          total += element.num
+          rank.data.push({ value: element.num, name: element.imeiVal })
+        })
+        water.data = [res.data.todayNum, total]
+        this.ranking = Object.assign({}, this.ranking, rank)
+        this.water = Object.assign({}, this.water, water)
+        res.data.todayNum / total
+      })
+    }
   }
 }
 </script>

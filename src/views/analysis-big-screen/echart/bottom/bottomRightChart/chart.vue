@@ -108,7 +108,7 @@ export default {
               fontSize: 24,
               fontWeight: "normal"
             },
-            subtext: newData.year + "/" + newData.weekCategory[6],
+            subtext: newData.year +'近几日拍照数量统计' ,
             subtextStyle: {
               color: "#fff",
               fontSize: 16
@@ -116,19 +116,7 @@ export default {
             top: 50,
             left: 80
           },
-          legend: {
-            top: 120,
-            left: 80,
-            orient: "vertical",
-            itemGap: 15,
-            itemWidth: 12,
-            itemHeight: 12,
-            data: ["平均指标", "我的指标"],
-            textStyle: {
-              color: "#fff",
-              fontSize: 14
-            }
-          },
+          
           tooltip: {
             trigger: "item"
           },
@@ -163,19 +151,19 @@ export default {
             },
             indicator: [
               {
-                name: "服务态度",
+                name: "",
                 max: newData.maxData
               },
               {
-                name: "产品质量",
+                name: "",
                 max: 10
               },
               {
-                name: "任务效率",
+                name: "",
                 max: 12
               },
               {
-                name: "售后保障",
+                name: "",
                 max: 3.5
               }
             ]
@@ -198,7 +186,7 @@ export default {
           },
           // 下方Y轴
           yAxis: {
-            name: "工单",
+            name: "数量",
             nameLocation: "end",
             nameGap: 24,
             nameTextStyle: {

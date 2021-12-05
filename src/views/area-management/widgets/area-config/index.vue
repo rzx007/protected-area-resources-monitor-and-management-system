@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-09 13:40:18
+ * @LastEditTime: 2021-12-04 22:43:13
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-config\index.vue
@@ -22,6 +22,10 @@
       <p class="config-item">
         <span class="teil">保护区名称：</span>
         <el-input v-model="form.title" placeholder="" clearable style="width:250px"></el-input>
+      </p>
+      <p class="config-item">
+        <span class="teil">保护区编号：</span>
+        <span>{{ info.reserveId }}</span>
       </p>
       <p class="config-item">
         <span class="teil">保护区绑定域名：</span>

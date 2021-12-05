@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
+import { findSpeciesNum } from '@/api'
 import Chart from './chart.vue'
 export default {
   data() {
@@ -57,11 +59,28 @@ export default {
   components: {
     Chart
   },
+  created() {
+    this.findSpeciesNum()
+  },
   mounted() {
     this.setData()
   },
   methods: {
     // 根据自己的业务情况修改
+    findSpeciesNum() {
+      findSpeciesNum({ reserveId: getToken('reserveId') }).then((res) => {
+        const data = res.data.list
+        this.cdata.category = []
+        this.cdata.lineData = []
+        this.cdata.barData = []
+        data.forEach((element) => {
+          this.cdata.barData.push(element.num)
+          this.cdata.lineData.push(element.num)
+          this.cdata.category.push(element.title)
+        })
+        
+      })
+    },
     setData() {
       for (let i = 0; i < this.cdata.barData.length - 1; i++) {
         let rate = this.cdata.barData[i] / this.cdata.lineData[i]
