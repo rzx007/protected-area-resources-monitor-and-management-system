@@ -4,18 +4,18 @@
     <div class="config-block">
       <h4 class="title">保护区信息</h4>
       <p class="config-item">
-        <span class="teil">保护区名称：</span>
-        <el-input v-model="areaName" placeholder="" clearable style="width:250px" @blur="initRemark"></el-input>
+        <span class="teil"> <i style="color: red">*</i>保护区名称：</span>
+        <el-input v-model="areaName" placeholder="" clearable style="width: 250px" @blur="initRemark"></el-input>
       </p>
       <p class="config-item">
-        <span class="teil" title="在地图左键点击选取中心点">地理位置：<i class="el-icon-question"></i></span>
-        <el-input v-model="lng" placeholder="经度" style="width:120px" type="number" @change="handraulicSetCenter"></el-input>
+        <span class="teil" title="在地图左键点击选取中心点"><i style="color: red">*</i>地理位置：<i class="el-icon-question"></i></span>
+        <el-input v-model="lng" placeholder="经度" style="width: 120px" type="number" @change="handraulicSetCenter"></el-input>
         -
-        <el-input v-model="lat" placeholder="纬度" style="width:120px" type="number" @change="handraulicSetCenter"></el-input>
+        <el-input v-model="lat" placeholder="纬度" style="width: 120px" type="number" @change="handraulicSetCenter"></el-input>
       </p>
       <p class="config-item">
-        <span class="teil">保护区绑定域名：</span>
-        <el-input v-model="domainName" placeholder="" clearable style="width:250px"></el-input>
+        <span class="teil"><i style="color: red">*</i>保护区绑定域名：</span>
+        <el-input v-model="domainName" placeholder="" clearable style="width: 250px"></el-input>
       </p>
     </div>
     <div class="config-block">
@@ -59,7 +59,7 @@ export default {
   props: {
     info: {
       type: Object,
-      default: function() {
+      default: function () {
         return { id: '' }
       }
     }
@@ -78,6 +78,10 @@ export default {
       hub.$emit('create-center', bool)
     },
     saveArea() {
+      if (! this.areaName||!this.lng||!his.lat ||!this.domainName) {
+        this.$message.warning('信息填写不完整')
+        return
+      }
       this.$emit('cerate-area', {
         title: this.areaName,
         centerLnglat: JSON.stringify([this.lng, this.lat]),
@@ -93,7 +97,7 @@ export default {
     }
   },
   mounted() {
-    hub.$on('on-setCenter', lnglat => {
+    hub.$on('on-setCenter', (lnglat) => {
       this.lng = Number(lnglat[0])
       this.lat = Number(lnglat[1])
     })
@@ -136,7 +140,7 @@ export default {
         display: inline-block;
       }
       .teil {
-        width: 120px;
+        width: 130px;
         letter-spacing: 2px;
         text-align: start;
       }

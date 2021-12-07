@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-12-04 22:43:13
+ * @LastEditTime: 2021-12-07 23:25:59
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-config\index.vue
@@ -20,23 +20,24 @@
     <div class="config-block">
       <h4 class="title">保护区信息</h4>
       <p class="config-item">
-        <span class="teil">保护区名称：</span>
+        <span class="teil"> <i style="color: red">*</i>保护区名称：</span>
         <el-input v-model="form.title" placeholder="" clearable style="width:250px"></el-input>
       </p>
       <p class="config-item">
-        <span class="teil">保护区编号：</span>
-        <span>{{ info.reserveId }}</span>
-      </p>
-      <p class="config-item">
-        <span class="teil">保护区绑定域名：</span>
+        <span class="teil"> <i style="color: red">*</i>保护区绑定域名：</span>
         <el-input v-model="form.domainName" placeholder="" clearable style="width:250px"></el-input>
       </p>
       <p class="config-item">
+        <span class="teil">保护区编号：</span>
+        <span class="sub-teil">{{ info.reserveId }}</span>
+      </p>
+      
+      <p class="config-item">
         <span class="teil">地理位置：</span>
-        <!-- <span class="sub-teil">{{ info.centerLnglat ? JSON.parse(info.centerLnglat).join('~') : '' }}</span> -->
-        <el-input v-model="lng" placeholder="经度" style="width:120px" type="number"></el-input>
-        -
-        <el-input v-model="lat" placeholder="纬度" style="width:120px" type="number"></el-input>
+        <span class="sub-teil">{{ info.centerLnglat ? JSON.parse(info.centerLnglat).join('~') : '' }}</span>
+        <!-- <el-input v-model="lng" disabled placeholder="经度" style="width:120px" type="number"></el-input> -->
+        <!-- - -->
+        <!-- <el-input v-model="lat" disabled placeholder="纬度" style="width:120px" type="number"></el-input> -->
       </p>
     </div>
     <div class="config-block">
@@ -83,6 +84,10 @@ export default {
       this.$emit('click-back', { status: false, area: this.form })
     },
     updataArea() {
+      if (!this.form.title||!this.form.domainName) {
+         this.$message.warning('信息填写不完整')
+        return
+      }
       const area = Object.assign({}, this.form, { centerLnglat: JSON.stringify([this.lng, this.lat]) })
       this.$emit('click-back', { status: true, area })
     },
@@ -129,7 +134,7 @@ export default {
         display: inline-block;
       }
       .teil {
-        width: 120px;
+        width: 130px;
         letter-spacing: 2px;
         text-align: start;
       }
