@@ -11,55 +11,34 @@
     </div>
     <div class="config-block">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="电信IMEI码">
-          <el-input v-model="form.imeival" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="信号">
-          <el-input v-model="form.signalVal" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="电量">
-          <el-input v-model="form.batteryVal" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="温度">
-          <el-input v-model="form.temperatureVal" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="sd卡总容量">
-          <el-input v-model="form.sdTotalSpaceVal" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="sd卡使用空间">
-          <el-input v-model="form.sdUsedpaceVal" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="经度">
-          <el-input v-model="form.longitudeVal" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="纬度">
-          <el-input v-model="form.latitudeVal" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="相机软件版本">
-          <el-input v-model="form.FWVersion" clearable></el-input>
-        </el-form-item>
         <el-form-item label="拍照间隔">
           <el-select v-model="form.pirInterval" placeholder="拍照间隔">
-            <el-option label="10" value="10"></el-option>
-            <el-option label="20" value="20"></el-option>
+            <el-option v-for="(item, index) in PirInterval" :key="index" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="	照片大小">
-          <el-select v-model="form.vSize" placeholder="照片大小">
-            <el-option label="5M" value="1"></el-option>
-            <el-option label="10M" value="2"></el-option>
+          <el-select v-model="form.pSize" placeholder="照片大小">
+            <el-option v-for="(item, index) in PhotoSize" :key="index" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="视频清晰度">
           <el-select v-model="form.vSize" placeholder="视频清晰度">
-            <el-option label="720p" value="1"></el-option>
-            <el-option label="1089p" value="2"></el-option>
+            <el-option v-for="(item, index) in VideoSize" :key="index" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="视频长度">
           <el-select v-model="form.vLength" placeholder="视频长度">
-            <el-option label="20S" value="1"></el-option>
-            <el-option label="30S" value="2"></el-option>
+            <el-option v-for="(item, index) in VideoLength" :key="index" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="定时拍摄间隔">
+          <el-select v-model="form.timeLapse" placeholder="间隔">
+            <el-option v-for="(item, index) in TimeLapse" :key="index" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工作模式">
+          <el-select v-model="form.cameraMode" placeholder="模式">
+            <el-option v-for="(item, index) in CameraMode" :key="index" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="工作时间">
@@ -75,8 +54,8 @@
         </el-form-item> -->
 
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
-          <el-button>取消</el-button>
+          <el-button type="primary" @click="onSubmit">下发配置</el-button>
+          <el-button @click="cancelSet">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -84,26 +63,26 @@
 </template>
 
 <script>
-import { uploadStatus, findCarmeraInfo } from '@/api'
+import { VideoLength, PirInterval, VideoSize, PhotoSize, TimeLapse, CameraMode } from '@/mock/cameraConfigMap'
+import { setDown, findCarmeraInfo } from '@/api'
 import backBar from '../../components/backBar.vue'
 export default {
   components: { backBar },
   data() {
     return {
+      VideoLength,
+      PirInterval,
+      PhotoSize,
+      VideoSize,
+      TimeLapse,
+      CameraMode,
       form: {
-        imeiVal: '',
-        signalVal: '',
-        pSize: '',
-        vLength: '',
-        vSize:'',
-        batteryVal: '',
-        longitudeVal: '',
-        latitudeVal:'',
-        sdTotalSpaceVal: '',
-        sdUsedpaceVal:'',
-        temperatureVal: '',
-        fwVersion:'',
-        pirInterval:'',
+        pSize: 's14',
+        vLength: '30',
+        vSize: 'fh',
+        pirInterval: 'i25m',
+        timeLapse: 'I0',
+        cameraMode: 'ct'
       }
     }
   },
@@ -115,7 +94,7 @@ export default {
       }
     }
   },
-  created(){
+  created() {
     this.getData()
   },
   methods: {
@@ -124,27 +103,30 @@ export default {
     },
     getData() {
       findCarmeraInfo({ cameraId: this.camera.id }).then((res) => {
-        this.form = res.data ? res.data : {}
+        const data = res.data ? res.data : {}
+        for (const key in this.form) {
+          if (data[key]) {
+            this.form[key] = data[key]
+          }
+        }
       })
     },
     uploadStatus() {
-      uploadStatus({
-        ImeiVal: this.camera.imeival,
-        SDTotalSpaceVal: '128GB',
-        FWVersion: '1.0.1',
-        PirInterval: '100000',
-        PSize: '10M',
-        VSize: '720P',
-        VLength: 1000 * 60 * 60,
-        SignalVal: '',
-        BatteryVal: '',
-        TemperatureVal: '',
-        SDUsedpaceVal: '',
-        LongitudeVal: '',
-        LatitudeVal: ''
+      let echoCode = '#'
+      for (const key in this.form) {
+        const element = this.form[key]
+        echoCode += `${element}#`
+      }
+      setDown({
+        cameraId: this.camera.id,
+        setConfig: echoCode
       }).then((res) => {
+        this.$message.success('配置已下发')
         this.$emit('click-back')
       })
+    },
+    cancelSet() {
+     this.$emit('click-back')
     },
     onSubmit() {
       this.uploadStatus()

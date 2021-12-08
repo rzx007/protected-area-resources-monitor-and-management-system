@@ -41,6 +41,10 @@ export async function findByDay(params) {
   const res = await http.post('/reserve/appPhoto/findByDay', params)
   return res
 }
+export async function setDown(params) {
+  const res = await http.post('/reserve/appCamera/setDown', params)
+  return res
+}
 // 不定参数请求
 // get
 export async function apiGet(url, params) {
