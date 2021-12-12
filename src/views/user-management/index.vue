@@ -15,7 +15,7 @@
             icon="el-icon-info"
             iconColor="red"
             title="确定删除该用户吗?"
-            @confirm="deleteUser(Props.rowData.row)"
+            @confirm="deleteUser(rowData.row)"
             style="margin: 0 5px;"
           >
             <el-button type="danger" slot="reference" title="删除" plain>删除</el-button>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-const fromOptions = [{ name: 'mobile', label: '账号', type: 'text' }]
+const fromOptions = [{ name: 'mobile', label: '手机号', type: 'text' }]
 import { deleteUser, updateUserStatus } from '@/api'
 import signUp from './pages/sign-up.vue'
 import areaz from './pages/area.vue'
@@ -72,7 +72,7 @@ export default {
         responseName: 'list',
         columns: [
           { type: 'index', label: '序号', align: 'center', width: 80 },
-          { label: '账号', align: 'center', prop: 'mobile' },
+          { label: '手机号', align: 'center', prop: 'mobile' },
           { label: '用户名称', align: 'center', prop: 'username' },
           { label: '角色权限', align: 'center', prop: 'roleName' },
           { label: '注册时间', align: 'center', prop: 'createTime' },

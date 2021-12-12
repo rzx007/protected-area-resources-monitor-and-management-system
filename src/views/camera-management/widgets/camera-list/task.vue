@@ -1,14 +1,14 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-11-20 15:14:38
+ * @LastEditTime: 2021-12-12 12:03:50
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\task.vue
 -->
 <template>
   <div class="state-list" v-loading="loading">
-    <el-input v-model="code" placeholder="相机编号查询" clearable @change='getCarmeraList'></el-input>
+    <el-input v-model="code" placeholder="相机编号查询" clearable @change="getCarmeraList"></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
@@ -16,7 +16,7 @@
             <span class="state" :style="{ backgroundColor: getStatus(item.state, 0) }">{{ getStatus(item.state) }}</span>
             <div class="sub-info">
               <p><span>编号：</span> {{ item.imeival }}</p>
-              <p style="margin-top:6px">
+              <p style="margin-top: 6px">
                 <span>布控时间：</span><span v-show="[3, 4].includes(item.state)">{{ item.setTime }}</span>
               </p>
             </div>
@@ -25,7 +25,7 @@
           <div class="mask"></div>
         </div>
         <div class="setting">
-          <el-button type="primary" @click="clickTask(item)">下发任务</el-button>
+          <el-button type="primary" v-show="item.state != 1" @click="clickTask(item)">下发任务</el-button>
         </div>
       </li>
     </ul>
@@ -56,7 +56,7 @@ export default {
   methods: {
     getCarmeraList() {
       this.loading = true
-      findCarmeraList().then(res => {
+      findCarmeraList().then((res) => {
         this.cameraList = res.code === 0 ? res.data : []
         this.loading = false
       })

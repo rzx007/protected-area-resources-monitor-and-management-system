@@ -71,7 +71,7 @@ export default {
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          { min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur' }
         ],
         mobile: [{ required: true, validator: validatePhone, trigger: 'blur' }],
         passwords: [{ required: true, validator: validatePass, trigger: 'blur' }],

@@ -78,7 +78,7 @@ export default {
       hub.$emit('create-center', bool)
     },
     saveArea() {
-      if (! this.areaName||!this.lng||!his.lat ||!this.domainName) {
+      if (!this.areaName || !this.lng || !this.lat || !this.domainName) {
         this.$message.warning('信息填写不完整')
         return
       }

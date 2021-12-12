@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-20 15:30:01
+ * @LastEditTime: 2021-12-12 12:05:35
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\index.vue
@@ -11,7 +11,7 @@
     <i class="el-icon-plus add-camera" @click="addCamera" title="添加相机"></i>
     <ul class="tabs">
       <li @click="activeIndex = 1" :class="{ active: activeIndex === 1 }">相机部署</li>
-      <li @click="activeIndex = 2" :class="{ active: activeIndex === 2 }">任务下发</li>
+      <li @click="activeIndex = 2" :class="{ active: activeIndex === 2 }" title="未部署相机无法下发任务">任务下发 <i class="el-icon-question"></i></li>
     </ul>
     <div class="camera-content">
       <transition name="slide-fade">
@@ -62,6 +62,7 @@ export default {
     },
     getCarmeraList() {
       this.$refs.status.getCarmeraList()
+      this.$refs.task.getCarmeraList()
     },
     getTaskList() {
       this.$refs.task.getCarmeraList()

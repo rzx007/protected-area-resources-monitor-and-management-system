@@ -1,14 +1,14 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-20 15:36:21
+ * @LastEditTime: 2021-12-12 11:11:40
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-list\index.vue
 -->
 <template>
   <div class="camera-block">
-    <i class="el-icon-plus add-camera" @click="aaddArea" title="添加保护区"></i>
+    <i v-if="isAdmin" class="el-icon-plus add-camera" @click="aaddArea" title="添加保护区"></i>
     <ul class="tabs">
       <li @click="activeIndex = 1" :class="{ active: activeIndex === 1 }">编辑保护区</li>
       <!-- <li @click="activeIndex = 2" :class="{ active: activeIndex === 2 }">任务下发</li> -->
@@ -22,10 +22,12 @@
 </template>
 
 <script>
+import { getToken, isAdmin } from '@/utils/auth'
 import status from './status.vue'
 export default {
   data() {
     return {
+      isAdmin: isAdmin(),
       activeIndex: 1
     }
   },

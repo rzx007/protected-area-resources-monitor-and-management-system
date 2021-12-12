@@ -15,7 +15,7 @@
           <i class="next el-icon-arrow-right"></i>
           <div class="mask"></div>
         </div>
-        <div class="setting" title="编辑保护区">
+        <div class="setting" title="编辑保护区" v-if="isAdmin">
           <el-dropdown trigger="click" @command="handleCommand">
             <i class="el-icon-more-outline"></i>
             <el-dropdown-menu slot="dropdown">

@@ -49,8 +49,14 @@ export default {
   methods: {
     getCarmeraList() {
       this.loading = true
+      this.cameraList = []
       findCarmeraList().then((res) => {
-        this.cameraList = res.code === 0 ? res.data : []
+        const camera = res.code === 0 ? res.data : []
+        camera.forEach((element) => {
+          if (element.state != 1) {
+            this.cameraList.push(element)
+          }
+        })
         this.loading = false
       })
     },

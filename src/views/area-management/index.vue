@@ -43,7 +43,7 @@ export default {
     }
   },
   computed: {
-    centerLnglat: function() {
+    centerLnglat: function () {
       console.log(this.areaObj.centerLnglat)
       return JSON.parse(this.areaObj.centerLnglat)
     }
@@ -78,18 +78,19 @@ export default {
       this.isCreate = false
     },
     cerateArea(params) {
+      this.level = 1
       const path = this.$refs.map.getPolygonPath()
-      console.log(params, path)
+      // console.log(params, path)
       this.addArea({ lngLat: JSON.stringify(path), ...params })
     },
     addArea(params) {
-      addArea(params).then(res => {
+      addArea(params).then((res) => {
         res.code === 0 ? this.$message.success('保护区新增成功') : this.$message.warning('保护区新增异常')
         this.$refs.list.getAreaList()
       })
     },
     updateArea(params) {
-      updateArea(params).then(res => {
+      updateArea(params).then((res) => {
         res.code === 0 ? this.$message.success('保护区更新成功') : this.$message.warning('保护区更新异常')
         this.$refs.list.getAreaList()
       })
