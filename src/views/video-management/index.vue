@@ -1,6 +1,10 @@
 <template>
   <div class="content" style="background-color: #fff; display: flex; flex-direction: column">
-    <from-dynamic class="mb" :searchDynamic="fromOptions" @query="handleChange"> </from-dynamic>
+    <from-dynamic class="mb" :searchDynamic="fromOptions" @query="handleChange">
+      <template v-slot:tool>
+        <el-button type="success" icon="el-icon-upload" v-if="roleCode != 'PT'" @click="isupload = !isupload">上传</el-button>
+      </template>
+    </from-dynamic>
     <div class="video-main">
       <div class="vl-con">
         <video-list ref="gallery" @click-video="clickVideo"></video-list>
@@ -8,17 +12,22 @@
       <div class="vr-con">
         <videoPlayer ref="video"> </videoPlayer>
       </div>
+      <transition name="fade">
+        <upload v-show="isupload" :limit="1" subTitle="视频" :maxSize="50" :imageType="['video/quicktime']"></upload>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
 import FromDynamic from '@/components/CurdViews/FromDynamic'
 import videoPlayer from './widgets/videoPlayer.vue'
 import videoList from './widgets/videoList.vue'
+import upload from '@/widgets/upload'
 import { findCarmeraList, speciesList } from '@/api'
 export default {
-  components: { videoPlayer, videoList, FromDynamic },
+  components: { videoPlayer, videoList, FromDynamic, upload },
   data() {
     return {
       imgurl: '',
@@ -33,7 +42,9 @@ export default {
           format: 'yyyy-MM-dd'
           // default: [this.$day().add(-1, 'day').format('YYYY-MM-DD'), this.$day().format('YYYY-MM-DD')]
         }
-      ]
+      ],
+      isupload: false,
+      roleCode: getToken('roleCode')
     }
   },
   methods: {

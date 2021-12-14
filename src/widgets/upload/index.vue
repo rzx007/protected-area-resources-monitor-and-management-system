@@ -2,7 +2,9 @@
   <div class="x-upload-mian" :class="collspe ? 'x-upload-mian-collspe' : 'x-upload-mian-nocollspe'">
     <el-progress v-show="fileList.length" :percentage="percentage" class="progress" :stroke-width="3" :show-text="false"></el-progress>
     <div class="x-upload-title" @click="collspe = !collspe">
-      <p class="left"><span>图片上传</span></p>
+      <p class="left">
+        <span>{{ subTitle }}上传</span>
+      </p>
       <i :class="collspe ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
     </div>
     <el-select v-model="cameraId" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
@@ -11,7 +13,7 @@
     <div class="x-upload-content">
       <el-upload
         :disabled="!cameraId"
-        :limit="10"
+        :limit="limit"
         action="customize"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
@@ -28,7 +30,7 @@
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">选择相机后,将文件拖到此处，或<em>点击上传</em></div>
         </div>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png/jpeg/gif文件，且不超过5M</div>
+        <div slot="tip" class="el-upload__tip">只能上传{{ subTitle }}文件，且不超过5M, 最多一次性上传{{limit}}</div>
       </el-upload>
     </div>
   </div>
@@ -44,8 +46,27 @@ export default {
       collspe: false,
       fileList: [],
       percentage: 0,
-      activeIndex: 0,
-      imageType: ['image/gif', 'image/jpeg', 'image/jpg', 'image/png', 'image/svg']
+      activeIndex: 0
+    }
+  },
+  props: {
+    imageType: {
+      type: Array,
+      default: function () {
+        return ['image/gif', 'image/jpeg', 'image/jpg', 'image/png', 'image/svg', 'video/quicktime']
+      }
+    },
+    maxSize: {
+      type: Number,
+      default: 5
+    },
+    limit: {
+      type: Number,
+      default: 10
+    },
+    subTitle: {
+      type: String,
+      default: '图片'
     }
   },
   created() {
@@ -65,13 +86,13 @@ export default {
     },
     beforeAvatarUpload(file) {
       const isJPG = this.imageType.includes(file.type)
-      const isLt5M = file.size / 1024 / 1024 < 5
+      const isLt5M = file.size / 1024 / 1024 < this.maxSize
 
       if (!isJPG) {
         this.$message.error('文件上传类型不对!')
       }
       if (!isLt5M) {
-        this.$message.error('文件上传大小不能超过 5MB!')
+        this.$message.error(`文件上传大小不能超过 ${this.maxSize}MB!`)
       }
       return isJPG && isLt5M
     },
@@ -93,11 +114,11 @@ export default {
       // this.$day(params.lastModifiedDate).format('YYYY-MM-DD HH:mm:ss')
       // /admin/carousel/addFile
       uploadImage(formData).then((res) => {
-        res.code === 0 ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
+        res ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
         this.activeIndex++
         if (this.activeIndex === this.fileList.length) {
           this.activeIndex = 0
-          this.fileList =[]
+          this.fileList = []
         }
         this.percentage = (this.activeIndex / this.fileList.length) * 100
       })

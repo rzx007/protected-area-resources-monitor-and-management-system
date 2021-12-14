@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-12-12 11:11:40
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-list\index.vue
--->
 <template>
   <div class="camera-block">
     <i v-if="isAdmin" class="el-icon-plus add-camera" @click="aaddArea" title="添加保护区"></i>
@@ -15,7 +7,7 @@
     </ul>
     <div class="camera-content">
       <transition name="slide-fade">
-        <status v-show="activeIndex === 1" @click-area="clickArea" ref="status"></status>
+        <status v-show="activeIndex === 1" @click-area="clickArea" @deleted-area="$emit('deleted-area')" ref="status"></status>
       </transition>
     </div>
   </div>

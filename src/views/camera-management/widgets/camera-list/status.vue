@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { findCarmeraList } from '@/api'
+import { findCarmeraList, deleteCarmera } from '@/api'
 export default {
   name: 'task',
   emits: ['click-camera', 'click-recycle', 'click-deploy'],
@@ -75,6 +75,12 @@ export default {
         }
       }
     },
+    deleteCarmera(item) {
+      deleteCarmera({cameraId: item.id}).then(res=> {
+        this.$message.success('已删除！')
+        this.getCarmeraList()
+      })
+    },
     clickCamera(item) {
       // 点击相机
       this.$emit('click-camera', item)
@@ -93,7 +99,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // this.deleteArea(command.reserveId)
+        this.deleteCarmera(command)
       })
     }
   }

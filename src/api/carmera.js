@@ -23,6 +23,10 @@ export async function findCarmeraInfo(params) {
   const res = await http.post('/reserve/appCamera/findInfo', params)
   return res
 }
+export async function deleteCarmera(params) {
+  const res = await http.post('/reserve/appCamera/delete', params)
+  return res
+}
 
 //  新增相机
 export async function addCarmera(params) {

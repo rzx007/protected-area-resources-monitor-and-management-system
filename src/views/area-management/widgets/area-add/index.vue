@@ -33,6 +33,13 @@
       <h4 class="title">保护区介绍</h4>
       <el-input type="textarea" :autosize="{ minRows: 7, maxRows: 20 }" placeholder="请输入内容" v-model="remark"> </el-input>
     </div>
+    <div class="config-block">
+      <h4 class="title">自定义导入</h4>
+      <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将KML文件拖到此处，或<em>点击上传</em></div>
+      </el-upload>
+    </div>
     <div class="config-btn">
       <el-button type="primary" @click="saveArea">保存</el-button>
       <el-button type="danger" @click="goBack">取消</el-button>

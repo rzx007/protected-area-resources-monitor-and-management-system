@@ -10,13 +10,22 @@
           <!-- <el-button type="primary" v-if="rowData.row.roleId === 1" title="关联保护区">关联保护区</el-button> -->
           <el-button type="primary" plain @click="editUser(rowData.row)" title="编辑">编辑</el-button>
           <el-button @click="updateStatus(rowData.row)" v-if="rowData.row.state == 1" plain title="停用用户">停用</el-button>
+          <el-dropdown v-else-if="rowData.row.state == 0" @command="handleCommand">
+            <el-button type="warning" plain title="审核用户" @click="userInfo = rowData.row"> 审核</el-button>
+            <!-- <el-button type="warning" @click="updateStatus(rowData.row)" plain title="审核用户">审核</el-button> -->
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="2">禁用</el-dropdown-item>
+              <el-dropdown-item command="1">启用</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
           <el-button type="success" @click="updateStatus(rowData.row)" v-else plain title="启用用户">启用</el-button>
           <el-popconfirm
             icon="el-icon-info"
             iconColor="red"
             title="确定删除该用户吗?"
             @confirm="deleteUser(rowData.row)"
-            style="margin: 0 5px;"
+            style="margin: 0 5px"
           >
             <el-button type="danger" slot="reference" title="删除" plain>删除</el-button>
           </el-popconfirm>
@@ -81,8 +90,9 @@ export default {
             align: 'center',
             prop: 'state',
             enum: [
+              { value: '已停用', id: 2, type: 'danger' },
               { value: '启用中', id: 1 },
-              { value: '已停用', id: 0, type: 'danger' }
+              { value: '待审核', id: 0, type: 'warning' }
             ]
           },
           { label: '操作', align: 'end', slot: 'operation', width: 320 }
@@ -97,11 +107,16 @@ export default {
   },
   components: { signUp, UpdateUser, areaz },
   methods: {
+    handleCommand(command) {
+      updateUserStatus({ userIds: this.userInfo.userId, state: command }).then((res) => {
+        res.code === 0 && this.$refs.table.refresh()
+      })
+    },
     getParams(data) {
       this.tableOptions.params.consName = data.consName
     },
     updateStatus(row) {
-      updateUserStatus({ userIds: row.userId, state: row.state === 1 ? 2 : 1 }).then(res => {
+      updateUserStatus({ userIds: row.userId, state: row.state === 1 ? 2 : 1 }).then((res) => {
         res.code === 0 && this.$refs.table.refresh()
       })
     },
@@ -111,7 +126,7 @@ export default {
       console.log(row)
     },
     deleteUser(row) {
-      deleteUser({ userId: row.userId }).then(res => {
+      deleteUser({ userId: row.userId }).then((res) => {
         res.code === 0 && this.$refs.table.refresh()
       })
     }

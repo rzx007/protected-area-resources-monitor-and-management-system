@@ -10,7 +10,7 @@
       <!-- <ul><li v-for="i in count" :key="i">{{i}}</li></ul> -->
       <from-dynamic class="mb" :searchDynamic="fromOptions" @params-change="handleChange" @query="handleChange">
         <template v-slot:tool>
-          <el-button type="success" icon="el-icon-upload" @click="isupload = !isupload">上传</el-button>
+          <el-button type="success" icon="el-icon-upload" v-if="roleCode != 'PT'" @click="isupload = !isupload">上传</el-button>
         </template>
       </from-dynamic>
       <gallery @click="getImg" @getTotalPage="getTotalPage" v-model="count" ref="gallery"></gallery>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
 import FromDynamic from '@/components/CurdViews/FromDynamic'
 import gallery from './widgets/gallery.vue'
 import subGallery from './widgets/sub-gallery.vue'
@@ -50,7 +51,8 @@ export default {
         }
       ],
       totalPage: 1,
-      photoObj: {}
+      photoObj: {},
+      roleCode: getToken('roleCode')
     }
   },
   components: { FromDynamic, gallery, subGallery, upload },
@@ -82,7 +84,7 @@ export default {
       })
     },
     handleChange(params) {
-     const times = params.occurTime ? params.occurTime.split(',') : []
+      const times = params.occurTime ? params.occurTime.split(',') : []
       if (times.length > 1) {
         params.startTime = times[0]
         params.endTime = times[1]

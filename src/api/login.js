@@ -1,3 +1,11 @@
+/*
+ * @Author: 阮志雄
+ * @Date: 2021-10-08 16:24:43
+ * @LastEditTime: 2021-12-14 21:57:14
+ * @LastEditors: 阮志雄
+ * @Description: In User Settings Edit
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\api\login.js
+ */
 import http from './http'
 // 发送验证码
 export async function getCaptcha(params) {
@@ -33,5 +41,11 @@ export async function getSystemFuncList(params) {
 
 export async function findAreaByDoMain(params) {
   const res = await http.post('/reserve/appReserve/findByDoMain', params)
+  return res
+}
+
+
+export async function findUserInfo(params) {
+  const res = await http.post('/reserve/appUser/findInfo', params)
   return res
 }

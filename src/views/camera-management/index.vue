@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-11 11:39:09
- * @LastEditTime: 2021-10-30 17:09:32
+ * @LastEditTime: 2021-12-14 21:06:59
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\index.vue
@@ -97,9 +97,8 @@ export default {
           // 刷新相机列表，刷新地图
           this.$refs.cameralists.getCarmeraList()
           this.$refs.map.ajaxRefreshMarkers()
-        } else {
-          this.$refs.map.cancelDeployCamera(this.cameraObj)
         }
+        this.$refs.map.cancelDeployCamera(this.cameraObj)
       })
     },
     // 新增相机

@@ -13,7 +13,7 @@
               autocomplete="off"
               v-model="mobile"
             ></el-input>
-            <span v-show="!isValidPhone" class="color_warning" style="font-size:12px">*请输入有效号码</span>
+            <span v-show="!isValidPhone" class="color_warning" style="font-size: 12px">*请输入有效号码</span>
           </div>
           <div class="bdbox" v-if="!loginByPwd">
             <el-input v-model="code" size="default" placeholder="请输入6位验证码" prefix-icon="el-icon-c-scale-to-original">
@@ -24,18 +24,19 @@
             </el-input>
           </div>
           <div class="bdbox" v-else>
-            <el-input v-model="passwords" size="default" placeholder="请输入密码" prefix-icon="el-icon-c-scale-to-original"> </el-input>
+            <el-input v-model="passwords" size="default" placeholder="请输入密码" type="password" prefix-icon="el-icon-c-scale-to-original">
+            </el-input>
           </div>
           <el-button type="primary" size="default" v-debounce="loginHandler" :loading="isLoging" class="login_btn">登录</el-button>
           <p class="login-tips">
             <span @click="loginByPwd = !loginByPwd">{{ loginByPwd ? '短信登录' : '密码登录' }}</span>
-            <span @click="close = true">没有账号? 立即注册</span>
+            <span v-if="!isAdmin" @click="close = true">没有账号? 立即注册</span>
           </p>
         </div>
       </div>
     </div>
     <overlay :close.sync="close" title="账号注册" owidth="380px">
-      <sign-up v-if="close"></sign-up>
+      <sign-up v-if="close" @success="close = false"></sign-up>
     </overlay>
     <div class="load-container" v-if="!isAdmin">
       <div class="loader-bounce"></div>
@@ -44,7 +45,7 @@
 </template>
 <script>
 const { VUE_APP_ADMIN } = process.env
-import { setToken, isAdmin } from '@/utils/auth'
+import { setToken, getToken, isAdmin } from '@/utils/auth'
 import { loginByMobile, loginByPwd, getCaptcha, findAreaByDoMain } from '@/api'
 import { title } from '@/settings'
 import signUp from './widgets/sign-up.vue'
@@ -68,9 +69,10 @@ export default {
   },
   components: { signUp },
   created() {
-    this.getAreaByDomain().then(result => {
+    this.getAreaByDomain().then((result) => {
       this.slogan = result.title + '管理系统'
       setToken('slogan', this.slogan)
+      setToken('reserveId', result.reserveId)
       this.isAdmin = true
     })
   },
@@ -96,9 +98,9 @@ export default {
           this.isLoging = false
           this.$message.warning('该用户未分配任何菜单,请联系站长!')
         } else {
+          setToken('roleCode', data.roleCode)
           setToken('token', data.token)
           setToken('domainName', domainName)
-          setToken('reserveId', reserveId)
           setToken('userName', data.username)
           setToken('userId', data.userId)
           this.$router.replace('/index')
@@ -106,28 +108,28 @@ export default {
       }
     },
     async loginajax() {
-      const params = { mobile: this.mobile }
+      const params = { mobile: this.mobile,  reserveId: getToken('reserveId')}
       this.loginByPwd ? (params.passwords = md5(this.passwords)) : (params.code = this.code)
       const login = this.loginByPwd ? loginByPwd(params) : loginByMobile(params)
       return login
-        .then(res => {
+        .then((res) => {
           return res.data
         })
-        .catch(error => {
+        .catch((error) => {
           this.isLoging = false
         })
     },
     async getAreaByDomain() {
       return findAreaByDoMain({ domainName: this.domainName })
-        .then(res => {
+        .then((res) => {
           return res.data
         })
-        .catch(error => {
+        .catch((error) => {
           this.isLoging = false
         })
     },
     async getUserMenu(params) {
-      return this.$store.dispatch('GetUserMenu', params).then(routes => {
+      return this.$store.dispatch('GetUserMenu', params).then((routes) => {
         console.log(routes)
         return routes
       })
@@ -181,7 +183,7 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  
+
   &::after {
     content: '';
     position: absolute;

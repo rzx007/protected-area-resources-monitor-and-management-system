@@ -13,7 +13,7 @@
         <i :class="[toggle ? 'el-icon-arrow-right' : 'el-icon-arrow-left']"></i>
       </div>
       <transition name="slide-fade">
-        <area-list v-show="level === 1" @click-area="clickArea" @click-add="aaddArea" ref="list"></area-list>
+        <area-list v-show="level === 1" @click-area="clickArea" @deleted-area="deletedArea" @click-add="aaddArea" ref="list"></area-list>
       </transition>
       <transition name="slide-fade">
         <area-config v-if="level === 2" @click-back="clickUpdate" @update-edit="swithEdit" :info="areaObj"></area-config>
@@ -39,7 +39,7 @@ export default {
       level: 1, // 1 显示相机列表, 2显示相机详情, 3新增相机
       editMap: false,
       isCreate: false, // 新增
-      areaObj: { centerLnglat: '[114.496577, 30.487779]' }
+      areaObj: { centerLnglat: '[114.496577, 30.487779]', lngLat: '[]' }
     }
   },
   computed: {
@@ -54,7 +54,7 @@ export default {
       this.level = 2
       // this.editMap = true
       this.areaObj = item
-      console.log(item)
+      // console.log(item)
     },
     swithEdit(bool) {
       this.editMap = bool
@@ -65,9 +65,13 @@ export default {
       this.editMap = false
       if (status) {
         const path = this.$refs.map.getPolygonPath()
-        console.log(path)
         this.updateArea({ lngLat: JSON.stringify(path), ...area })
+      } else {
+        this.areaObj = Object.assign({}, this.areaObj, {})
       }
+    },
+    deletedArea() {
+      this.$refs.map.clearPlogon()
     },
     aaddArea() {
       this.level = 3
@@ -79,6 +83,7 @@ export default {
     },
     cerateArea(params) {
       this.level = 1
+      this.isCreate = false
       const path = this.$refs.map.getPolygonPath()
       // console.log(params, path)
       this.addArea({ lngLat: JSON.stringify(path), ...params })

@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 16:38:42
- * @LastEditTime: 2021-11-20 15:30:38
+ * @LastEditTime: 2021-12-14 21:02:47
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\Home\widgets\camera-list\index.vue
@@ -10,7 +10,7 @@
   <div class="camera-block">
 
     <ul class="tabs">
-      <li @click="activeIndex = 1" :class="{ active: activeIndex === 1 }">已部署相机</li>
+      <li @click="activeIndex = 1" :class="{ active: activeIndex === 1 }">相机列表</li>
       <!-- <li @click="activeIndex = 2" :class="{ active: activeIndex === 2 }">任务下发</li> -->
     </ul>
     <div class="camera-content">

@@ -95,8 +95,8 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           delete this.ruleForm['checkPass']
-          const { username, mobile, passwords } = this.ruleForm
-          const params = { username, mobile, passwords: md5(passwords) }
+          const { username, mobile, passwords, roleId } = this.ruleForm
+          const params = { username,roleId, mobile, passwords: md5(passwords) }
           addUser(params).then(res => {
             this.$emit('success')
             this.$message.success('新增用户成功!')

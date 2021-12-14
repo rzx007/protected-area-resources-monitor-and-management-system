@@ -58,6 +58,7 @@ export default {
     deleteArea(reserveId) {
       deleteArea({ reserveId }).then((result) => {
         this.$message.success('此保护区域已删除!')
+        this.$emit('deleted-area')
         this.getAreaList()
       })
     },

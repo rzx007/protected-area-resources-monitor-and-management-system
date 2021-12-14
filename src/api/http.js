@@ -28,10 +28,13 @@ http.interceptors.request.use(
 // respone 拦截器
 http.interceptors.response.use(
   response => {
+    const isUplaod = response.config.url.indexOf('uploadImage') > 0
     const status = response.status
     const res = response.data
-    if (status === 200 && res.code === 0 ) {
+    if (status === 200 && res.code === 0) {
       // Message({message: res.msg, type:'success'})
+      return Promise.resolve(res)
+    } else if (isUplaod) {
       return Promise.resolve(res)
     } else {
       Message({
