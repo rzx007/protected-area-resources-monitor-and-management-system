@@ -19,7 +19,7 @@
           <li v-for="(item, index) in cameraList" :key="index">
             <span class="time">{{ item.setTime }}</span>
             <span class="num ellipsis" :title="item.id">{{ item.id }}</span>
-            <span class="name">{{ item.imeival }}</span>
+            <span class="name ellipsis">{{ item.imeival }}</span>
             <span :class="['status', { recly: item.state === 3 }]">{{ getStatus(item.state) }}</span>
           </li>
         </ul>

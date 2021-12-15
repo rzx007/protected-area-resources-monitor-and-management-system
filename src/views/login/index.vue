@@ -30,7 +30,7 @@
           <el-button type="primary" size="default" v-debounce="loginHandler" :loading="isLoging" class="login_btn">登录</el-button>
           <p class="login-tips">
             <span @click="loginByPwd = !loginByPwd">{{ loginByPwd ? '短信登录' : '密码登录' }}</span>
-            <span v-if="!isAdmin" @click="close = true">没有账号? 立即注册</span>
+            <span v-if="!showSingup" @click="close = true">没有账号? 立即注册</span>
           </p>
         </div>
       </div>
@@ -53,6 +53,7 @@ import md5 from 'md5-js'
 export default {
   data() {
     return {
+      showSingup:isAdmin(),
       isAdmin: isAdmin(),
       slogan: title,
       mobile: '',
