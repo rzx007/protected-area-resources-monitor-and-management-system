@@ -17,9 +17,9 @@
           <i class="next el-icon-arrow-right"></i>
           <div class="mask"></div>
         </div>
-        <div class="setting" title="地图定位">
+        <!-- <div class="setting" title="地图定位">
           <i class="el-icon-location-information"></i>
-        </div>
+        </div> -->
       </li>
     </ul>
   </div>

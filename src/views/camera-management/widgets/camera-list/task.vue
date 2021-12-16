@@ -1,14 +1,14 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-10-13 17:31:18
- * @LastEditTime: 2021-12-12 12:03:50
+ * @LastEditTime: 2021-12-16 15:17:59
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\widgets\camera-list\task.vue
 -->
 <template>
   <div class="state-list" v-loading="loading">
-    <el-input v-model="code" placeholder="相机编号查询" clearable @change="getCarmeraList"></el-input>
+    <el-input v-model="imeiVal" placeholder="相机编号查询" clearable @change="getCarmeraList"></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       loading: false,
-      code: '',
+      imeiVal: '',
       cameraList: [],
       statusEnum: [
         // 1 未部署， 2 部署中 3已部署 4 回收中
@@ -56,7 +56,7 @@ export default {
   methods: {
     getCarmeraList() {
       this.loading = true
-      findCarmeraList().then((res) => {
+      findCarmeraList({ imeiVal: this.imeiVal }).then((res) => {
         this.cameraList = res.code === 0 ? res.data : []
         this.loading = false
       })

@@ -61,7 +61,10 @@
 </template>
 
 <script>
-const fromOptions = [{ name: 'mobile', label: '手机号', type: 'text' }]
+const fromOptions = [
+  { name: 'mobile', label: '手机号', type: 'text' },
+  { name: 'username', label: '用户名称', type: 'text' }
+]
 import { deleteUser, updateUserStatus } from '@/api'
 import signUp from './pages/sign-up.vue'
 import areaz from './pages/area.vue'

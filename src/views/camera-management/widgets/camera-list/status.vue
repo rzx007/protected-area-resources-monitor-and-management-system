@@ -1,6 +1,6 @@
 <template>
   <div class="state-list" v-loading="loading">
-    <el-input v-model="code" placeholder="相机编号查询" clearable @change="getCarmeraList"></el-input>
+    <el-input v-model="imeiVal" placeholder="相机名称查询" clearable @change="getCarmeraList"></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
@@ -8,7 +8,7 @@
             <span class="state" :style="{ backgroundColor: getStatus(item.state, 0) }">{{ getStatus(item.state) }}</span>
             <div class="sub-info">
               <p><span>编号：</span> {{ item.imeival }}</p>
-              <p style="margin-top:6px">
+              <p style="margin-top: 6px">
                 <span>布控时间：</span><span v-show="[3, 4].includes(item.state)">{{ item.setTime }}</span>
               </p>
             </div>
@@ -20,7 +20,7 @@
           <el-button type="warning" v-if="item.state == 3" @click="clickRecycle(item)">回收</el-button>
           <el-button type="primary" v-if="item.state == 1" @click="clickDeploy(item)">部署</el-button>
           <!-- <span v-if="[4, 2].includes(item.state)">{{ item.user }}</span> -->
-          <el-button type="primary" v-if="[4, 2].includes(item.state)" style=" visibility: hidden;">占位</el-button>
+          <el-button type="primary" v-if="[4, 2].includes(item.state)" style="visibility: hidden">占位</el-button>
           <el-dropdown trigger="click" @command="handleCommand">
             <i class="el-icon-more-outline"></i>
             <el-dropdown-menu slot="dropdown">
@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       loading: false,
-      code: '',
+      imeiVal: '',
       cameraList: [],
       statusEnum: [
         // 1 未部署， 2 部署中 3已部署 4 回收中
@@ -58,7 +58,7 @@ export default {
   methods: {
     getCarmeraList() {
       this.loading = true
-      findCarmeraList().then(res => {
+      findCarmeraList({ imeiVal: this.imeiVal }).then((res) => {
         this.cameraList = res.code === 0 ? res.data : []
         this.loading = false
       })
@@ -76,7 +76,7 @@ export default {
       }
     },
     deleteCarmera(item) {
-      deleteCarmera({cameraId: item.id}).then(res=> {
+      deleteCarmera({ cameraId: item.id }).then((res) => {
         this.$message.success('已删除！')
         this.getCarmeraList()
       })
