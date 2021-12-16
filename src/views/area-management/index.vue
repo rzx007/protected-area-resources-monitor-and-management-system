@@ -91,13 +91,13 @@ export default {
     addArea(params) {
       addArea(params).then((res) => {
         res.code === 0 ? this.$message.success('保护区新增成功') : this.$message.warning('保护区新增异常')
-        this.$refs.list.getAreaList()
+        this.$refs.list.getArea()
       })
     },
     updateArea(params) {
       updateArea(params).then((res) => {
         res.code === 0 ? this.$message.success('保护区更新成功') : this.$message.warning('保护区更新异常')
-        this.$refs.list.getAreaList()
+        this.$refs.list.getArea()
       })
     }
   }

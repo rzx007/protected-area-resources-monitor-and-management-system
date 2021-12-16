@@ -1,5 +1,5 @@
 import axios from 'axios'
 const http = axios.create({
-  timeout: 30000
+  timeout: 300000
 })
 export default http

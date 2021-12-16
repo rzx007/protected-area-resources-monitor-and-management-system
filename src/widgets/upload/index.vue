@@ -144,7 +144,7 @@ export default {
   right: 12px;
   // top: 95%;
   transition: all 0.5s ease-in-out;
-  z-index: 10;
+  z-index: 1000;
   .progress {
     position: absolute;
     width: 90%;

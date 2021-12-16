@@ -34,18 +34,19 @@
 </template>
 
 <script>
-import { findCameraNum } from '@/api'
+import { findCameraNum, findCarmeraList } from '@/api'
 import { getToken } from '@/utils/auth'
 import CenterChart from './echart/center/centerChartRate'
 
 export default {
   data() {
     return {
+      cameraList: [],
       titleItem: [
         {
           title: '相机总数',
           number: {
-            number: [3],
+            number: [13],
 
             textAlign: 'left',
             content: '{nt}',
@@ -67,7 +68,7 @@ export default {
           }
         },
         {
-          title: '待回收相机',
+          title: '回收中相机',
           number: {
             number: [1],
 
@@ -79,7 +80,19 @@ export default {
           }
         },
         {
-          title: '待部署相机',
+          title: '未部署相机',
+          number: {
+            number: [1],
+
+            textAlign: 'left',
+            content: '{nt}',
+            style: {
+              fontSize: 26
+            }
+          }
+        },
+        {
+          title: '部署中相机',
           number: {
             number: [1],
 
@@ -94,18 +107,6 @@ export default {
           title: '已经拍摄照片总数',
           number: {
             number: [106],
-
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 26
-            }
-          }
-        },
-        {
-          title: '昨日拍摄照片总数',
-          number: {
-            number: [100],
 
             textAlign: 'left',
             content: '{nt}',
@@ -206,8 +207,93 @@ export default {
   },
   mounted() {
     this.findCameraNum()
+    this.findCarmeraList()
   },
   methods: {
+    findCarmeraList() {
+      findCarmeraList().then((res) => {
+        let aa = [],
+          bb = [],
+          cc = [],
+          dd = []
+        this.cameraList = res.code === 0 ? res.data : []
+        this.cameraList.forEach((item) => {
+          if (item.state === 3) {
+            aa.push(item)
+          } else if (item.state === 4) {
+            bb.push(item)
+          } else if (item.state === 1) {
+            cc.push(item)
+          } else {
+            dd.push(item)
+          }
+        })
+        this.titleItem.splice(
+          0,
+          5,
+          {
+            title: '相机总数',
+            number: {
+              number: [res.data.length],
+
+              textAlign: 'left',
+              content: '{nt}',
+              style: {
+                fontSize: 26
+              }
+            }
+          },
+          {
+            title: '已部署相机',
+            number: {
+              number: [aa.length],
+
+              textAlign: 'left',
+              content: '{nt}',
+              style: {
+                fontSize: 26
+              }
+            }
+          },
+          {
+            title: '待回收相机',
+            number: {
+              number: [bb.length],
+
+              textAlign: 'left',
+              content: '{nt}',
+              style: {
+                fontSize: 26
+              }
+            }
+          },
+          {
+            title: '待部署相机',
+            number: {
+              number: [cc.length],
+
+              textAlign: 'left',
+              content: '{nt}',
+              style: {
+                fontSize: 26
+              }
+            }
+          },
+          {
+            title: '未部署相机',
+            number: {
+              number: [dd.length],
+
+              textAlign: 'left',
+              content: '{nt}',
+              style: {
+                fontSize: 26
+              }
+            }
+          }
+        )
+      })
+    },
     findCameraNum() {
       findCameraNum({ reserveId: getToken('reserveId') }).then((res) => {
         let rank = { data: [] }
@@ -221,6 +307,18 @@ export default {
           rank.data.push({ value: element.num, name: element.imeiVal })
         })
         water.data = [res.data.todayNum, total]
+        this.titleItem.splice(5, 1, {
+          title: '已经拍摄照片总数',
+          number: {
+            number: [total],
+
+            textAlign: 'left',
+            content: '{nt}',
+            style: {
+              fontSize: 26
+            }
+          }
+        })
         this.ranking = Object.assign({}, this.ranking, rank)
         this.water = Object.assign({}, this.water, water)
         res.data.todayNum / total

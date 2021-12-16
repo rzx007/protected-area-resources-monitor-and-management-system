@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-10-11 11:39:09
- * @LastEditTime: 2021-12-14 21:06:59
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\camera-management\index.vue
--->
 <template>
   <div class="content">
     <div class="carmera-main">

@@ -1,6 +1,6 @@
 <template>
   <div class="home-cameral-list">
-    <el-input v-model="code" placeholder="相机编号查询" clearable></el-input>
+    <el-input v-model="imeiVal" placeholder="相机编号查询" clearable  @change="getCarmeraList"></el-input>
     <ul class="ul-list">
       <li v-for="(item, index) in cameraList" :key="index">
         <div class="info" title="查看信息" @click="clickCamera(item)">
@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       loading: false,
-      code: '',
+      imeiVal: '',
       cameraList: [],
       statusEnum: [
         { state: 3, color: '#4762b0', title: '已部署' },
@@ -50,7 +50,7 @@ export default {
     getCarmeraList() {
       this.loading = true
       this.cameraList = []
-      findCarmeraList().then((res) => {
+      findCarmeraList({ imeiVal: this.imeiVal }).then((res) => {
         const camera = res.code === 0 ? res.data : []
         camera.forEach((element) => {
           if (element.state != 1) {

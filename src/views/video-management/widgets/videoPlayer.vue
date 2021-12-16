@@ -1,7 +1,7 @@
 <!--
  * @Author: 阮志雄
  * @Date: 2021-11-24 23:21:00
- * @LastEditTime: 2021-12-04 22:19:20
+ * @LastEditTime: 2021-12-16 23:08:44
  * @LastEditors: 阮志雄
  * @Description: In User Settings Edit
  * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\video-management\widgets\videoPlayer.vue
@@ -9,63 +9,33 @@
 <template>
   <div class="video-content">
     <div class="video-tool">
-      <h4>正在播放:{{videoObj.speciesTitle}}{{videoObj.createTime}}</h4>
+      <h4>正在播放:{{ videoObj.speciesTitle }}{{ videoObj.createTime }}</h4>
     </div>
     <div class="video-block">
-      <div id="mse"></div>
+      <video width="100%" height="100%" preload="auto" id="xt-video" src="" controls="controls">
+        your browser does not support the video tag
+      </video>
     </div>
   </div>
 </template>
 
 <script>
-import Player from 'xgplayer'
-let player = null
 export default {
   name: 'xgplayer',
   data() {
     return {
-      videoObj: {createTime:'',speciesTitle:''}
+      videoObj: { createTime: '', speciesTitle: '' }
     }
   },
   mounted() {
-    this.initVideo()
+    // this.initVideo()
   },
   methods: {
-    initVideo() {
-      player = new Player({
-        id: 'mse',
-        url: '',
-        // poster: '//abc.com/**/*.png',
-        videoInit: true, // 显示首帧
-        lang: 'zh-cn',
-        download: true,
-        // width: '100%',
-        // height: "100%",
-        fluid: true,
-        autoplay: false,
-        screenShot: true,
-        isLive: true,
-        preloadTime: 30,
-        minCachedTime: 5,
-        cors: true
-      })
 
-      // 监听播放器截图事件
-      player.on('screenShot', (screenShotImg) => {
-        // 替换type类型
-        let base64Data = screenShotImg.replace('data:application/octet-stream;base64', 'data:image/png;base64')
-
-        // 转文件
-        // this.imgurl = this.getBaseImage(base64Data, '1.png')
-
-        // base64直接赋值img标签展示
-        this.imgurl = base64Data
-        console.log(screenShotImg, this.imgurl)
-      })
-    },
     setPlayerUrl(item) {
+      const video = document.getElementById('xt-video')
       this.videoObj = item
-      player.src  = item.url
+      video.src = item.url
     },
     // base64转文件
     getBaseImage(dataUrl, fileName) {
@@ -80,11 +50,6 @@ export default {
       return new File([u8arr], fileName, { type: mime })
     }
   },
-  beforeDestroy() {
-    player.once('destroy', () => {
-      console.log('destroy')
-    })
-  }
 }
 </script>
 <style lang="scss">
@@ -92,6 +57,9 @@ export default {
   h4 {
     @include font_color(#222);
     margin-bottom: 10px;
+  }
+  .video-block {
+    width: 100%;
   }
 }
 </style>

@@ -42,9 +42,12 @@ export default {
     }
   },
   created() {
-    this.isAdmin ? this.getAreaList() : this.findAreaByDoMain()
+    this.getArea()
   },
   methods: {
+    getArea() {
+      this.isAdmin ? this.getAreaList() : this.findAreaByDoMain()
+    },
     getAreaList() {
       areaList({ start: 0, limit: 1000, title: '' }).then((res) => {
         this.areaList = res.data.list
@@ -59,7 +62,7 @@ export default {
       deleteArea({ reserveId }).then((result) => {
         this.$message.success('此保护区域已删除!')
         this.$emit('deleted-area')
-        this.getAreaList()
+        this.getArea()
       })
     },
     clickArea(item) {

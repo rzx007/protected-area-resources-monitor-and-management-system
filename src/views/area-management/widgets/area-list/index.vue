@@ -1,5 +1,14 @@
+<!--
+ * @Author: 阮志雄
+ * @Date: 2021-10-16 21:33:27
+ * @LastEditTime: 2021-12-16 22:17:20
+ * @LastEditors: 阮志雄
+ * @Description: In User Settings Edit
+ * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\views\area-management\widgets\area-list\index.vue
+-->
 <template>
   <div class="camera-block">
+    <i class="el-icon-refresh add-camera" @click="getArea" title="刷新"></i>
     <i v-if="isAdmin" class="el-icon-plus add-camera" @click="aaddArea" title="添加保护区"></i>
     <ul class="tabs">
       <li @click="activeIndex = 1" :class="{ active: activeIndex === 1 }">编辑保护区</li>
@@ -31,8 +40,8 @@ export default {
     aaddArea() {
       this.$emit('click-add')
     },
-    getAreaList() {
-      this.$refs.status.getAreaList()
+    getArea() {
+      this.$refs.status.getArea()
     }
   }
 }
