@@ -154,7 +154,7 @@ export default {
       const infoWindow = new AMap.InfoWindow({
         anchor: 'top-left',
         content: `
-            相机编号：${extData.id ? extData.id : ''}<br/>
+            相机IMEI号：${extData.imeival ? extData.imeival : ''}<br/>
             状态：${stutusName}
         `
       })

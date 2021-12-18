@@ -19,9 +19,9 @@
           </el-tooltip>
         </div>
         <!-- 消息中心 -->
-        <el-tooltip effect="dark" :content="message ? `有${message}条未读消息` : `消息中心`" placement="bottom">
+        <!-- <el-tooltip effect="dark" :content="message ? `有${message}条未读消息` : `消息中心`" placement="bottom">
           <i class="el-icon-bell"></i>
-        </el-tooltip>
+        </el-tooltip> -->
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <div class="user-block">

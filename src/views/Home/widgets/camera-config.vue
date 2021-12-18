@@ -12,7 +12,7 @@
     <div class="config-block">
       <h4 class="title">相机信息</h4>
       <p class="config-item">
-        <span class="teil">相机型号：</span><span class="sub-teil">{{ getVal('imeival') }}</span>
+        <span class="teil">相机IMEI号：</span><span class="sub-teil">{{ getVal('imeival') }}</span>
       </p>
       <p class="config-item">
         <span class="teil" :title="getVal('planBackTime')">计划回收时间：</span><span class="sub-teil">{{ getVal('planBackTime') }}</span>
