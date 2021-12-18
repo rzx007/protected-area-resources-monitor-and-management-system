@@ -10,7 +10,7 @@ import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
 import PolygonGrid from '@/utils/ScanFill'
 import { findCarmeraList, findAreaByDoMain } from '@/api'
-let AMap, Map, polygon, satelliteLayer
+let AMap, Map, polygon, satelliteLayer, infoWindow
 export default {
   data() {
     return {
@@ -151,7 +151,7 @@ export default {
     },
     setInfoWindow(lnglat, extData) {
       const { stutusName } = this.setIconImg(extData.state)
-      const infoWindow = new AMap.InfoWindow({
+      infoWindow = new AMap.InfoWindow({
         anchor: 'top-left',
         content: `
             相机IMEI号：${extData.imeival ? extData.imeival : ''}<br/>
@@ -184,6 +184,7 @@ export default {
     mapEvent() {
       Map.on('click', (e) => {
         const _this = this
+        infoWindow.close()
         var overlays = Map.getAllOverlays('marker')
         overlays.forEach((markerItem) => {
           const extData = markerItem.getExtData()

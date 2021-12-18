@@ -4,13 +4,14 @@
     <div class="x-upload-title" @click="collspe = !collspe">
       <p class="left">
         <span>{{ subTitle }}上传</span>
+        <i v-show="loading" class="el-icon-loading"></i>
       </p>
       <i :class="collspe ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
     </div>
     <el-select v-model="cameraId" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
       <el-option v-for="item in cameraList" :key="item.id" :label="item.imeival" :value="item.imeival"> </el-option>
     </el-select>
-    <div class="x-upload-content">
+    <div class="x-upload-content" v-loading="loading">
       <el-upload
         :disabled="!cameraId"
         :limit="limit"
@@ -28,9 +29,12 @@
       >
         <div>
           <i class="el-icon-upload"></i>
-          <div class="el-upload__text">选择相机后,将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__text">
+            <strong style="color: red">选择相机后</strong>
+            ,将文件拖到此处，或<em>点击上传</em>
+          </div>
         </div>
-        <div slot="tip" class="el-upload__tip">只能上传{{ subTitle }}文件，且不超过5M, 最多一次性上传{{limit}}</div>
+        <div slot="tip" class="el-upload__tip">只能上传{{ subTitle }}文件，且不超过5M, 最多一次性上传{{ limit }}</div>
       </el-upload>
     </div>
   </div>
@@ -46,7 +50,8 @@ export default {
       collspe: false,
       fileList: [],
       percentage: 0,
-      activeIndex: 0
+      activeIndex: 0,
+      loading: false
     }
   },
   props: {
@@ -104,6 +109,7 @@ export default {
       this.fileList = fileList
     },
     uploadFile(params) {
+      this.loading = true
       const { file, data } = params
       // 通过 FormData 对象上传文件
       var formData = new FormData()
@@ -117,6 +123,7 @@ export default {
         res ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
         this.activeIndex++
         if (this.activeIndex === this.fileList.length) {
+          this.loading = false
           this.activeIndex = 0
           this.fileList = []
         }

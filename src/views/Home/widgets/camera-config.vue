@@ -15,7 +15,8 @@
         <span class="teil">相机IMEI号：</span><span class="sub-teil">{{ getVal('imeival') }}</span>
       </p>
       <p class="config-item">
-        <span class="teil" :title="getVal('planBackTime')">计划回收时间：</span><span class="sub-teil">{{ getVal('planBackTime') }}</span>
+        <span class="teil" :title="getVal('planBackTime')">计划回收时间：</span
+        ><span class="sub-teil">{{ getVal('planBackTime') ? $day(getVal('planBackTime')).format('YYYY-MM-DD') : '' }}</span>
       </p>
       <p class="config-item">
         <span class="teil">所属保护区</span><span class="sub-teil">{{ getVal('reserveTitle') }}</span>
@@ -55,7 +56,7 @@
     </div>
     <div class="config-block">
       <h4 class="title">相机图像</h4>
-      <img :src=" getVal('fixupImg')" :alt=" getVal('reserveTitle')" width="350">
+      <img :src="getVal('fixupImg')" :alt="getVal('reserveTitle')" width="350" />
     </div>
   </div>
 </template>
