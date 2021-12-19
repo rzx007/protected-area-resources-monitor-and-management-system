@@ -50,3 +50,9 @@ export async function uploadImage(params) {
   const res = await http.post('/reserve/appPhoto/uploadImageForPc', params)
   return res
 }
+
+//  获取部署中和下方放中的相机
+export async function findCameraMseeage(params) {
+  const res = await http.post('/reserve/appMessage/list', { reserveId: getToken('reserveId'), start: 0, limit: 1000, ...params })
+  return res
+}

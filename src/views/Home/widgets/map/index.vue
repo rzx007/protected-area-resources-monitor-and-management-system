@@ -39,7 +39,7 @@ export default {
     getMarkersData() {
       return findCarmeraList().then((res) => {
         const cameraList = res.code === 0 ? res.data : []
-        return cameraList.filter((item) => item.state !== 1)
+        return cameraList.filter((item) => [3, 4].includes(item.state))
       })
     },
     async initMap() {
@@ -99,10 +99,13 @@ export default {
       for (let index = 0; index < this.cameraList.length; index++) {
         const element = this.cameraList[index]
         const item = element
-        // const lnglat = this.path[index]
-        const lnglat = [Number(element['fixupLongitudeVal']), Number(element['fixupLatitudeVal'])]
-        const marker = this.createMarker(lnglat, item)
-        Map.add(marker)
+        if (element['fixupLongitudeVal'] && element['fixupLatitudeVal']) {
+          // const lnglat = this.path[index]
+          const lnglat = [Number(element['fixupLongitudeVal']), Number(element['fixupLatitudeVal'])]
+
+          const marker = this.createMarker(lnglat, item)
+          Map.add(marker)
+        }
       }
     },
     createMarker(lnglat, extData) {

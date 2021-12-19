@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { findCarmeraList, findAreaByDoMain } from '@/api'
+import { findCarmeraList, findAreaByDoMain, findCameraMseeage } from '@/api'
 import { getToken, setToken } from '@/utils/auth'
 import hub from '@/utils/bus'
 import AMapLoader from '@/utils/map'
@@ -39,7 +39,25 @@ export default {
     getMarkersData() {
       return findCarmeraList().then((res) => {
         const cameraList = res.code === 0 ? res.data : []
-        return cameraList.filter((item) => item.state !== 1)
+        return cameraList.filter((item) => [3, 4].includes(item.state))
+      })
+    },
+    findCameraMseeage() {
+      return findCameraMseeage().then((res) => {
+        let arr = []
+        const cameraList = res.code === 0 ? res.data.list : []
+        cameraList.forEach((item) => {
+          if (item.type == 1 && item.state == 1) {
+            arr.push({
+              id: item.cameraId,
+              imeival: item.imeiVal,
+              state: 2,
+              fixupLongitudeVal: item.lng,
+              fixupLatitudeVal: item.lat
+            })
+          }
+        })
+        return arr
       })
     },
     async initMap() {
@@ -67,7 +85,9 @@ export default {
         this.center = center
         Map.setCenter(center)
         Map.addControl(new AMap.Scale()) // 比例尺
-        this.cameraList = await this.getMarkersData()
+        const cameraList1 = await this.getMarkersData()
+        const cameraList2 = await this.findCameraMseeage()
+        this.cameraList = [...cameraList1, ...cameraList2]
         this.setPloygon(this.path)
         this.createPolylineGrid()
         this.addMarkers() // 添加标记点
@@ -95,11 +115,13 @@ export default {
       for (let index = 0; index < this.cameraList.length; index++) {
         const element = this.cameraList[index]
         const item = element
-        // const lnglat = this.path[index]
-        const lnglat = [Number(element['fixupLongitudeVal']), Number(element['fixupLatitudeVal'])]
+        if (element['fixupLongitudeVal'] && element['fixupLatitudeVal']) {
+          // const lnglat = this.path[index]
+          const lnglat = [Number(element['fixupLongitudeVal']), Number(element['fixupLatitudeVal'])]
 
-        const marker = this.createMarker(lnglat, item)
-        Map.add(marker)
+          const marker = this.createMarker(lnglat, item)
+          Map.add(marker)
+        }
       }
     },
     createMarker(lnglat, extData) {
@@ -188,7 +210,7 @@ export default {
     mapEvent() {
       Map.on('click', (e) => {
         const _this = this
-         infoWindow && infoWindow.close()
+        infoWindow && infoWindow.close()
         var overlays = Map.getAllOverlays('marker')
         overlays.forEach((markerItem) => {
           const extData = markerItem.getExtData()
