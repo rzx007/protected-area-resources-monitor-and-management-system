@@ -3,7 +3,7 @@
     <div class="head-con">
       <div class="head-left">
         <h3>视频选集</h3>
-        <span class="cur-page">({{pageIndex}}/{{totalPage}})</span>
+        <span class="cur-page">({{ pageIndex }}/{{ totalPage }})</span>
       </div>
       <div class="head-right">
         <span :class="{ disable: pageIndex <= 1 }" @click="previousHandler"><i class="el-icon-arrow-left"></i></span>
@@ -11,14 +11,23 @@
       </div>
     </div>
     <ul v-loading="loading">
-      <li v-for="(item, index) in video_url" :key="index" @click="activeIndex = index; clickVideo(item)" :class="{ on: activeIndex === index }">
-        <div class="clickitem">
+      <li v-for="(item, index) in video_url" :key="index" :class="{ on: activeIndex === index }">
+        <div
+          class="clickitem"
+          @click="
+            activeIndex = index
+            clickVideo(item)
+          "
+        >
           <div class="link-content">
             <i class="el-icon-video-play"></i>
             <span class="page-num">P{{ index + 1 < 10 ? '0' + (index + 1) : index + 1 }}</span>
             <span class="part">{{ item.speciesTitle }}-{{ item.createTime }}</span>
           </div>
-          <div class="duration">00:30</div>
+          <div class="duration">
+            00:30
+            <i v-if="roleCode != 'PT'" @click="deleteImg(item)" class="el-icon-delete delete-icon" title="删除视频"></i>
+          </div>
         </div>
       </li>
     </ul>
@@ -26,7 +35,7 @@
 </template>
 
 <script>
-import { galleryList } from '@/api'
+import { galleryList, galleryDelete } from '@/api'
 import { getToken } from '@/utils/auth'
 export default {
   name: 'vodeoList',
@@ -38,7 +47,8 @@ export default {
       pageSize: 30,
       totalPage: 1,
       video_url: [],
-      exrData: {}
+      exrData: {},
+      roleCode: getToken('roleCode')
     }
   },
   created() {
@@ -71,6 +81,23 @@ export default {
           this.video_url = [...this.video_url, ...res.data.list]
         })
         .catch((err) => {})
+    },
+    deleteImg(item) {
+      console.log(item);
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        galleryDelete({ photoId: item.photoId }).then((res) => {
+          this.video_url = []
+          this.galleryList()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+      })
     }
   },
   watch: {
@@ -186,6 +213,9 @@ $active-color: #03a0d6;
           color: #757575;
           justify-self: flex-end;
         }
+      }
+      &:hover {
+        color: $active-color !important;
       }
     }
   }

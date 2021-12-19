@@ -11,6 +11,7 @@
             <img :src="item.url" alt="" />
             <div class="mask" title="查看照片" @click="showViewer(item, index)">
               <span
+                v-if="roleCode != 'PT'"
                 :class="[
                   checkedArr.indexOf(item.photoId) > -1 ? 'checked-span' : '',
                   checkedArr.length > 0 ? 'checked-mode-span' : '',
@@ -38,10 +39,10 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
 import 'viewerjs/dist/viewer.css'
 import { api as viewerApi } from 'v-viewer'
 import { galleryList, galleryDelete } from '@/api'
-import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
@@ -53,7 +54,8 @@ export default {
       totalPage: 1,
       dellyCount: 0,
       checkedArr: [],
-      exrData: {}
+      exrData: {},
+      roleCode: getToken('roleCode')
     }
   },
   props: {

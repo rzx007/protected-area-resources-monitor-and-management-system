@@ -79,6 +79,11 @@ export default {
       }
     }
   },
+  watch: {
+    "camera.id": function() {
+      this.getData()
+    }
+  },
   created() {
     this.getData()
   },

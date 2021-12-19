@@ -9,7 +9,7 @@
       </div>
       <div class="d-flex ai-center flex-column body-box">
         <dv-capsule-chart class="dv-cap-chart" :config="config" />
-        <centerRight2Chart1 />
+        <!-- <centerRight2Chart1 /> -->
       </div>
     </div>
   </div>

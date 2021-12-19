@@ -53,7 +53,7 @@ export default {
       findCarmeraList({ imeiVal: this.imeiVal }).then((res) => {
         const camera = res.code === 0 ? res.data : []
         camera.forEach((element) => {
-          if (element.state != 1) {
+          if ([3,4].includes(element.state)) {
             this.cameraList.push(element)
           }
         })

@@ -3,7 +3,7 @@
     <back-bar @back="goBack"></back-bar>
     <div class="anas-block">
       <p class="sub-title">
-        设备编号：<span>{{ camera.id }}</span>
+        设备编号：<span>{{ cameraId }}</span>
       </p>
       <p class="sub-title">
         布设时间：<span>{{ getVal('setTime') }}</span>
@@ -71,12 +71,10 @@ export default {
       cameraObj: {}
     }
   },
-  props: {
-    camera: {
-      type: Object,
-      default: function () {
-        return { id: '' }
-      }
+  props: ['cameraId'],
+  watch: {
+    cameraId: function (val) {
+      this.getData()
     }
   },
   created() {
@@ -84,7 +82,7 @@ export default {
   },
   methods: {
     getData() {
-      findCarmeraInfo({ cameraId: this.camera.id }).then((res) => {
+      findCarmeraInfo({ cameraId: this.cameraId }).then((res) => {
         this.cameraObj = res.data ? res.data : {}
       })
     },

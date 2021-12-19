@@ -60,6 +60,7 @@ export default {
     clickCamera(item) {
       this.level = 2
       this.cameraObj = item
+       this.$refs.map.markerHandler(item)
     },
     // 点击回收
     clickRecycle(item) {

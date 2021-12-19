@@ -9,7 +9,7 @@
         <camera-list v-show="level === 1" @click-camera="clickCamera"></camera-list>
       </transition>
       <transition name="slide-fade">
-        <camera-config v-if="level === 2" @click-back="level = 1" :camera="cameraObj"></camera-config>
+        <camera-config v-if="level === 2" @click-back="level = 1" :cameraId="cameraObj.id"></camera-config>
       </transition>
     </div>
   </div>
@@ -23,6 +23,7 @@ export default {
   components: { homeMap, cameraList, cameraConfig },
   data() {
     return {
+      cameraObj:{id:''},
       toggle: true,
       level: 1 // 1 显示相机列表, 2显示相机详情
     }
@@ -32,6 +33,7 @@ export default {
     clickCamera(item) {
       this.level = 2
       this.cameraObj = item
+      this.$refs.map.markerHandler(item)
     },
     getMapCarmera(item) {
       this.level = 2
@@ -88,6 +90,5 @@ export default {
   .carmera-list-hidden {
     transform: translate(100%, -50%);
   }
-  
 }
 </style>

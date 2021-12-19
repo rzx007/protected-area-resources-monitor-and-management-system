@@ -167,19 +167,26 @@ export default {
         const marker = overlays[index]
         marker.on('click', function (e) {
           let carmeraInfo = marker.getExtData()
-          const { lng, lat } = marker.getPosition()
-          const extData = marker.getExtData()
-          const { iconPath } = _this.setIconImg(extData.state)
-          overlays.forEach((markerItem) => {
-            const extData = markerItem.getExtData()
-            const { iconPath } = _this.setIconImg(extData.state)
-            markerItem.setIcon(_this.createIcon(iconPath))
-          })
-          marker.setIcon(_this.createIcon(iconPath, { x: 50, y: 52 }))
-          _this.setInfoWindow([lng, lat], carmeraInfo)
+          _this.markerHandler(carmeraInfo)
           _this.$emit('click-map-carmera', carmeraInfo)
         })
       }
+    },
+    markerHandler(carmera) {
+      const _this = this
+      var overlays = Map.getAllOverlays('marker')
+      overlays.forEach((markerItem) => {
+        const extData = markerItem.getExtData()
+        const { iconPath } = _this.setIconImg(extData.state)
+        markerItem.setIcon(_this.createIcon(iconPath))
+        if (carmera.id === extData.id) {
+          const { lng, lat } = markerItem.getPosition()
+          const extData = markerItem.getExtData()
+          const { iconPath } = _this.setIconImg(extData.state)
+          markerItem.setIcon(_this.createIcon(iconPath, { x: 50, y: 52 }))
+          _this.setInfoWindow([lng, lat], extData)
+        }
+      })
     },
     mapEvent() {
       Map.on('click', (e) => {
