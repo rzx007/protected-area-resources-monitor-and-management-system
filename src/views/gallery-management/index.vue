@@ -86,8 +86,8 @@ export default {
     handleChange(params) {
       const times = params.occurTime ? params.occurTime.split(',') : []
       if (times.length > 1) {
-        params.startTime = times[0]
-        params.endTime = times[1]
+        params.startTime = times[0] + ' 00:00:00'
+        params.endTime = times[1] + ' 23:59:59'
       }
       const param = Object.assign({}, params)
       delete param.occurTime

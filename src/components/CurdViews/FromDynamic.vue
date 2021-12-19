@@ -37,7 +37,7 @@
               </el-date-picker>
             </div>
           </template>
-          <template v-else-if="!item.dateSwitch && item.type === 'daterange'">
+          <template v-else-if="!item.dateSwitch && ['daterange','datetimerange'].includes(item.type)">
             <div :key="'item' + index" class="curd_tool_item" ref="tool">
               <label class="label" v-if="mode !== 'simple'">{{ item.label }}：</label>
               <el-date-picker
