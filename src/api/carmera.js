@@ -47,6 +47,6 @@ export async function uploadStatus(params) {
 
 //  上传相机图片
 export async function uploadImage(params) {
-  const res = await http.post('/reserve/appPhoto/uploadImage', params)
+  const res = await http.post('/reserve/appPhoto/uploadImageForPc', params)
   return res
 }

@@ -6,13 +6,14 @@
           <el-button icon="el-icon-plus" size="mini" type="success" @click="isAdd = true">新增角色</el-button>
           <!-- <el-button icon="el-icon-plus" size="mini" type="primary" @click="isUpdate = true">用户审批</el-button> -->
         </template>
-        <template v-slot:operation="Props">
-          <el-button type="primary" plain @click="editUser(Props.rowData.row)" title="编辑">编辑</el-button>
+        <template v-slot:operation="{rowData}">
+          <el-button type="primary" plain @click="editUser(rowData.row)" title="编辑">编辑</el-button>
           <el-popconfirm
+            v-if="!roleCode.includes(rowData.row['roleCode'])"
             icon="el-icon-info"
             iconColor="red"
             title="确定删除该用户吗?"
-            @confirm="deleteRole(Props.rowData.row)"
+            @confirm="deleteRole(rowData.row)"
             style="margin: 0 5px"
           >
             <el-button type="danger" slot="reference" title="删除" plain>删除</el-button>
@@ -23,7 +24,7 @@
             title="分配权限"
             @click="
               isPermission = true
-              detailInfo = Props.rowData.row
+              detailInfo = rowData.row
             "
             >分配权限</el-button
           >
@@ -69,6 +70,7 @@ export default {
     return {
       detailInfo: {},
       fromItem: [],
+      roleCode:['PT','JGDY','JGD','JFZ','JZ'],
       tableOptions: {
         limit: 20,
         showPanelTool: true,

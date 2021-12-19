@@ -120,7 +120,7 @@ export default {
       // this.$day(params.lastModifiedDate).format('YYYY-MM-DD HH:mm:ss')
       // /admin/carousel/addFile
       uploadImage(formData).then((res) => {
-        res ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
+       res.code === 0 ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
         this.activeIndex++
         if (this.activeIndex === this.fileList.length) {
           this.loading = false

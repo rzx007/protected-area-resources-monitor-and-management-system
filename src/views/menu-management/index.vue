@@ -12,9 +12,9 @@
         </template>
         <template v-slot:actions="{ rowData }">
           <el-button type="primary" icon="el-icon-edit" @click="editMenu(rowData.row)" circle title="编辑"> </el-button>
-          <el-popconfirm title="是否将停用此菜单？" @confirm="deleteMenu(rowData.row)">
+          <!-- <el-popconfirm title="是否将停用此菜单？" @confirm="deleteMenu(rowData.row)">
             <el-button type="danger" icon="el-icon-delete" circle title="删除" slot="reference"></el-button>
-          </el-popconfirm>
+          </el-popconfirm> -->
         </template>
       </CurdView>
     </div>

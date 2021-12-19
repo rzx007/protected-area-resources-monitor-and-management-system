@@ -48,7 +48,7 @@ export default {
     return {
       userId: null,
       lnglat: [],
-      options: []
+      options: [],
     }
   },
   props: {
@@ -74,12 +74,12 @@ export default {
     getUserList() {
       listUser().then((res) => {
         if (res.code === 0) {
-          this.options =[]
-          res.data.list.forEach(item => {
-            if (item.roleId !== 11) {
+          this.options = []
+          res.data.list.forEach((item) => {
+            if (item.roleId !== 11 &&  item.roleCode !== 'PT') {
               this.options.push(item)
             }
-          });
+          })
         }
       })
     },

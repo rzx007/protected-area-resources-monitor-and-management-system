@@ -188,7 +188,7 @@ export default {
     mapEvent() {
       Map.on('click', (e) => {
         const _this = this
-         infoWindow.close()
+         infoWindow && infoWindow.close()
         var overlays = Map.getAllOverlays('marker')
         overlays.forEach((markerItem) => {
           const extData = markerItem.getExtData()
