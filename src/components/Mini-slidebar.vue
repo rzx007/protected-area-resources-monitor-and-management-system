@@ -58,16 +58,17 @@ $activeColor: #409eff;
     text-align: center;
   }
   .menu-content {
-    flex: 1;
+    height: calc(100% - 85px);
     position: relative;
+    overflow: auto;
     .menu-list {
-      position: relative; /*脱离文档流*/
-      top: 50%;
-      transform: translateY(-50%);
-      width: 100%;
-      height: 90%;
-      min-height: 500px;
-      overflow-y: auto;
+      // position: relative; /*脱离文档流*/
+      // top: 50%;
+      // transform: translateY(-50%);
+      // width: 100%;
+      // height: 90%;
+      // min-height: 500px;
+      // overflow-y: auto;
       display: flex;
       flex-direction: column;
       // justify-content: space-between;

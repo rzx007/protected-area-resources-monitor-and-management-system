@@ -22,6 +22,14 @@ const routes = [
       meta: {
         title: '保护区管理'
       }
+    },{
+      path: '/permission',
+      name: 'permission',
+      component: () =>
+        import(/* webpackChunkName: "permission" */ '../views/permission/index.vue'),
+      meta: {
+        title: '权限管理'
+      }
     }]
   },
   {

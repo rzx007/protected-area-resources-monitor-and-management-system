@@ -11,6 +11,10 @@
     <el-select v-model="cameraId" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
       <el-option v-for="item in cameraList" :key="item.id" :label="item.imeival" :value="item.imeival"> </el-option>
     </el-select>
+    <p>
+      <el-input v-model="lng" style="width: 180px" placeholder="经度"></el-input>
+      <el-input v-model="lat" style="width: 180px" placeholder="纬度"></el-input>
+    </p>
     <div class="x-upload-content" v-loading="loading">
       <el-upload
         :disabled="!cameraId"
@@ -51,7 +55,9 @@ export default {
       fileList: [],
       percentage: 0,
       activeIndex: 0,
-      loading: false
+      loading: false,
+      lng: '',
+      lat: ''
     }
   },
   props: {
@@ -115,12 +121,14 @@ export default {
       var formData = new FormData()
       formData.append('Image', file)
       formData.append('ImeiVal', this.cameraId)
+      formData.append('lat', this.lat)
+      formData.append('lng', this.lat)
       // formData.append('name', file.name)
       formData.append('lastModifiedDate', this.$day(file.lastModified).format('YYYY-MM-DD HH:mm:ss'))
       // this.$day(params.lastModifiedDate).format('YYYY-MM-DD HH:mm:ss')
       // /admin/carousel/addFile
       uploadImage(formData).then((res) => {
-       res.code === 0 ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
+        res.code === 0 ? this.$message.success('已上传!') : this.$message.warning('上传失败!')
         this.activeIndex++
         if (this.activeIndex === this.fileList.length) {
           this.loading = false

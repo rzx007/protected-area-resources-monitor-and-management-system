@@ -13,6 +13,15 @@ const setAdminRoute = () => {
     id: '05151',
     type: 3,
     path: '/area-management'
+  }, {
+    title: '权限管理',
+    componentName: 'permission',
+    componentPath: '/permission',
+    icon: 'quanxian',
+    parentId: 0,
+    id: '05150',
+    type: 3,
+    path: '/permission'
   }] : []
 }
 const permission = {
