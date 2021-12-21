@@ -11,7 +11,7 @@
     <el-select v-model="cameraId" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
       <el-option v-for="item in cameraList" :key="item.id" :label="item.imeival" :value="item.imeival"> </el-option>
     </el-select>
-    <p>
+    <p v-if="isGallery">
       <el-input v-model="lng" style="width: 180px" placeholder="经度"></el-input>
       <el-input v-model="lat" style="width: 180px" placeholder="纬度"></el-input>
     </p>
@@ -78,6 +78,10 @@ export default {
     subTitle: {
       type: String,
       default: '图片'
+    },
+    isGallery: {
+      type: Boolean,
+      default: true
     }
   },
   created() {
@@ -121,8 +125,10 @@ export default {
       var formData = new FormData()
       formData.append('Image', file)
       formData.append('ImeiVal', this.cameraId)
-      formData.append('lat', this.lat)
-      formData.append('lng', this.lat)
+      if (this.isGallery) {
+        formData.append('LongitudeVal', this.lat)
+        formData.append('LatitudeVal', this.lat)
+      }
       // formData.append('name', file.name)
       formData.append('lastModifiedDate', this.$day(file.lastModified).format('YYYY-MM-DD HH:mm:ss'))
       // this.$day(params.lastModifiedDate).format('YYYY-MM-DD HH:mm:ss')
