@@ -126,7 +126,7 @@ export default {
       formData.append('Image', file)
       formData.append('ImeiVal', this.cameraId)
       if (this.isGallery) {
-        formData.append('LongitudeVal', this.lat)
+        formData.append('LongitudeVal', this.lng)
         formData.append('LatitudeVal', this.lat)
       }
       // formData.append('name', file.name)
