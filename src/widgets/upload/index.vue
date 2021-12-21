@@ -8,7 +8,7 @@
       </p>
       <i :class="collspe ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
     </div>
-    <el-select v-model="cameraId" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
+    <el-select v-model="cameraId" @change="fillterCamera" placeholder="选择相机" style="width: 100%; margin-bottom: 12px">
       <el-option v-for="item in cameraList" :key="item.id" :label="item.imeival" :value="item.imeival"> </el-option>
     </el-select>
     <p v-if="isGallery">
@@ -88,6 +88,14 @@ export default {
     this.getCarmeraList()
   },
   methods: {
+    fillterCamera(imeival){
+      this.cameraList.forEach(item=> {
+        if (item.imeival === imeival) {
+          this.lng = item.fixupLongitudeVal
+          this.lat = item.fixupLatitudeVal
+        }
+      })
+    },
     getCarmeraList() {
       findCarmeraList().then((res) => {
         this.cameraList = res.code === 0 ? res.data : []
