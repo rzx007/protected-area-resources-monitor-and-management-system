@@ -140,6 +140,7 @@ export default {
           this.loading = false
           this.activeIndex = 0
           this.fileList = []
+          this.$emit('on-success')
         }
         this.percentage = (this.activeIndex / this.fileList.length) * 100
       })

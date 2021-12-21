@@ -147,6 +147,11 @@ export default {
           })
         })
       })
+    },
+    refreshList() {
+      this.pageCount = 1
+      this.img_url = []
+      this.galleryList()
     }
   },
   mounted() {
@@ -183,9 +188,7 @@ export default {
     },
     exrData: {
       handler: function () {
-        this.pageCount = 1
-        this.img_url = []
-        this.galleryList()
+        this.refreshList()
       },
       deep: true
     }

@@ -19,7 +19,7 @@
       <sub-gallery v-if="close" :photoObj="photoObj"></sub-gallery>
     </overlay>
     <transition name="fade">
-      <upload v-show="isupload"></upload>
+      <upload v-show="isupload" @on-success="$refs.gallery.refreshList()"></upload>
     </transition>
   </div>
 </template>
