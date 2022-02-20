@@ -7,6 +7,20 @@
       <el-form-item label="手机号码" prop="mobile">
         <el-input v-model="ruleForm.mobile" placeholder="请输入用手机号"></el-input>
       </el-form-item>
+      <el-form-item label="验证码" prop="code">
+        <el-input
+          v-model="ruleForm.code"
+          size="default"
+          @change="checkCaptcha"
+          placeholder="请输入4位验证码"
+          prefix-icon="el-icon-c-scale-to-original"
+        >
+          <template slot="append">
+            <span v-show="!isTry" class="a" @click="getCode">获取验证码</span>
+            <span v-show="isTry">{{ count }}秒重新获取验证码</span>
+          </template>
+        </el-input>
+      </el-form-item>
       <el-form-item label="密码" prop="passwords">
         <el-input type="passwords" v-model="ruleForm.passwords" autocomplete="off" placeholder="请输入密码"></el-input>
       </el-form-item>
@@ -24,7 +38,7 @@
 </template>
 
 <script>
-import { addUser, listRole } from '@/api'
+import { addUser, listRole, getCaptcha, checkCaptcha } from '@/api'
 import md5 from 'md5-js'
 export default {
   data() {
@@ -66,7 +80,8 @@ export default {
         passwords: '',
         checkPass: '',
         mobile: '',
-        roleId: ''
+        roleId: '',
+        code: ''
       },
       rules: {
         username: [
@@ -79,7 +94,11 @@ export default {
         roleId: [{ required: true, message: '请分配一个角色', trigger: 'blur' }]
       },
       isValidPhone: false, // 手机号是否正确
-      roleOptions: []
+      roleOptions: [],
+      isTry: false, // 60秒 是否重新获取验证码
+      count: 60,
+      timer: null,
+      isValidCode: false
     }
   },
   created() {
@@ -87,17 +106,52 @@ export default {
   },
   methods: {
     getRoleData() {
-      listRole({ start: 0, limit: 100 }).then(res => {
+      listRole({ start: 0, limit: 100 }).then((res) => {
         this.roleOptions = res.data.list
       })
     },
+    getCode() {
+      if (this.isValidPhone && this.ruleForm.mobile) {
+        this.isTry = true
+        this.subtracCount()
+        getCaptcha({ mobile: this.ruleForm.mobile, type: 0 })
+      }
+    },
+    checkCaptcha() {
+      if (this.isValidPhone && this.ruleForm.mobile) {
+        checkCaptcha({ mobile: this.ruleForm.mobile, code: this.ruleForm.code })
+          .then((res) => {
+            this.isValidCode = true
+          })
+          .catch((err) => {
+            this.isValidCode = false
+          })
+      } else {
+        this.isValidCode = false
+      }
+    },
+    subtracCount() {
+      // 获取验证码倒计时
+      this.timer = setInterval(() => {
+        this.count--
+        if (this.count <= 0) {
+          this.isTry = false
+          clearInterval(this.timer)
+          return
+        }
+      }, 1000)
+    },
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      if (!this.isValidCode) {
+        this.$message.error('验证码填写错误!')
+        return
+      }
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           delete this.ruleForm['checkPass']
-          const { username, mobile, passwords, roleId } = this.ruleForm
-          const params = { username,roleId, mobile, passwords: md5(passwords) }
-          addUser(params).then(res => {
+          const { username, mobile, passwords, roleId, code } = this.ruleForm
+          const params = { username, roleId, mobile, code, passwords: md5(passwords) }
+          addUser(params).then((res) => {
             this.$emit('success')
             this.$message.success('新增用户成功!')
           })

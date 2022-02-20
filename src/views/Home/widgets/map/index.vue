@@ -29,7 +29,6 @@ export default {
   methods: {
     getMapData() {
       return findAreaByDoMain({ domainName: getToken('domainName') }).then((res) => {
-        setToken('center', res.data.centerLnglat)
         return {
           path: res.data.lngLat ? JSON.parse(res.data.lngLat) : [],
           center: JSON.parse(res.data.centerLnglat)

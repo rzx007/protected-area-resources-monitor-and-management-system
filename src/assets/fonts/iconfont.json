@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1159882",
+      "name": "电量",
+      "font_class": "dianliang",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "1348246",
+      "name": "存储",
+      "font_class": "cunchu",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
       "icon_id": "2678639",
       "name": "统计",
       "font_class": "tongji1",

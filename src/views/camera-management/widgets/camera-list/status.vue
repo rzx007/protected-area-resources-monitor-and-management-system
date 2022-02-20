@@ -11,6 +11,14 @@
               <p style="margin-top: 6px">
                 <span>布控时间：</span><span v-show="[3, 4].includes(item.state)">{{ item.setTime }}</span>
               </p>
+              <p style="margin-top: 6px">
+                <span><svg-icon type="css" icon="dianliang"></svg-icon>{{ item.batteryVal }}%</span>
+                &nbsp;&nbsp;
+                <span
+                  ><svg-icon type="css" icon="cunchu"></svg-icon
+                  >{{ ((item.sdUsedpaceVal / item.sdTotalSpaceVal) * 100).toString().substring(0, 4) }}%</span
+                >
+              </p>
             </div>
           </div>
           <!-- <i class="next el-icon-arrow-right"></i> -->

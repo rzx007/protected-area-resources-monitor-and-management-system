@@ -123,6 +123,7 @@ export default {
     async getAreaByDomain() {
       return findAreaByDoMain({ domainName: this.domainName })
         .then((res) => {
+          setToken('center', res.data.centerLnglat)
           return res.data
         })
         .catch((error) => {

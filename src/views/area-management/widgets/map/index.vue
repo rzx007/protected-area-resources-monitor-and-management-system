@@ -91,8 +91,8 @@ export default {
       Map = new AMap.Map('area-container', {
         mapStyle: 'amap://styles/b0de2f829295042fd24e20c6233cef55',
         viewMode: '3D',
-        zoom: 14,
-        zooms: [7, 18],
+        zoom: 5.4,
+        zooms: [4.5, 18],
         showBuildingBlock: true,
         center: this.center
       })

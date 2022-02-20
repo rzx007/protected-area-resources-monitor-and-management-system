@@ -51,7 +51,7 @@
         <span class="teil">拍照间隔时间(s):</span><span class="sub-teil">{{ getVal('pirInterval') }}</span>
       </p>
       <p class="config-item">
-        <span class="teil">SD卡容量(M):</span><span class="sub-teil">{{ getVal('sdUsedpaceVal') }}/{{ getVal('sdUsedpaceVal') }}</span>
+        <span class="teil">SD卡容量(M):</span><span class="sub-teil">{{ getVal('sdUsedpaceVal') }}/{{ getVal('sdTotalSpaceVal') }}</span>
       </p>
     </div>
     <div class="config-block">
