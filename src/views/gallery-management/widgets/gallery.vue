@@ -1,7 +1,8 @@
 <template>
   <div class="gallery-viewer">
     <div class="gallery-tool" v-show="checkedArr.length > 0">
-      <i class="el-icon-delete" @click="deleteImg"></i>
+      <i class="el-icon-delete" @click="deleteImg" title="删除"></i>
+      <i class="el-icon-finished" @click="checkAllImgs" title="全选"></i>
       <span class="cancel" title="取消选择" @click="cancelAllCheck()">取消</span>
     </div>
     <el-row :gutter="20" style="min-height: 80vh">
@@ -125,6 +126,14 @@ export default {
     checkImg(id) {
       const index = this.checkedArr.indexOf(id)
       index > -1 ? this.checkedArr.splice(index, 1) : this.checkedArr.push(id)
+    },
+    checkAllImgs() {
+      this.img_url.forEach((item) => {
+        const index = this.checkedArr.indexOf(item.photoId)
+        if (index < 0) {
+          this.checkedArr.push(item.photoId)
+        }
+      })
     },
     cancelAllCheck() {
       this.checkedArr = []

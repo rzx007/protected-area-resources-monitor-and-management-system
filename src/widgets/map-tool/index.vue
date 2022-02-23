@@ -1,11 +1,3 @@
-<!--
- * @Author: 阮志雄
- * @Date: 2021-07-18 23:17:58
- * @LastEditTime: 2021-11-25 17:16:07
- * @LastEditors: 阮志雄
- * @Description: In User Settings Edit
- * @FilePath: \Protected-Area-Resources-Monitor-and-Management-System\src\widgets\map-tool\index.vue
--->
 <template>
   <div class="map_tool_block">
     <div class="show_list">

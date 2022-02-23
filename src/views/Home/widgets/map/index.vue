@@ -249,7 +249,11 @@ export default {
       }
     },
     selectGrid(parma) {
-      this.createPolylineGrid(parma.y)
+      Map.setCenter(this.center)
+      Map.setZoom(15)
+      setTimeout(() => {
+        this.createPolylineGrid(parma.y)
+      }, 1500);
     },
     createPolylineGrid(interval = 273) {
       const _this = this
