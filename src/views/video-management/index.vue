@@ -13,7 +13,7 @@
         <videoPlayer ref="video"> </videoPlayer>
       </div>
       <transition name="fade">
-        <upload v-show="isupload" :isGallery="false" :limit="1" subTitle="视频" :maxSize="50" :imageType="['video/quicktime']"></upload>
+        <upload v-show="isupload" :isGallery="false" :limit="1" subTitle="视频" :maxSize="500" :imageType="['video/quicktime', 'video/mp4']"></upload>
       </transition>
     </div>
   </div>

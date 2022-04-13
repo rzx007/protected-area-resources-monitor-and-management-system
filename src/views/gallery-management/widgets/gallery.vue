@@ -26,6 +26,7 @@
           </div>
           <div class="img-info">
             <div>
+              <p class="time">{{ item.photoId }}</p>
               <p class="time">{{ item.createTime }}</p>
               <p class="camera-name">{{ item.speciesInfo }}</p>
             </div>
