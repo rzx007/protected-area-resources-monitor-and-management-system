@@ -65,7 +65,7 @@ export default {
       this.editMap = false
       if (status) {
         const path = this.$refs.map.getPolygonPath()
-        this.updateArea({ lngLat: JSON.stringify(path), ...area })
+        this.updateArea({ ...area, lngLat: JSON.stringify(path) })
       } else {
         this.areaObj = Object.assign({}, this.areaObj, {})
       }
