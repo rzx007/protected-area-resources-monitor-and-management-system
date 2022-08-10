@@ -58,7 +58,9 @@ export default {
     },
     async getMenuTree() {
       getMenuTree({ start: 0, limit: 100 }).then(res => {
-        this.treeData = res.data.list
+        this.treeData = res.data.list.filter(item => {
+          return item.linkUrl !== '/permission'
+        })
         return  res.data.list
       })
     },
