@@ -12,7 +12,7 @@
             <img :src="item.url" alt="" />
             <div class="mask" title="查看照片" @click="showViewer(item, index)">
               <span
-                v-if="['JGD','JFZ','JZ','CG'].includes(getToken('roleCode'))"
+                v-if="['JGD','JFZ','JZ','CG'].includes(roleCode)"
                 :class="[
                   checkedArr.indexOf(item.photoId) > -1 ? 'checked-span' : '',
                   checkedArr.length > 0 ? 'checked-mode-span' : '',

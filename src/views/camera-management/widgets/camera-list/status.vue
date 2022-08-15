@@ -29,7 +29,7 @@
           <el-button type="primary" v-if="item.state == 1" @click="clickDeploy(item)">部署</el-button>
           <!-- <span v-if="[4, 2].includes(item.state)">{{ item.user }}</span> -->
           <el-button type="primary" v-if="[4, 2].includes(item.state)" style="visibility: hidden">占位</el-button>
-          <el-dropdown trigger="click" @command="handleCommand" v-if="['JGD','JFZ','JZ','CG'].includes(getToken('roleCode'))">
+          <el-dropdown trigger="click" @command="handleCommand" v-if="['JGD','JFZ','JZ','CG'].includes(roleCode)">
             <i class="el-icon-more-outline"></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :command="item" icon="el-icon-delete-solid">删除</el-dropdown-item>
@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       loading: false,
+      roleCode: getToken('roleCode'),
       imeiVal: '',
       cameraList: [],
       statusEnum: [
