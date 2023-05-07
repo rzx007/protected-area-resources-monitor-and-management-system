@@ -41,6 +41,9 @@
             <el-option v-for="(item, index) in CameraMode" :key="index" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="配置下发">
+          <el-switch v-model="form.isSet" active-text="是" inactive-text="否"> </el-switch>
+        </el-form-item>
         <!-- <el-form-item label="工作时间">
           <el-date-picker
             v-model="value1"
@@ -77,19 +80,20 @@ export default {
       TimeLapse,
       CameraMode,
       form: {
-        pSize: 's14',
-        vLength: '30',
-        vSize: 'fh',
         pirInterval: 'i25m',
+        pSize: 's14',
+        vSize: 'fh',
+        vLength: '30',
         timeLapse: 'I0',
-        cameraMode: 'ct'
+        cameraMode: 'ct',
+        isSet: 'Y'
       }
     }
   },
   props: {
     camera: {
       type: Object,
-      default: function () {
+      default: function() {
         return { id: '' }
       }
     }
@@ -102,31 +106,36 @@ export default {
       this.$emit('click-back')
     },
     getData() {
-      findCarmeraInfo({ cameraId: this.camera.id }).then((res) => {
+      findCarmeraInfo({ cameraId: this.camera.id }).then(res => {
         const data = res.data ? res.data : {}
-        for (const key in this.form) {
-          if (data[key]) {
-            this.form[key] = data[key]
-          }
-        }
+        const confingArr = data.setConfig.split('#')
+        const keys = Object.keys(this.form)
+        keys.forEach((item, index) => {
+          this.form[item] = confingArr[index + 1]
+        })
+        this.form.isSet = data.isSet
       })
     },
     uploadStatus() {
       let echoCode = '#'
       for (const key in this.form) {
+        if (key === 'isSet') {
+          continue
+        }
         const element = this.form[key]
         echoCode += `${element}#`
       }
       setDown({
         cameraId: this.camera.id,
-        setConfig: echoCode
-      }).then((res) => {
+        setConfig: echoCode,
+        isSet: this.form.isSet
+      }).then(res => {
         this.$message.success('配置已下发')
         this.$emit('click-back')
       })
     },
     cancelSet() {
-     this.$emit('click-back')
+      this.$emit('click-back')
     },
     onSubmit() {
       this.uploadStatus()
