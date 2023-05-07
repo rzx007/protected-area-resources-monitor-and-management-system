@@ -25,6 +25,9 @@
         <span class="teil">地理位置：</span><span class="sub-teil">{{ getVal('fixupLongitudeVal') }}~{{ getVal('fixupLatitudeVal') }}</span>
       </p>
       <p class="config-item">
+        <span class="teil">海拔:</span><span class="sub-teil">{{ getVal('altitudeVal') }}</span>
+      </p>
+      <p class="config-item">
         <span class="teil">温度(℃)：</span><span class="sub-teil">{{ getVal('temperatureVal') }}</span>
       </p>
       <p class="config-item">
@@ -53,9 +56,7 @@
       <p class="config-item">
         <span class="teil">SD卡容量(M):</span><span class="sub-teil">{{ getVal('sdUsedpaceVal') }}/{{ getVal('sdTotalSpaceVal') }}</span>
       </p>
-      <p class="config-item">
-        <span class="teil">经纬度:</span><span class="sub-teil">{{ getVal('altitudeVal') }}</span>
-      </p>
+
     </div>
     <div class="config-block">
       <h4 class="title">相机图像</h4>

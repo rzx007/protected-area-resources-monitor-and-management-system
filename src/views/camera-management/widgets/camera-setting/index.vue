@@ -42,7 +42,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="配置下发">
-          <el-switch v-model="form.isSet" active-text="是" inactive-text="否"> </el-switch>
+          <el-switch v-model="form.isSet" active-text="是" inactive-text="否" active-value="Y" inactive-value="N"> </el-switch>
         </el-form-item>
         <!-- <el-form-item label="工作时间">
           <el-date-picker
