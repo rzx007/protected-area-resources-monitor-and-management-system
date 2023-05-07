@@ -53,7 +53,7 @@ import md5 from 'md5-js'
 export default {
   data() {
     return {
-      showSingup:isAdmin(),
+      showSingup: isAdmin(),
       isAdmin: isAdmin(),
       slogan: title,
       mobile: '',
@@ -80,15 +80,18 @@ export default {
   methods: {
     async loginHandler() {
       this.isLoging = true
-      console.log(this.domainName, VUE_APP_ADMIN)
       if (isAdmin()) {
-        console.log('it`s superAdmin')
-        const data = await this.loginajax()
-        this.isLoging = false
-        setToken('token', data.token)
-        setToken('userName', data.username)
-        setToken('userId', data.userId)
-        this.$router.replace('/area-management')
+        if (this.mobile === '10000000000') {
+          console.log('it`s superAdmin')
+          const data = await this.loginajax()
+          this.isLoging = false
+          setToken('token', data.token)
+          setToken('userName', data.username)
+          setToken('userId', data.userId)
+          this.$router.replace('/area-management')
+        } else {
+          this.$message.error('非管理员账号不能登录')
+        }
       } else {
         console.log('it`s areaUser or superAdmin')
         const data = await this.loginajax()
@@ -109,7 +112,7 @@ export default {
       }
     },
     async loginajax() {
-      const params = { mobile: this.mobile,  reserveId: getToken('reserveId')}
+      const params = { mobile: this.mobile, reserveId: getToken('reserveId') }
       this.loginByPwd ? (params.passwords = md5(this.passwords)) : (params.code = this.code)
       const login = this.loginByPwd ? loginByPwd(params) : loginByMobile(params)
       return login
