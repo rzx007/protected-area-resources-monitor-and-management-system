@@ -9,7 +9,7 @@
 <template>
   <div class="camera-block">
     <i class="el-icon-refresh add-camera" @click="getArea" title="刷新"></i>
-    <i v-if="isAdmin" class="el-icon-plus add-camera" @click="aaddArea" title="添加保护区"></i>
+    <i v-if="isAdmin" class="el-icon-plus add-area" @click="aaddArea" title="添加保护区"></i>
     <ul class="tabs">
       <li @click="activeIndex = 1" :class="{ active: activeIndex === 1 }">编辑保护区</li>
       <!-- <li @click="activeIndex = 2" :class="{ active: activeIndex === 2 }">任务下发</li> -->
@@ -67,6 +67,16 @@ $color: #4762b0;
       color: $color;
     }
   }
+  .add-area {
+      font-size: 28px;
+      position: absolute;
+      right: 70px;
+      top: 30px;
+      cursor: pointer;
+      &:hover {
+        color: $color;
+      }
+    }
   .tabs {
     display: flex;
     justify-content: flex-start;

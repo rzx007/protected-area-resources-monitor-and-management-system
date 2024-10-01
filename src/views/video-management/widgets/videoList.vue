@@ -61,6 +61,7 @@ export default {
     },
     nextHandler() {
       if (this.pageIndex >= this.totalPage) return
+      this.pageIndex++
       this.galleryList()
     },
     clickVideo(item) {

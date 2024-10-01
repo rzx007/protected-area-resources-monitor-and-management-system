@@ -93,7 +93,7 @@ export default {
   props: {
     camera: {
       type: Object,
-      default: function() {
+      default: function () {
         return { id: '' }
       }
     }
@@ -106,7 +106,7 @@ export default {
       this.$emit('click-back')
     },
     getData() {
-      findCarmeraInfo({ cameraId: this.camera.id }).then(res => {
+      findCarmeraInfo({ cameraId: this.camera.id }).then((res) => {
         const data = res.data ? res.data : {}
         const confingArr = data.setConfig.split('#')
         const keys = Object.keys(this.form)
@@ -129,9 +129,9 @@ export default {
         cameraId: this.camera.id,
         setConfig: echoCode,
         isSet: this.form.isSet
-      }).then(res => {
+      }).then((res) => {
         this.$message.success('配置已下发')
-        this.$emit('click-back')
+        this.$emit('click-back', { status: true })
       })
     },
     cancelSet() {

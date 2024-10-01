@@ -27,7 +27,7 @@
           <camera-recycle v-if="level === 4" @click-back="cancelRecycle" :camera="cameraObj"></camera-recycle>
         </transition>
         <transition name="slide-fade">
-          <camera-setting v-if="level === 5" @click-back="level = 1" :camera="cameraObj"></camera-setting>
+          <camera-setting v-if="level === 5" @click-back="cancelRecycle" :camera="cameraObj"></camera-setting>
         </transition>
         <transition name="slide-fade">
           <camera-add v-if="level === 6" @click-back="cancelAdd"></camera-add>
